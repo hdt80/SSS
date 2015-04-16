@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
     
     int texts[16] = {0};
     shader.setUniform1iv("textures", texts, 16);
-
+    
 #if LOTS_OF_SPRITES
     shader.setUniformMat4("perspective", glm::ortho(0.0f, 16.0f, 0.0f, 9.0f, -1.0f, 1.0f));
 #else

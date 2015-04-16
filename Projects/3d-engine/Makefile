@@ -15,9 +15,9 @@ OBJECTS = $(patsubst $(SOURCEDIR)/%.cpp, $(BUILDDIR)/%.o, $(SOURCES))
 CSOURCES = $(wildcard $(SOURCEDIR)/rendering/*.c)
 COBJECTS = $(patsubst $(SOURCEDIR)/%.c, $(BUILDDIR)/%.o, $(CSOURCES))
 
-CXXFLAGS = -Wall -c -std=c++11 -I include -I code/headers
+CXXFLAGS = -Wall -Wno-comment -c -std=c++11 -I include -I code/headers
 CFLAGS = -c -I code/headers -I include
-LDFLAGS = $(LIBS)
+LDFLAGS = $(LIBS) lib/stb_image.o
 
 EXE = exe
 
