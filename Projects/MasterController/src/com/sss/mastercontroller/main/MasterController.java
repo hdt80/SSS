@@ -10,14 +10,23 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.concurrent.Executors;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.TableColumn;
 
+import com.sss.mastercontroller.connections.Addresses;
+import com.sss.mastercontroller.connections.Connection;
 import com.sss.mastercontroller.editors.PreferencesEditor;
 import com.sss.mastercontroller.editors.ValuesEditor;
+import com.sss.mastercontroller.io.Print;
+import com.sss.mastercontroller.io.TableModel;
 import com.sss.mastercontroller.lists.Enemies;
 import com.sss.mastercontroller.lists.Events;
 import com.sss.mastercontroller.lists.InternalProblems;
@@ -25,6 +34,8 @@ import com.sss.mastercontroller.lists.Preferences;
 
 public class MasterController implements ActionListener {
 
+	private static Connection connection;
+	private static Addresses addresses;
 	private Enemies enemies;
 	private Events events;
 	private InternalProblems internalproblems;
@@ -51,14 +62,81 @@ public class MasterController implements ActionListener {
 
 	private boolean[] isSelected;
 	private boolean[] isItemSelected;
+	private boolean wantChooseIP = true;
 	
 	public JFrame frame = new JFrame("SSS Master Controller 1.0 - Bryce Hahn");
 
 	public MasterController() {
 		enemies = new Enemies();
+		addresses = new Addresses();
 		events = new Events();
 		internalproblems = new InternalProblems();
 		preferences = new Preferences();
+		if (wantChooseIP) {
+			//getIPAddress();
+		} else {
+			connection = new Connection(addresses.getAddress(2), 5003);  	//connect to the default IP address without choice
+			connection.sendMessageToServer("MSC"); 							//initialize the client name
+		}
+	}
+	
+	public void getIPAddress() {
+		//disable frame to avoid mess-ups
+		frame.setEnabled(false);
+		//now open connection frame
+		final JFrame ipframe = new JFrame("Please choose your IP Adress");
+		ipframe.setSize(500, 600);
+		ipframe.setUndecorated(true);
+		ipframe.setLayout(new BorderLayout());
+		ipframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		ipframe.setResizable(false);
+		ipframe.setLocationRelativeTo(null);
+		JLabel labl = new JLabel("Choose an IP Address to connect to");
+		final JTable table = new JTable(new TableModel());
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		TableColumn columnA = table.getColumn("Index");
+        columnA.setMinWidth(25);
+        columnA.setMaxWidth(30);
+        TableColumn columnB = table.getColumn("IP Addresses");
+        columnB.setMinWidth(100);
+        columnB.setMaxWidth(100);
+        TableColumn columnC = table.getColumn("IP Definition");
+        columnC.setMinWidth(350);
+        columnC.setMaxWidth(360);
+		//table.setRowSelectionAllowed(false);
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		ipframe.add(labl, BorderLayout.NORTH);
+		new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		ipframe.add(table, BorderLayout.CENTER);
+		JButton select = new JButton("Select IP");
+		select.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (table.getSelectedRow() >= 0 && table.getSelectedRow() <= addresses.getAddresses()) {
+					Print.debug("We are going to connect using ", addresses.getAddress(table.getSelectedRow()), " as an adress through the 5003 port");
+					connection = new Connection(addresses.getAddress(table.getSelectedRow()), 5003);
+					connection.sendMessageToServer("MSC"); //initialize the client name
+					Executors.newSingleThreadExecutor().execute(new Runnable() {
+						@Override
+						public void run() {
+							try {
+								Print.debug("Editing Shield");
+								Thread.sleep(1000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+						}
+					});
+					frame.setEnabled(true);
+					frame.requestFocus();
+					ipframe.dispose();
+				}
+			}
+		});
+		ipframe.add(select, BorderLayout.SOUTH);
+		ipframe.setAlwaysOnTop(true);
+		ipframe.setVisible(true);
 	}
 
 	public void start() {
@@ -181,6 +259,7 @@ public class MasterController implements ActionListener {
 			num = preferences.getPreferences();
 			initItems(num);
 		} else if (i == 4) { //exit button
+			connection.disconnect();
 			System.exit(0);
 		} else { // some how there was an error
 			System.err.println("For some weird reason there was an error on the selection you have tried to make, try choosing the option again.");
@@ -205,11 +284,11 @@ public class MasterController implements ActionListener {
 	private void showValues(int i) {
 		frame.setEnabled(false);
 		if (selectedNum == 0) { // enemies tab
-			new ValuesEditor(enemies.getEnemy(i), enemies.getDefinition(i), selectedNum);
+			new ValuesEditor(enemies.getEnemy(i), enemies.getDefinition(i), selectedNum, i);
 		} else if (selectedNum == 1) { // internal problems tab
-			new ValuesEditor(internalproblems.getInternalProblem(i), internalproblems.getDefinition(i), selectedNum);
+			new ValuesEditor(internalproblems.getInternalProblem(i), internalproblems.getDefinition(i), selectedNum, -1);
 		} else if (selectedNum == 2) { // events tab
-			new ValuesEditor(events.getEventName(i), events.getEventDefinition(i), selectedNum);
+			new ValuesEditor(events.getEventName(i), events.getEventDefinition(i), selectedNum, -1);
 		} else {
 			System.err.println("For some reason you are still running when you pressed exit button...");
 		}
@@ -286,5 +365,13 @@ public class MasterController implements ActionListener {
 	
 	public static MasterController getMasterController() {
 		return ms;
+	}
+	
+	public static Connection getConnection() {
+		return connection;
+	}
+	
+	public static Addresses getAddress() {
+		return addresses;
 	}
 }

@@ -14,11 +14,14 @@ import javax.swing.JTextArea;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.sss.mastercontroller.connections.Connection;
+import com.sss.mastercontroller.io.Print;
 import com.sss.mastercontroller.main.MasterController;
 
 public class PreferencesEditor implements ChangeListener, ActionListener {
 	
 	private JFrame frame = new JFrame("Preferences");
+	private Connection connection;
 	private JTextArea definition = new JTextArea(4, 1);
 	private JPanel defPanel = new JPanel();
 	//private JPanel editorPanel = new JPanel();
@@ -32,12 +35,13 @@ public class PreferencesEditor implements ChangeListener, ActionListener {
 	private int type;
 
 	public PreferencesEditor(String item, String defi, int type) {
+		connection = MasterController.getConnection();
 		frame.setTitle("Edit " + item + " preferences");
 		frame.setSize(400, 600);
 		frame.setAlwaysOnTop(true);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
-		//frame.setUndecorated(true);
+		frame.setUndecorated(true);
 		frame.setResizable(false);
 		frame.setLayout(new GridBagLayout());
 		this.type = type;
@@ -91,7 +95,8 @@ public class PreferencesEditor implements ChangeListener, ActionListener {
 			ms.showItems(type);
 		} else if (event.getSource().equals(apply)) {
 			// this is where all the code will go to send information to the server
-			
+			Print.debug(type + ";" + "more settings here later");
+			connection.sendMessageToServer(type + ";" + "more settings here later");
 			//end it here
 			frame.dispose();
 			MasterController ms = MasterController.getMasterController();

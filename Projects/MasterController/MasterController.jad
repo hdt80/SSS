@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Class-Path: .
+Main-Class: com.sss.mastercontroller.main.MasterController
+MIDlet-Jar-Size: 31472
+MIDlet-Jar-URL: MasterController.jar
+Nokia-MIDlet-Category: Game

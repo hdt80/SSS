@@ -19,6 +19,8 @@ import javax.swing.JTextArea;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.sss.mastercontroller.connections.Connection;
+import com.sss.mastercontroller.io.Print;
 import com.sss.mastercontroller.main.MasterController;
 
 public class ValuesEditor implements ChangeListener, ActionListener {
@@ -33,6 +35,9 @@ public class ValuesEditor implements ChangeListener, ActionListener {
     private JButton apply = new JButton("Apply");
     
     private int type;
+    private int enemyType;
+    
+    private Connection connection;
     
     private GridBagConstraints editorCon = new GridBagConstraints();
     
@@ -57,7 +62,9 @@ public class ValuesEditor implements ChangeListener, ActionListener {
     private JCheckBox isfriendly = new JCheckBox();
     private JComboBox<String> stations = new JComboBox<String>(); private JLabel timedownStationsLabel = new JLabel("Station Down");
     
-	public ValuesEditor(String item, String defi, int type) {
+	public ValuesEditor(String item, String defi, int type, int enemy) {
+		connection = MasterController.getConnection();
+		enemyType = enemy;
 		//initialize editor gridbag
 		editorCon.anchor = GridBagConstraints.CENTER;
 		editorCon.fill = GridBagConstraints.HORIZONTAL;
@@ -129,11 +136,11 @@ public class ValuesEditor implements ChangeListener, ActionListener {
 		editorPanel.setLayout(new GridLayout(3, 2));
 		//spawn count
 		editorPanel.add(spawncountLabel, editorCon);
-		spawncountSlider = configureSlider(_spawncount, _minspawncount, _maxspawncount, "Change how many enemies are desired to spawn.", 5, true);
+		spawncountSlider = configureSlider(_spawncount, _minspawncount, _maxspawncount, "Change how many enemies are desired to spawn.", 5, true, false);
 		editorPanel.add(spawncountSlider, editorCon);
 		//initial health
 		editorPanel.add(initialhealthLabel, editorCon);
-		initialhealthSlider = configureSlider(_initialhealth, _mininitialhealth, _maxinitialhealth, "Change how much health the enemy will spawn with", 10, true);
+		initialhealthSlider = configureSlider(_initialhealth, _mininitialhealth, _maxinitialhealth, "Change how much health the enemy will spawn with", 10, true, false);
 		editorPanel.add(initialhealthSlider, editorCon);
 		//is friendly
 		isfriendly = new JCheckBox("Is Friendly [" + _isfriendly + "]", false);
@@ -147,19 +154,19 @@ public class ValuesEditor implements ChangeListener, ActionListener {
 		editorPanel.setLayout(new GridLayout(4, 2));
 		//damage ratio
 		editorPanel.add(damageratioLabel, editorCon);
-		damageratioSlider = configureSlider(_damageratio, _mindamageratio, _maxdamageratio, "Change how much damage the event will inflict on the team ship", 5, true);
+		damageratioSlider = configureSlider(_damageratio, _mindamageratio, _maxdamageratio, "Change how much damage the event will inflict on the team ship", 5, true, false);
 		editorPanel.add(damageratioSlider, editorCon);
 		//cracks
 		editorPanel.add(cracksLabel, editorCon);
-		cracksSlider = configureSlider(_cracks, _mincracks, _maxcracks, "Change how many cracks the event will add to the team ship window", 5, true);
+		cracksSlider = configureSlider(_cracks, _mincracks, _maxcracks, "Change how many cracks the event will add to the team ship window", 5, true, false);
 		editorPanel.add(cracksSlider, editorCon);
 		//time down
 		editorPanel.add(timedownLabel, editorCon);
-		timedownSlider = configureSlider(_timedown, _mintimedown, _maxtimedown, "Change how long the effect will put a station down", 5, true);
+		timedownSlider = configureSlider(_timedown, _mintimedown, _maxtimedown, "Change how long the effect will put a station down", 5, true, false);
 		editorPanel.add(timedownSlider, editorCon);
 		//station down
 		editorPanel.add(timedownStationsLabel, editorCon);
-		stations.addItem("None");stations.addItem("Station 1");stations.addItem("Station 2");stations.addItem("Station 3");stations.addItem("Station 4");
+		stations.addItem("None");stations.addItem("Engineering Station");stations.addItem("Flight Station");stations.addItem("Weapons Station");stations.addItem("Power Station");
 		editorPanel.add(stations, editorCon);
 		//add to frame
 		frame.add(editorPanel, editorCon);
@@ -169,18 +176,18 @@ public class ValuesEditor implements ChangeListener, ActionListener {
 		editorPanel.setLayout(new GridLayout(2, 1));
 		//pull force
 		editorPanel.add(pullforceLabel, editorCon);
-		pullforceSlider = configureSlider(_pullforce, _minpullforce, _maxpullforce, "", 20, true);
+		pullforceSlider = configureSlider(_pullforce, _minpullforce, _maxpullforce, "", 20, true, false);
 		editorPanel.add(pullforceSlider, editorCon);
 		//push force
 		editorPanel.add(pushforceLabel, editorCon);
-		pushforceSlider = configureSlider(_pushforce, _minpushforce, _maxpushforce, "", 20, true);
+		pushforceSlider = configureSlider(_pushforce, _minpushforce, _maxpushforce, "", 20, true, false);
 		editorPanel.add(pushforceSlider, editorCon);
 		
 		//add to frame
 		frame.add(editorPanel, editorCon);
 	}
 	
-	private JSlider configureSlider(int value, int min, int max, String tip, int ticks, boolean showMarks) {
+	private JSlider configureSlider(int value, int min, int max, String tip, int ticks, boolean showMarks, boolean snapToTick) {
 		JSlider slider = new JSlider();
 		slider.setValue(value);
 		slider.setMinimum(min);
@@ -190,7 +197,7 @@ public class ValuesEditor implements ChangeListener, ActionListener {
 		slider.setMajorTickSpacing(ticks * 2);
 		slider.setMinorTickSpacing(ticks);
 		slider.setPaintTicks(showMarks);
-		slider.setSnapToTicks(showMarks);
+		slider.setSnapToTicks(snapToTick);
 		slider.addChangeListener(this);
 		return slider;
 	}
@@ -244,7 +251,13 @@ public class ValuesEditor implements ChangeListener, ActionListener {
 			ms.showItems(type);
 		} else if (event.getSource().equals(apply)) {
 			// this is where all the code will go to send information to the server
-			
+			int isfriend = (_isfriendly) ? 1 : 0;
+			Print.debug(type + ";" + _pullforce + ";" + _pushforce + ";" + _spawncount + ";"
+					+ _damageratio + ";" + _initialhealth + ";" + _timedown + ";" + _cracks
+					+ ";" + isfriend + ";" + enemyType + ";");
+			connection.sendEventToServer(type + ";" + _pullforce + ";" + _pushforce + ";" + _spawncount + ";"
+					+ _damageratio + ";" + _initialhealth + ";" + _timedown + ";" + _cracks
+					+ ";" + isfriend + ";" + enemyType + ";");
 			//end it here
 			frame.dispose();
 			MasterController ms = MasterController.getMasterController();
