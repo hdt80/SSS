@@ -4,7 +4,7 @@ namespace engine {
     namespace graphics {
     
         TextureData::TextureData(Texture* texture) : _texture(texture) {
-            addRefererence(); 
+            addReference(); 
         }
 
         TextureData::~TextureData() {

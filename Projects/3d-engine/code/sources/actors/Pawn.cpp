@@ -10,6 +10,9 @@ namespace engine {
         Pawn::~Pawn() {
             delete _input;
             delete _physics;
+
+            _input = nullptr;
+            _physics = nullptr;
         }
 
         void Pawn::tick(float delta) {
@@ -26,6 +29,11 @@ namespace engine {
 
         void Pawn::onDestroy() {
         
+        }
+
+        const Collideable* Pawn::getCollider() {
+            _physics->getCollider()->setPosition(getPosition());
+            return _physics->getCollider();
         }
 
     }

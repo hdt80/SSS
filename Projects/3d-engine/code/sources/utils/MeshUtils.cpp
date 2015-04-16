@@ -25,20 +25,14 @@ namespace engine {
                 /* parse a vertex */
                 if(not tokens[0].compare("v")) { 
                     glm::vec3 vert;
-                    // std::stof does not work with MinGW
                     vert.x = strtof(tokens[1].c_str(), nullptr);
                     vert.y = strtof(tokens[2].c_str(), nullptr);
                     vert.z = strtof(tokens[3].c_str(), nullptr);
-                    // vert.x = std::stof(tokens[1]);
-                    // vert.y = std::stof(tokens[2]);
-                    // vert.z = std::stof(tokens[3]);
                     temp_verts.push_back(vert);
                 } else if(not tokens[0].compare("vt")) { /* parse a UV coordinate */
                     glm::vec2 UV;
                     UV.x = strtof(tokens[1].c_str(), nullptr);
-                    //UV.x = std::stof(tokens[1]);
                     UV.y = 1.0f - strtof(tokens[2].c_str(), nullptr);
-                    //UV.y = 1.0f - std::stof(tokens[2]);
                     temp_uvs.push_back(UV);
                 } else if(not tokens[0].compare("f")) { /* parse a face */
                     for(int i = 0; i < tokens.size() - 3; i++) {
@@ -138,7 +132,7 @@ namespace engine {
             std::string num;
             for(int i = 0; i < token.length(); i++) {
                 if(token[i] == '/') {
-                    nums.push_back(strtof(num.c_str(), nullptr) - 1);
+                    nums.push_back(strtol(num.c_str(), nullptr, 10));
                     num = "";
                 } else {
                     num += token[i];

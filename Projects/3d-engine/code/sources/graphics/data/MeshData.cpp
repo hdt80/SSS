@@ -4,7 +4,7 @@ namespace engine {
     namespace graphics {
 
         MeshData::MeshData(Mesh* mesh) : _mesh(mesh) {
-            addRefererence();
+            addReference();
         }
 
         MeshData::~MeshData() {

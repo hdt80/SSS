@@ -17,7 +17,7 @@ namespace engine {
                 virtual void update(Actor& actor, float delta=1.0f) override;
 
                 inline const bool isCollideable() const { return _collider != nullptr; }
-                
+                inline Collideable* getCollider() const { return _collider; }
         };
 
     }

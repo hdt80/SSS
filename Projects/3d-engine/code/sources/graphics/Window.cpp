@@ -23,13 +23,18 @@ namespace engine {
                 return false;
             }
 
-            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);  
-            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-            glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-            glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+            // glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);  
+            // glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+            // glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+            // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-            _window = glfwCreateWindow(_width, _height, _title.c_str(), NULL, NULL);
-
+			GLFWmonitor* prim = glfwGetPrimaryMonitor();
+			const GLFWvidmode* vidMode = glfwGetVideoMode(prim);
+			
+			_width = vidMode->width;
+			_height = vidMode->height;
+			
+            _window = glfwCreateWindow(_width, _height, _title.c_str(), glfwGetPrimaryMonitor(), NULL);
 
             if(not _window) {
                 glfwTerminate();

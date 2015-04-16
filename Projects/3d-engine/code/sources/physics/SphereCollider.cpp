@@ -9,7 +9,7 @@ namespace engine {
         
         }
     
-        bool SphereCollider::collides(const Collideable& other) {
+        bool SphereCollider::collides(const Collideable& other) const {
             const SphereCollider* p = dynamic_cast<const SphereCollider*>(&other);
             if(p != nullptr)
                 return (glm::length(_position - other.getPosition()) <= _radius + p->getRadius());

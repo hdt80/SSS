@@ -2,6 +2,7 @@
 
 #include <string>
 #include <stdio.h>
+#include <string.h>
 
 namespace engine {
     namespace utils {

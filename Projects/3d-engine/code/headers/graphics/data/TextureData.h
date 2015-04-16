@@ -14,7 +14,7 @@ namespace engine {
                 ~TextureData();
 
                 inline const unsigned short getReferences() const { return _references; }
-                inline void addRefererence() { _references++; }
+                inline void addReference() { _references++; }
                 inline void removeReference() { _references--; }
 
                 const Texture* getTexture() const;

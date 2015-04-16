@@ -7,9 +7,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include <string>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdlib>
 
 namespace engine {
     namespace utils {

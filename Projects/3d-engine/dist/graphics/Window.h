@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <input/Input.h>
+#include <cstdio>
 
 namespace engine {
     namespace graphics {

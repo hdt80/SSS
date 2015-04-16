@@ -9,6 +9,7 @@ namespace engine {
 
         Prop::~Prop() {
             delete _render;
+            _render = nullptr;
         }
     }
 }

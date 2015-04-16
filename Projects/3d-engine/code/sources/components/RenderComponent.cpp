@@ -17,12 +17,15 @@ namespace engine {
                 else
                     MeshUtils::load_mesh_obj(mesh_id, verts, indices);
                 loadedMeshes[mesh_id] = new MeshData(new Mesh(verts, indices));
+            } else {
+                loadedMeshes[mesh_id]->addReference();
             } 
-
-            if(not texture_id.empty() and not loadedTextures.count(texture_id)) {
-                std::cout << "seg-fault next line" << std::endl;
-                loadedTextures[texture_id] = new TextureData(new Texture(texture_id));   
-                std::cout << "Hello, there" << std::endl;
+            if (!texture_id.empty()) {
+                if(!loadedTextures.count(texture_id)) {
+                    loadedTextures[texture_id] = new TextureData(new Texture(texture_id));   
+                } else {
+                    loadedTextures[texture_id]->addReference();
+                }
             }
         }
 

@@ -25,7 +25,6 @@ static: $(OBJECTS) $(COBJECTS)
 	mkdir dist
 	$(AR) rvs dist/Engine.a $(addprefix $(BUILDDIR)/, $(notdir $^))
 	cp -r ./code/headers/* ./dist
-	cp -r ./include/* ./dist
 
 build: $(EXE)
 	
@@ -43,3 +42,6 @@ clean:
 
 run:
 	./bin/$(EXE)
+
+debug:
+	gdb ./bin/$(EXE)

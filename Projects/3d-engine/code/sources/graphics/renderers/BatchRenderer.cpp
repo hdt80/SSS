@@ -102,11 +102,11 @@ namespace engine {
                 _vertexCount++;
             }
 
-            // if(_vertexCount > 20000) {
-            //     end();
-            //     flush();
-            //     begin();
-            // }
+            if(_vertexCount > 90000) {
+                end();
+                flush();
+                begin();
+            }
         }
 
         void BatchRenderer::end() {

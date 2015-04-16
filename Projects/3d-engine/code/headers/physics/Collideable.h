@@ -19,7 +19,7 @@ namespace engine {
                 
                 virtual ~Collideable();
 
-                virtual bool collides(const Collideable& other);
+                virtual bool collides(const Collideable& other) const;
                 virtual glm::vec3 getDirection(const Collideable& other);
 
                 inline const char getType() const { return _type; }

@@ -1,4 +1,5 @@
 #include <physics/Collideable.h>
+#include <iostream>
 
 namespace engine {
     namespace physics {
@@ -9,10 +10,9 @@ namespace engine {
         }
 
         Collideable::~Collideable() {
-            
         }
 
-        bool Collideable::collides(const Collideable& other) {
+        bool Collideable::collides(const Collideable& other) const {
             return (_position == other.getPosition());
         }
        

@@ -25,6 +25,10 @@ namespace engine {
             delete _render;
             delete _input;
             delete _physics;
+
+            _render = nullptr;
+            _input = nullptr;
+            _physics = nullptr;
         }
 
         void Player::tick(float delta) {
