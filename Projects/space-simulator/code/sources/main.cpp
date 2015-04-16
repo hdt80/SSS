@@ -30,7 +30,9 @@ int main(int argc, char** agrv) {
     glCullFace(GL_BACK);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_DEPTH_CLAMP);
-    glDepthMask(GL_TRUE);std::string file_path = "assets/shaders/textured";
+    glDepthMask(GL_TRUE);
+
+    std::string file_path = "assets/shaders/textured";
     
     sss::Game game(Camera(glm::vec3(0, 0, 0), glm::quat(0, 0, 0, 1), glm::perspective(70.0f, 960.0f / 540.0f, 0.1f, 1000.0f)));
     while(not window.shouldClose()) {
@@ -39,8 +41,10 @@ int main(int argc, char** agrv) {
         game.update();
         game.render();
 
-	if(Input::isKeyPressed(GLFW_KEY_ESCAPE))
-	    break;
+        if(Input::isKeyPressed(GLFW_KEY_ESCAPE)) {
+            break;
+        }
+
         window.update();
     }
 

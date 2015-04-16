@@ -1,7 +1,7 @@
 CXX = g++
 CC = gcc
 
-LIBS = -L lib -lengine -lglfw3 -lglew32 -lopengl32
+LIBS = -L lib -lengine -lglfw3 -lglew32 -lopengl32 -lws2_32
 
 SOURCEDIR = code/sources
 BUILDDIR = build

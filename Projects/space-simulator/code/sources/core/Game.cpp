@@ -15,8 +15,7 @@ namespace sss {
     }
 
     Game::Game(const Camera& camera) 
-        : _camera(camera)
-    {
+            : _camera(camera) {
         _shader = new Shader("assets/shaders/textured.vs", "assets/shaders/textured.fs");
         _shader->bind();
         _player = new Actor;
@@ -25,12 +24,17 @@ namespace sss {
 
     Game::~Game() {
         _shader->unbind();
+
         delete _shader;
         delete _player;
+
         _shader = nullptr;
         _player = nullptr;
-        for(int i = 0; i < _children.size(); i++)
+
+        for(int i = 0; i < _children.size(); i++) {
             delete _children[i];
+        }
+        
         _children.clear();
     }
 
