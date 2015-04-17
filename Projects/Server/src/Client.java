@@ -43,9 +43,6 @@ public class Client extends Thread {
 					while (!closed) {
 						try {
 							Thread.sleep(1000);
-							send("Hiya!");
-							Thread.sleep(10);
-							setValue("Shield", "3");
 						} catch (Exception e) {
 							e.printStackTrace();
 						}

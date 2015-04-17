@@ -3,9 +3,11 @@ import java.util.HashMap;
 
 public class InternalValues {
     private HashMap<String, String> values;
+	private EventHandler eh;
 
     public InternalValues() {
         values = new HashMap<>();
+        eh = new EventHandler();
     }
 
     /**
@@ -57,7 +59,7 @@ public class InternalValues {
     		}
     	}
     	//parse my AMAZING code
-    	EventHandler.callEvent(vals);
+    	eh.callEvent(vals);
     }
 
     /**
