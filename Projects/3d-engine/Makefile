@@ -15,15 +15,14 @@ OBJECTS = $(patsubst $(SOURCEDIR)/%.cpp, $(BUILDDIR)/%.o, $(SOURCES))
 CSOURCES = $(wildcard $(SOURCEDIR)/rendering/*.c)
 COBJECTS = $(patsubst $(SOURCEDIR)/%.c, $(BUILDDIR)/%.o, $(CSOURCES))
 
-CXXFLAGS = -Wall -Wno-comment -c -std=c++11 -I include -I code/headers
+CXXFLAGS = -Wall -g -Wno-comment -c -std=c++11 -I include -I code/headers
 CFLAGS = -c -I code/headers -I include
 LDFLAGS = $(LIBS) lib/stb_image.o
 
 EXE = exe
 
 static: $(OBJECTS) $(COBJECTS)
-	mkdir dist
-	$(AR) rvs dist/Engine.a $(addprefix $(BUILDDIR)/, $(notdir $^))
+	$(AR) rvs dist/libengine.a $(addprefix $(BUILDDIR)/, $(notdir $^))
 	cp -r ./code/headers/* ./dist
 
 build: $(EXE)

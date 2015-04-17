@@ -111,7 +111,7 @@ namespace sss {
     void Game::init() {
         int texts[16] = {0};
         _shader->setUniform1iv("textures", texts, 16);
-        for(unsigned long long i = 0; i < 200; i++) {
+        for(unsigned long long i = 0; i < 20; i++) {
             Asteroid* a = new Asteroid(glm::vec3(rand() % 200 - 100, rand() % 200 - 100, rand() % 200 - 100), 1);
             a->onSpawn();
             _children.push_back(a);
