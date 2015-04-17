@@ -73,20 +73,23 @@ namespace sss {
     void Game::player_stuff() {
         static glm::vec3 Y_AXIS(0, 1, 0);
         static glm::vec3 X_AXIS(1, 0, 0);
-	static glm::vec3 Z_AXIS(0, 0, 1);
+        static glm::vec3 Z_AXIS(0, 0, 1);
 
         /*  looking around */
-        if(Input::isKeyPressed(GLFW_KEY_J)) 
+        if(Input::isKeyPressed(GLFW_KEY_J)) {
             _player->rotate(Y_AXIS, 0.01);
-        else if(Input::isKeyPressed(GLFW_KEY_L)) 
+        } else if(Input::isKeyPressed(GLFW_KEY_L)) {
             _player->rotate(Y_AXIS, -0.01);
-        if(Input::isKeyPressed(GLFW_KEY_I))
-            _player->rotate(X_AXIS, 0.01);
-        else if(Input::isKeyPressed(GLFW_KEY_K))
-            _player->rotate(X_AXIS, -0.01);
+        }
 
-	if(Input::isKeyPressed(GLFW_KEY_U))
-	    _player->rotate(Z_AXIS, 0.01);
+        if(Input::isKeyPressed(GLFW_KEY_I)) {
+            _player->rotate(X_AXIS, 0.01);
+        } else if(Input::isKeyPressed(GLFW_KEY_K)) {
+            _player->rotate(X_AXIS, -0.01);
+        }
+
+	   if(Input::isKeyPressed(GLFW_KEY_U))
+	_player->rotate(Z_AXIS, 0.01);
 	else if(Input::isKeyPressed(GLFW_KEY_O))
 	    _player->rotate(Z_AXIS, -0.01);
 

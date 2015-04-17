@@ -18,6 +18,9 @@ public class InternalValues {
             setValue(msg);
         } else if (msg.substring(4, 7).equals("GET")) {
             requestValue(msg);
+        } else if (msg.substring(4, 7).equals("EVN")) {
+            // Type;Pull force;Push force; Spawn count;Damage ratio; init hp; timedown; cracks; isfriend
+            // Bryche sent me some shit ass event thingy
         } else {
             Logger.warn("Unknown request: \'" + msg + "\'");
         }
