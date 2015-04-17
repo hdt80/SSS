@@ -16,11 +16,10 @@ public class InternalValues {
         // Messages are in [1-3] Client name, [4-7] SET/GET, [8-n] Key, :, [n-n] Value
         if (msg.substring(4, 7).equals("SET")) {
             setValue(msg);
+        } else if (msg.substring(4, 7).equals("EVN")) {
+        	setEvent(msg.substring(8, msg.length()));
         } else if (msg.substring(4, 7).equals("GET")) {
             requestValue(msg);
-        } else if (msg.substring(4, 7).equals("EVN")) {
-            // Type;Pull force;Push force; Spawn count;Damage ratio; init hp; timedown; cracks; isfriend
-            // Bryche sent me some shit ass event thingy
         } else {
             Logger.warn("Unknown request: \'" + msg + "\'");
         }
@@ -28,7 +27,7 @@ public class InternalValues {
 
     /**
      * Set an internal value for the server based on the unprocessed String
-     * @param msg The key and value seperated by an ':'
+     * @param msg The key and value separated by an ':'
      */
     public void setValue(String msg) {
         int keyStop = 0;
@@ -41,6 +40,24 @@ public class InternalValues {
         }
         Logger.debug("Setting:\'" + msg.substring(8, keyStop) + "\' to \'" + msg.substring(keyStop + 1, msg.length()) + '\'');
         values.put(msg.substring(8, keyStop), msg.substring(keyStop + 1, msg.length()));
+    }
+    
+    public void setEvent(String msg) {
+    	int[] vals = new int[10];
+    	int curval = 0;
+    	String curvalstr = "";
+    	
+    	for (int i = 0; i < msg.length(); i++) {
+    		if (msg.charAt(i) != ';') {
+    			curvalstr += msg.charAt(i);
+    		} else {
+    			vals[curval] = Integer.parseInt(curvalstr);
+    			curvalstr = "";
+    			curval++;
+    		}
+    	}
+    	//parse my AMAZING code
+    	EventHandler.callEvent(vals);
     }
 
     /**

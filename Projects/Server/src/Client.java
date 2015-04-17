@@ -43,11 +43,9 @@ public class Client extends Thread {
 					while (!closed) {
 						try {
 							Thread.sleep(1000);
-							send("Hiya!@");
+							send("Hiya!");
 							Thread.sleep(10);
-							setValue("Shield", "-3");
-							Thread.sleep(10);
-							setValue("Weapons", "-19999");
+							setValue("Shield", "3");
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -126,8 +124,6 @@ public class Client extends Thread {
 		msg.append(key);
 		msg.append(':');
 		msg.append(value);
-		msg.append('@');
-		Logger.debug("Set: \'" + msg.toString() + "\'");
 		send(msg.toString());
 	}
 
