@@ -26,6 +26,9 @@ static: $(OBJECTS) $(COBJECTS)
 	cp -r ./code/headers/* ./dist
 
 build: $(EXE)
+
+stbi:
+	$(CC) -c $(SOURCEDIR)/stb_image.c
 	
 $(EXE): $(OBJECTS) $(COBJECTS)
 		$(CXX) $(addprefix $(BUILDDIR)/, $(notdir $^)) $(LDFLAGS) -o ./bin/$@
