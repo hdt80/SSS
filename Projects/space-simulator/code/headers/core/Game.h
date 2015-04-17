@@ -12,6 +12,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstdio>
+#include "core/Connection.h"
 #include <algorithm>
 
 namespace sss {

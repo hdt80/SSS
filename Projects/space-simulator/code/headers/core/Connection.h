@@ -11,7 +11,7 @@
 #include "core/Logger.h"
 
 #define TIMEOUT_WAIT 2500
-#define BUFFER_SIZE  1024
+#define CONBUF_SIZE  1024
 #define MSG_END      '@'
 
 // A Connection is a socket connection using UDP between two open
@@ -37,7 +37,7 @@ class Connection {
         static Connection _connection;
     private:
         bool _connected;
-        char _buffer[BUFFER_SIZE];
+        char _buffer[CONBUF_SIZE];
 
         // Winsock data members
         WSADATA         _wsaData;

@@ -89,8 +89,8 @@ namespace sss {
         }
 
 	   if(Input::isKeyPressed(GLFW_KEY_U))
-	_player->rotate(Z_AXIS, 0.01);
-	else if(Input::isKeyPressed(GLFW_KEY_O))
+            _player->rotate(Z_AXIS, 0.01);
+	        else if(Input::isKeyPressed(GLFW_KEY_O))
 	    _player->rotate(Z_AXIS, -0.01);
 
         glm::vec3 forward = getForward(_player->getRotation());
@@ -126,6 +126,7 @@ namespace sss {
                 continue;
             if(p->getCollider()->collides(SphereCollider(_player->getPosition(), 1))) {
                 p->destroy();
+                Connection::_connection.write("EVN#3;-1;-1;-1;10;20;30;-1;-1;-1;-1");
                 std::cout << "Send To Server Asteroid Struck" << std::endl;
             }
         } 

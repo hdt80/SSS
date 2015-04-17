@@ -11,6 +11,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <input/Input.h>
+#include "core/Connection.h"
 
 int main(int argc, char** agrv) {
 
@@ -24,6 +25,8 @@ int main(int argc, char** agrv) {
     using engine::Input;
     using sss::Asteroid;
 
+    Connection::_connection.makeConnect("10.65.175.117", 5003);
+
     Window window("sunset-space-simulator", 960, 540);
     glClearColor(0.3, 0.0, 0.3, 1.0);
     glEnable(GL_CULL_FACE);
@@ -35,11 +38,15 @@ int main(int argc, char** agrv) {
     std::string file_path = "assets/shaders/textured";
     
     sss::Game game(Camera(glm::vec3(0, 0, 0), glm::quat(0, 0, 0, 1), glm::perspective(70.0f, 960.0f / 540.0f, 0.1f, 1000.0f)));
+    
+    Connection::_connection.write("NAV"); // First message is the client name
     while(not window.shouldClose()) {
         window.clear();
 
         game.update();
         game.render();
+
+        Connection::_connection.printBuffer();
 
         if(Input::isKeyPressed(GLFW_KEY_ESCAPE)) {
             break;

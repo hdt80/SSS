@@ -98,7 +98,7 @@ void Connection::disconnect() {
 
 // Print the buffer from the socket
 void Connection::printBuffer() {
-	int result = recv(_socket, _buffer, BUFFER_SIZE, 0);
+	int result = recv(_socket, _buffer, CONBUF_SIZE, 0);
 	if (result == -1) {
 		return;
 	}
@@ -122,7 +122,7 @@ std::string Connection::getValue(std::string value) {
 	Connection::_connection.write(msg);
 
 	// Wait for a return message from the server, hopefully the value
-	int result = recv(_socket, _buffer, BUFFER_SIZE, 0);
+	int result = recv(_socket, _buffer, CONBUF_SIZE, 0);
 	if (result == -1) {
 		warn("Recieved nothing when getting \'%s\'", value.c_str());
 		return "";
@@ -169,11 +169,10 @@ void Connection::write(std::string message) {	// SOCKET, char* buf, buff_size, f
 
 // Reset the buffer to null terminators
 void Connection::clearBuffer() {
-	for (int i = 0; i < BUFFER_SIZE; ++i) {
+	for (int i = 0; i < CONBUF_SIZE; ++i) {
 		_buffer[i] = '\0';
 	}
 }
 
-// Create a reference to the static var _connection as it's used by multiple
-// objects, such as Reactor, PowerCell and FixPanel
+// Static reference to the global connection
 Connection Connection::_connection;
