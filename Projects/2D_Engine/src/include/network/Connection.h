@@ -36,8 +36,8 @@ class Connection {
         void        setValue(char* msg);
 
         static Connection _connection;
-    private:
         bool _connected;
+    private:
         char _buffer[BUFFER_SIZE];
 
         // Winsock data members

@@ -22,6 +22,7 @@ Connection::~Connection() {
 
 // Initailze Winsock2 and create the socket we'll be using
 void Connection::init() {
+	_connected = false;
     // Initalizing Winsock
     // We'll use a Windows macro called MAKEWORD to determine the 
     // major and minor version of Winsock we'll use, 2.2
@@ -58,6 +59,9 @@ void Connection::close() {
 
 // Attempt to connect to the other socket
 bool Connection::makeConnect(std::string ip, int port) {
+	if (_connected == true) {
+		warn("Already connected to %s:%i", _ip.c_str(), _port);
+	}
 	_ip   = ip;
 	_port = port;
 
@@ -86,6 +90,7 @@ bool Connection::makeConnect(std::string ip, int port) {
 		return false;
 	} else {
 		info("Connection made to %s:%i", _ip.c_str(), _port);
+		_connected = true;
 		return true;
 	}
 
@@ -98,8 +103,12 @@ void Connection::disconnect() {
 
 // Print the buffer from the socket
 void Connection::printBuffer() {
+	if (!_connected) {
+		return;
+	}
 	int result = recv(_socket, _buffer, BUFFER_SIZE, 0);
 	if (result == -1) {
+		_connected = false;
 		return;
 	}
 	debug("RECV: \'%s\' (%i)", _buffer, result);
@@ -115,6 +124,9 @@ void Connection::printBuffer() {
 
 // Sends a request to the server to get the value stored on the server
 std::string Connection::getValue(std::string value) {
+	if (!_connected) {
+		return "";
+	}
 	// Send a message to the server requesting a value
 	std::string msg = "";
 	msg.append("GET#");
@@ -137,6 +149,10 @@ std::string Connection::getValue(std::string value) {
 
 // Set a value based on what message was recieved
 void Connection::setValue(char* msg) {
+	if (!_connected) {
+		error("Not connected!");
+		return;
+	}
 	int keyStop = 0;
 	// Finding the index of the char that splits the key and value
 	for (unsigned int i = 0; i < strlen(msg); ++i) {
@@ -161,9 +177,14 @@ void Connection::setValue(char* msg) {
 // Write a message to the socket
 // message - Message to send
 // Can't use send as Winsock uses that
-void Connection::write(std::string message) {	// SOCKET, char* buf, buff_size, flags
+void Connection::write(std::string message) {
+	if (!_connected) {
+		return;
+	}
+	// SOCKET, char* buf, buff_size, flags
 	if (send(_socket, (message + MSG_END).c_str(), strlen((message + MSG_END).c_str()), 0) == SOCKET_ERROR) {
 		error("Error while writing to socket: %i", WSAGetLastError());
+		_connected = false;
 	}
 	debug("SEND: \'%s\' (%i)", (message + MSG_END).c_str(), strlen((message + MSG_END).c_str()));
 }

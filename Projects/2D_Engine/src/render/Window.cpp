@@ -105,7 +105,9 @@ void Window::start() {
 
 void Window::loop() {
 	while (!shouldClose()) {
-		Connection::_connection.printBuffer();
+		if (Connection::_connection._connected == true) {
+			Connection::_connection.printBuffer();
+		}
 		pollEvents();
 		render();
 	}
@@ -177,17 +179,23 @@ void Window::renderPowerCells() {
 	// Drawing the amount of power in each cell
 	for (int y = POWER_CELL_Y; y < Reactor::_reactor.size(); ++y) {
 		PowerCell* cell = &Reactor::_reactor.cells[y];
-
-		if (cell->currPower == 0) { // If they have no power why
-			continue;               // try to draw their power?
-		}
-
+		// Drawing how much power is currently in it
+		_render->setColor(0xB0, 0xC4, 0xDE, 0x00);
 		_render->drawBox(POWER_CELL_X, // Power cell's power starts at 0.75
 						 // The y origin of the rect to draw is a ratio of screen hgt to #cells
 						 (double) y * (POWER_CELL_HEIGHT / (double) Reactor::_reactor.size()),
 						 // Width is number of powered cells * max to get width 
 						 ((double) cell->currPower * (POWER_CELL_WIDTH / (double) cell->trueMax)),
 						 // Height is the ratio of one cell
+						 POWER_CELL_HEIGHT / (double) Reactor::_reactor.size());
+
+		// Drawing the currMax power in the power cell
+		_render->setColor(0xFF, 0x00, 0x00, 0x00); // Red
+		_render->drawBox((POWER_CELL_X + POWER_CELL_WIDTH) -
+						 	((cell->trueMax - cell->currMax) *
+						 	(POWER_CELL_WIDTH / (double) cell->trueMax)),
+						 (double) y * (POWER_CELL_HEIGHT) / (double) Reactor::_reactor.size(),
+						 1.0,
 						 POWER_CELL_HEIGHT / (double) Reactor::_reactor.size());
 	}
 
