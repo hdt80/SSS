@@ -10,7 +10,6 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.concurrent.Executors;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -18,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableColumn;
 
@@ -27,6 +27,7 @@ import com.sss.mastercontroller.editors.PreferencesEditor;
 import com.sss.mastercontroller.editors.ValuesEditor;
 import com.sss.mastercontroller.io.Print;
 import com.sss.mastercontroller.io.TableModel;
+import com.sss.mastercontroller.lists.Collisions;
 import com.sss.mastercontroller.lists.Enemies;
 import com.sss.mastercontroller.lists.Events;
 import com.sss.mastercontroller.lists.InternalProblems;
@@ -36,6 +37,7 @@ public class MasterController implements ActionListener {
 
 	private static Connection connection;
 	private static Addresses addresses;
+	private Collisions collisions;
 	private Enemies enemies;
 	private Events events;
 	private InternalProblems internalproblems;
@@ -44,7 +46,6 @@ public class MasterController implements ActionListener {
 
 	private Container selectionC = new Container();
 	private Container itemsC = new Container();
-	private Container valuesC = new Container();
 
 	private JButton[] selections;
 	private JButton[] items;
@@ -53,29 +54,33 @@ public class MasterController implements ActionListener {
 
 	private JPanel buttonPanel = new JPanel();
 
-	private int selectorsNum = 5;
+	private int selectorsNum = 6;
 	private int itemsNum = 10;
-	private int optionsNum = 4;
 	private int num;
 	private int selectedNum = 0;
 	int selectedItemNum = 0;
+
+	private String build = "1.1.29";
 
 	private boolean[] isSelected;
 	private boolean[] isItemSelected;
 	private boolean wantChooseIP = true;
 	
-	public JFrame frame = new JFrame("SSS Master Controller 1.0 - Bryce Hahn");
+	public JFrame frame = new JFrame();
+	private JTextArea name = new JTextArea();
 
 	public MasterController() {
+		name.setText("Sunset Space Simulation - Master Controller " + build);
+		collisions = new Collisions();
 		enemies = new Enemies();
 		addresses = new Addresses();
 		events = new Events();
 		internalproblems = new InternalProblems();
 		preferences = new Preferences();
 		if (wantChooseIP) {
-			//getIPAddress();
+			getIPAddress();
 		} else {
-			connection = new Connection(addresses.getAddress(2), 5003);  	//connect to the default IP address without choice
+			connection = new Connection(addresses.getAddress(6), 5003);  	//connect to the default IP address without choice
 			connection.sendMessageToServer("MSC"); 							//initialize the client name
 		}
 	}
@@ -116,18 +121,7 @@ public class MasterController implements ActionListener {
 				if (table.getSelectedRow() >= 0 && table.getSelectedRow() <= addresses.getAddresses()) {
 					Print.debug("We are going to connect using ", addresses.getAddress(table.getSelectedRow()), " as an adress through the 5003 port");
 					connection = new Connection(addresses.getAddress(table.getSelectedRow()), 5003);
-					connection.sendMessageToServer("MSC"); //initialize the client name
-					Executors.newSingleThreadExecutor().execute(new Runnable() {
-						@Override
-						public void run() {
-							try {
-								Print.debug("Editing Shield");
-								Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-						}
-					});
+					connection.sendClientIDToServer(); //initialize the client name
 					frame.setEnabled(true);
 					frame.requestFocus();
 					ipframe.dispose();
@@ -173,19 +167,23 @@ public class MasterController implements ActionListener {
 	    //the buttons
     	items = new JButton[btAmount];
 	    for(int i = 0; i < btAmount; i++) {
-	    	if (selectedNum == 0) { //enemies
+	    	if (selectedNum == 1) { //enemies
 	    		items[i] = new JButton(enemies.getEnemy(i));
 		        // other attributes you will set
 		        buttonPanel.add(items[i], constraint);
-	    	} else if (selectedNum == 1) { //internal problems
+	    	} else if (selectedNum == 2) { //internal problems
 	    		items[i] = new JButton(internalproblems.getInternalProblem(i));
 		        // other attributes you will set
 		        buttonPanel.add(items[i], constraint);
-	    	} else if (selectedNum == 2) { //events
+	    	} else if (selectedNum == 3) { //events
 	    		items[i] = new JButton(events.getEventName(i));
 		        // other attributes you will set
 		        buttonPanel.add(items[i], constraint);
-	    	} else if (selectedNum == 3) {
+	    	} else if (selectedNum == 0) {
+	    		items[i] = new JButton(collisions.getCollision(i));
+	    		//other attributes you will set
+	    		buttonPanel.add(items[i], constraint);
+	    	} else if (selectedNum == 4) {
 	    		items[i] = new JButton(preferences.getPreferenceName(i));
 	    		// other attributes you will set
 	    		buttonPanel.add(items[i], constraint);
@@ -208,8 +206,6 @@ public class MasterController implements ActionListener {
 		selectionC.setVisible(true);
 		itemsC.setLayout(new GridLayout(itemsNum, 1));
 		itemsC.setVisible(false);
-		valuesC.setLayout(new GridLayout(optionsNum, 2));
-		valuesC.setVisible(true);
 	}
 
 	// initialize all the used buttons to give them names, values, ex...
@@ -221,11 +217,12 @@ public class MasterController implements ActionListener {
 		isItemSelected = new boolean[num]; // there will be `num` amount of
 											// booleans
 
-		selections[0] = new JButton("Enemies");
-		selections[1] = new JButton("Internal Problems");
-		selections[2] = new JButton("Events");
-		selections[3] = new JButton("Preferences");
-		selections[4] = new JButton("Exit");
+		selections[0] = new JButton("Collisions");
+		selections[1] = new JButton("Enemies");
+		selections[2] = new JButton("Internal Problems");
+		selections[3] = new JButton("Events");
+		selections[4] = new JButton("Preferences");
+		selections[5] = new JButton("Exit");
 
 		for (int i = 0; i < selections.length; i++) {
 			selectionC.add(selections[i]);
@@ -242,23 +239,27 @@ public class MasterController implements ActionListener {
 	private void addButtons() {
 		frame.add(selectionC, BorderLayout.WEST);
 		frame.add(itemsC, BorderLayout.CENTER);
-		frame.add(valuesC, BorderLayout.EAST);
+		name.setBackground(new Color(190, 190, 190));
+		frame.add(name, BorderLayout.EAST);
 	}
 
 	public void showItems(int i) {
-		if (i == 0) { // show enemies buttons
+		if (i == 1) { // show enemies buttons
 			num = enemies.getEnemies();
 			initItems(num);
-		} else if (i == 1) { // show internal problems buttons
+		} else if (i == 2) { // show internal problems buttons
 			num = internalproblems.getInternalProblems();
 			initItems(num);
-		} else if (i == 2) { // show events buttons
+		} else if (i == 3) { // show events buttons
 			num = events.getEvents();
 			initItems(num);
-		} else if (i == 3) { //show preferences
+		} else if (i == 0) {
+			num = collisions.getCollisions();
+			initItems(num);
+		} else if (i == 4) { //show preferences
 			num = preferences.getPreferences();
 			initItems(num);
-		} else if (i == 4) { //exit button
+		} else if (i == 5) { //exit button
 			connection.disconnect();
 			System.exit(0);
 		} else { // some how there was an error
@@ -283,12 +284,12 @@ public class MasterController implements ActionListener {
 
 	private void showValues(int i) {
 		frame.setEnabled(false);
-		if (selectedNum == 0) { // enemies tab
-			new ValuesEditor(enemies.getEnemy(i), enemies.getDefinition(i), selectedNum, i);
-		} else if (selectedNum == 1) { // internal problems tab
-			new ValuesEditor(internalproblems.getInternalProblem(i), internalproblems.getDefinition(i), selectedNum, -1);
-		} else if (selectedNum == 2) { // events tab
-			new ValuesEditor(events.getEventName(i), events.getEventDefinition(i), selectedNum, -1);
+		if (selectedNum == 1) { // enemies tab
+			new ValuesEditor(enemies.getEnemy(i), enemies.getDefinition(i), ValuesEditor.SpawnEnemy, i);
+		} else if (selectedNum == 2) { // internal problems tab
+			new ValuesEditor(internalproblems.getInternalProblem(i), internalproblems.getDefinition(i), ValuesEditor.InternalProblem, -1);
+		} else if (selectedNum == 3) { // events tab
+			new ValuesEditor(events.getEventName(i), events.getEventDefinition(i), ValuesEditor.ExteriorEvent, -1);
 		} else {
 			System.err.println("For some reason you are still running when you pressed exit button...");
 		}
@@ -333,7 +334,7 @@ public class MasterController implements ActionListener {
 		}
 		// items buttons test
 		for (int i = 0; i < num; i++) {
-			if (event.getSource().equals(items[i]) && selectedNum != 3) {
+			if (event.getSource().equals(items[i]) && (selectedNum != 4 && selectedNum != 0)) {
 				if (items[i].getBackground().equals(new Color(60, 60, 200))) {
 					// it is already selected, de-select it.
 					items[i].setBackground(Color.LIGHT_GRAY);
@@ -346,7 +347,7 @@ public class MasterController implements ActionListener {
 					// give the new values section to the user
 					showValues(i);
 				}
-			} else if (event.getSource().equals(items[i]) && selectedNum == 3) {
+			} else if (event.getSource().equals(items[i]) && (selectedNum == 4 && selectedNum != 0)) {
 				if (items[i].getBackground().equals(new Color(60, 60, 200))) {
 					// it is already selected, de-select it.
 					items[i].setBackground(Color.LIGHT_GRAY);
@@ -359,6 +360,13 @@ public class MasterController implements ActionListener {
 					// give the new values section to the user
 					showPreferences(i);
 				}
+			} else if (event.getSource().equals(items[i]) && (selectedNum != 4 && selectedNum == 0)) {
+				selections[i].setBackground(Color.LIGHT_GRAY);
+				selections[i].setForeground(Color.BLACK);
+				isSelected[i] = false;
+				// give the items section to the user
+				selectedNum = 0;
+				connection.sendEventToServer(ValuesEditor.Collision + ";" + collisions.getDamage(i));
 			}
 		}
 	}

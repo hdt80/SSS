@@ -16,6 +16,7 @@ public class Connection {
     private BufferedReader in;
 	private Socket socket;
 	private ArrayList<Character> buffer;
+	private boolean closed = true;
 	
 	/**
 	 * Default Constructor to initialize the socket
@@ -35,6 +36,20 @@ public class Connection {
 		buffer = new ArrayList<Character>();
 		socket = new Socket();
 		connect(hostName, port);
+	}
+	
+	/**
+	 * 
+	 * @author Bryce Hahn
+	 * @since 1.0
+	 */
+	public void sendClientIDToServer() {
+		try {
+			Print.debug("Sending Cliend ID MSC to server.");
+			sendBytes(new String("MSC@").getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -91,21 +106,6 @@ public class Connection {
 	}
 	
 	/**
-	 * Public method to read a message that is expected form the server
-	 * @return will return a string that is recieved from the server
-	 * @author Bryce Hahn
-	 * @since 1.0
-	 */
-	public String readFromServer() {
-		try {
-			return readBytes(); //returns the string from the private method
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return "Did not successfully read from the server.";
-	}
-	
-	/**
 	 * public method to connect to the server through a specified ip address and port
 	 * @param hostname String of the IPv4 Address from the server computer
 	 * @param port integer of the port, should remain the same unless connecting to multiple servers
@@ -118,6 +118,7 @@ public class Connection {
 			socket.connect(new InetSocketAddress(hostname, port)); //connect to the socket using the given parameters
 			dOut = socket.getOutputStream();
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			closed = false;
 			beginRead();
 		} catch (IOException e) {
 			//connection failed
@@ -135,6 +136,7 @@ public class Connection {
 		try {
 			Print.debug("Closing the socket.");
 			socket.close(); //close the connection
+			closed = true;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -153,11 +155,14 @@ public class Connection {
 			public void run() {
 				try {
 					char input;
-					while (true) {
+					while (!closed) {
 						input = (char)in.read();
-						buffer.add(input);
-						Print.debug("Received: ", makeString(buffer));
-						buffer.clear();
+						if (input != '@') {
+							buffer.add(input);
+						} else {
+							Print.debug("Received: ", makeString(buffer));
+							buffer.clear();
+						}
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -192,19 +197,5 @@ public class Connection {
     	dOut.write(myByteArray);           // write the message to the server
         Print.debug("[Message Send To Server] ", new String(myByteArray)); //debug text
 		dOut.flush(); //flush the stream
-	}
-	
-	/**
-	 * private method to read form the server
-	 * @return return a string that was inputed from the server
-	 * @throws IOException
-	 * @author Bryce Hahn, Dakota Alton, Mason Cluff
-	 * @since 1.0
-	 */
-	private String readBytes() throws IOException {
-	    //char array with a length of 4000
-	    char[] data = new char[4000];
-	    in.read(data); //read from the server
-	    return String.valueOf(data); //the return to the public method
 	}
 }

@@ -36,6 +36,10 @@ public class ValuesEditor implements ChangeListener, ActionListener {
     
     private int type;
     private int enemyType;
+	public final static int Collision = 0;
+	public final static int SpawnEnemy = 1;
+	public final static int InternalProblem = 2;
+	public final static int ExteriorEvent = 3;
     
     private Connection connection;
     
@@ -44,7 +48,7 @@ public class ValuesEditor implements ChangeListener, ActionListener {
     //variables -- will be changed through editor
     private int _pullforce = 0, _minpullforce = 0, _maxpullforce = 200;
     private int _pushforce = 0, _minpushforce = 0, _maxpushforce = 200;
-    private int _spawncount = 1, _minspawncount = 0, _maxspawncount = 50;
+    private int _spawncount = 1, _minspawncount = 0, _maxspawncount = 25;
     private int _damageratio = 50, _mindamageratio = 0, _maxdamageratio = 75; //1.0f = 100% of health
     private int _initialhealth = 100, _mininitialhealth = 10, _maxinitialhealth = 200;
     private int _timedown = 25, _mintimedown = 0, _maxtimedown = 100;
@@ -99,13 +103,13 @@ public class ValuesEditor implements ChangeListener, ActionListener {
 		//editor
 		editorPanel = new JPanel();
 		switch (type) {
-		case 0:
+		case 1:
 			setEnemy();
 			break;
-		case 1:
+		case 2:
 			setIP();
 			break;
-		case 2:
+		case 3:
 			setEvent();
 			break;
 		}
@@ -252,12 +256,27 @@ public class ValuesEditor implements ChangeListener, ActionListener {
 		} else if (event.getSource().equals(apply)) {
 			// this is where all the code will go to send information to the server
 			int isfriend = (_isfriendly) ? 1 : 0;
-			Print.debug(type + ";" + _pullforce + ";" + _pushforce + ";" + _spawncount + ";"
-					+ _damageratio + ";" + _initialhealth + ";" + _timedown + ";" + _cracks
-					+ ";" + isfriend + ";" + enemyType + ";");
-			connection.sendEventToServer(type + ";" + _pullforce + ";" + _pushforce + ";" + _spawncount + ";"
-					+ _damageratio + ";" + _initialhealth + ";" + _timedown + ";" + _cracks
-					+ ";" + isfriend + ";" + enemyType + ";");
+			
+			switch (type) {
+				case SpawnEnemy:
+					Print.debug("Sending spawn event to the server.");
+					connection.sendEventToServer(SpawnEnemy + ";" + enemyType + ";" + _spawncount + ";" + _initialhealth
+							+ ";" + isfriend + ";");
+					break;
+				case InternalProblem:
+					Print.debug("Sending internal problem to the server.");
+					connection.sendEventToServer(InternalProblem + ";");
+					break;
+				case ExteriorEvent:
+					Print.debug("Sending exterior event to the server.");
+					connection.sendEventToServer(ExteriorEvent + ";");
+					break;
+			}
+			
+//			connection.sendEventToServer(type + ";" + _pullforce + ";" + _pushforce + ";" + _spawncount + ";"
+//					+ _damageratio + ";" + _initialhealth + ";" + _timedown + ";" + _cracks
+//					+ ";" + isfriend + ";" + enemyType + ";");
+			
 			//end it here
 			frame.dispose();
 			MasterController ms = MasterController.getMasterController();
