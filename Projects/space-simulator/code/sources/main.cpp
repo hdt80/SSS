@@ -6,12 +6,12 @@
 #include <graphics/renderers/BatchRenderer.h>
 #include <environment/Asteroid.h>
 #include <actors/Prop.h>
+#include <input/Input.h>
 #include <core/Game.h>
 #include <time.h>
-#include <cstdlib>
-#include <cstdio>
-#include <input/Input.h>
-#include "core/Connection.h"
+#include <core/Connection.h>
+#include <thread>
+#include <chrono>
 
 int main(int argc, char** agrv) {
 
@@ -23,36 +23,36 @@ int main(int argc, char** agrv) {
     using engine::object::Prop;
     using engine::graphics::Camera;
     using engine::Input;
-    using sss::Asteroid;
 
-    Connection::_connection.makeConnect("10.65.175.117", 5003);
+    using sss::Asteroid;
+    using sss::Connection;
 
     Window window("sunset-space-simulator", 960, 540);
-    glClearColor(0.3, 0.0, 0.3, 1.0);
+    glClearColor(0.0, 0.0, 0.0, 1.0);
+
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_DEPTH_CLAMP);
-    glDepthMask(GL_TRUE);
+    glDepthMask(GL_TRUE);std::string file_path = "assets/shaders/textured";
+    
+    Connection::getInstance().makeConnection("192.168.0.105", 5003);
+    Connection::getInstance().write("NAV");
 
-    std::string file_path = "assets/shaders/textured";
-    
     sss::Game game(Camera(glm::vec3(0, 0, 0), glm::quat(0, 0, 0, 1), glm::perspective(70.0f, 960.0f / 540.0f, 0.1f, 1000.0f)));
-    
-    Connection::_connection.write("NAV"); // First message is the client name
     while(not window.shouldClose()) {
         window.clear();
+
+
 
         game.update();
         game.render();
 
-        Connection::_connection.printBuffer();
-
-        if(Input::isKeyPressed(GLFW_KEY_ESCAPE)) {
+        if(Input::isKeyPressed(GLFW_KEY_ESCAPE))
             break;
-        }
 
         window.update();
+		
     }
 
     

@@ -5,9 +5,6 @@
 #include <components/RenderComponent.h>
 #include <cstdlib>
 #include <cstdio>
-#include <cstdlib>
-#include <cstdio>
-#include <algorithm>
 
 namespace sss {
     
@@ -16,6 +13,7 @@ namespace sss {
             typedef Pawn Super;
             typedef Asteroid This;
 
+            const glm::vec3 _initPos;
             glm::vec3 _vector;
             glm::vec3 _rotAxis;
 

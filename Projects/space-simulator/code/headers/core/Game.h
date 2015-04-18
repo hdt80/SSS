@@ -8,11 +8,10 @@
 #include <vector>
 #include <actors/Pawn.h>
 #include <input/Input.h>
-#include <cstdlib>
-#include <cstdio>
-#include <cstdlib>
-#include <cstdio>
-#include "core/Connection.h"
+#include <environment/Enemy.h>
+#include <environment/Missile.h>
+#include <core/Connection.h>
+#include <core/Game.h>
 #include <algorithm>
 
 namespace sss {
@@ -24,14 +23,19 @@ namespace sss {
     using engine::graphics::BatchRenderer;
     using engine::physics::SphereCollider;
     using engine::Input;
+    using sss::Connection;
+    using sss::Enemy;
+    using sss::Missile;
 
     class Game {
         private:
             std::vector<Actor*> _children;
+            std::vector<Missile*> _missiles;
             Camera _camera;
             Shader* _shader;
             Actor* _player; 
             BatchRenderer _renderer;
+            bool _canFire;
         public:
             Game(const Camera& camera);
             ~Game();

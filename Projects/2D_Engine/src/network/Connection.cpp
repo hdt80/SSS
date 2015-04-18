@@ -90,7 +90,7 @@ bool Connection::makeConnect(std::string ip, int port) {
 		return false;
 	} else {
 		info("Connection made to %s:%i", _ip.c_str(), _port);
-		_connected = true;
+		//_connected = true;
 		return true;
 	}
 
@@ -104,12 +104,12 @@ void Connection::disconnect() {
 // Print the buffer from the socket
 void Connection::printBuffer() {
 	if (!_connected) {
-		return;
+		//return;
 	}
 	int result = recv(_socket, _buffer, BUFFER_SIZE, 0);
 	if (result == -1) {
-		_connected = false;
-		return;
+		//_connected = false;
+		//return;
 	}
 	debug("RECV: \'%s\' (%i)", _buffer, result);
 
@@ -125,7 +125,7 @@ void Connection::printBuffer() {
 // Sends a request to the server to get the value stored on the server
 std::string Connection::getValue(std::string value) {
 	if (!_connected) {
-		return "";
+		//return "";
 	}
 	// Send a message to the server requesting a value
 	std::string msg = "";
@@ -151,7 +151,7 @@ std::string Connection::getValue(std::string value) {
 void Connection::setValue(char* msg) {
 	if (!_connected) {
 		error("Not connected!");
-		return;
+		//return;
 	}
 	int keyStop = 0;
 	// Finding the index of the char that splits the key and value
@@ -179,7 +179,7 @@ void Connection::setValue(char* msg) {
 // Can't use send as Winsock uses that
 void Connection::write(std::string message) {
 	if (!_connected) {
-		return;
+		//return;
 	}
 	// SOCKET, char* buf, buff_size, flags
 	if (send(_socket, (message + MSG_END).c_str(), strlen((message + MSG_END).c_str()), 0) == SOCKET_ERROR) {

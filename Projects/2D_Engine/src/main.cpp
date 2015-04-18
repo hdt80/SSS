@@ -15,8 +15,8 @@
 // =================================
 int main(int argc, char* argv[]) {
 	try {
-    	Window w("Engineering", 1024, 768);
-    	w.start();
+    	Window w("Engineering");
+    	w.start(); // Badd0ged
 	} catch (...) {
 		printf("Oh dear: %s\n", SDL_GetError());
 	}

@@ -8,7 +8,7 @@ namespace sss {
     } 
 
     Asteroid::Asteroid(const glm::vec3& position, float size, const glm::vec3& vector, const glm::vec3& rotAxis)
-        : Super(), _vector(vector), _rotAxis(rotAxis)
+        : Super(), _initPos(position), _vector(vector), _rotAxis(rotAxis)
     {
         init(position, size);
     }
@@ -19,25 +19,33 @@ namespace sss {
         _physics = nullptr;
         _render = nullptr;
 
-       // std::cout << "Yo" << std::endl;
 
     }
 
     void Asteroid::init(const glm::vec3& position, float size) {
+        static std::string array[3] = {
+            "assets/models/asteroids/asteroid0.obj",
+            "assets/models/asteroids/asteroid2.obj",
+            "assets/models/asteroids/asteroid2.obj"
+        };
         delete _input;
         delete _physics;
         _input = nullptr;
         _physics = new engine::object::PhysicsComponent(new engine::physics::SphereCollider(position, size));
-        _render = new engine::object::RenderComponent("assets/models/asteroid0.obj", "assets/textures/asteroid1.png");
+        _render = new engine::object::RenderComponent(array[rand() % 2], "assets/textures/asteroid1.png");
         setPosition(position);
     }
 
     void Asteroid::tick(float delta) {
         static const glm::vec3 NULL_VEC(0, 0, 0);
-        if(_vector != NULL_VEC)
+        if(_vector != NULL_VEC) {
             move(_vector);
+            if(glm::length(getPosition() - _initPos) > 1000.0f) {
+                _vector *= -1.0f;
+            }
+        }
         if(_rotAxis != NULL_VEC)
-            rotate(_rotAxis, 0.01f);
+            rotate(_rotAxis, 1);
     } 
 
     void Asteroid::onSpawn() {

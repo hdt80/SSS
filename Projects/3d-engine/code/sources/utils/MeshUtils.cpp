@@ -44,7 +44,7 @@ namespace engine {
             }
             file.close();
             /* calculate all the normals */
-            for(int i = 0; i < temp_verts.size(); i+= 3) {
+            for(size_t i = 0; i < temp_verts.size(); i+= 3) {
                 short i0 = i;
                 short i1 = i + 1;
                 short i2 = i + 2;
@@ -58,7 +58,7 @@ namespace engine {
                 temp_normals.push_back(normal);
             }
 
-            for(int i = 0; i < indices.size(); i++) {
+            for(size_t i = 0; i < indices.size(); i++) {
                 glm::vec3 position = glm::vec3(temp_verts[indices[i].vIndex]); // The OBJ format starts indicies at one
 
                 glm::vec4 color = random_color(); //  (indices[i].hasUV) ? glm::vec4(0, 0, 0, 1) : random_color();
@@ -130,7 +130,7 @@ namespace engine {
             OBJIndex index{0, 0, 0, false, false};
             std::vector<unsigned int> nums;
             std::string num;
-            for(int i = 0; i < token.length(); i++) {
+            for(size_t i = 0; i < token.length(); i++) {
                 if(token[i] == '/') {
                     nums.push_back(strtol(num.c_str(), nullptr, 10));
                     num = "";

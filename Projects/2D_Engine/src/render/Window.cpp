@@ -68,7 +68,7 @@ Window::~Window() {
 
 // Start rendering to the window and create the power cells
 void Window::start() {
-	Connection::_connection.makeConnect("127.0.0.1", 5003);
+	Connection::_connection.makeConnect("192.168.0.105", 5003);
 	Connection::_connection.write("ENG");
 
 	// Creating the power cells

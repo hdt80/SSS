@@ -1,56 +1,65 @@
-#ifndef NETWORK_CONNECT_H
-#define NETWORK_CONNECT_H
+#pragma once
 
 #include <string>
-#include <string.h>
+#include <cstring>
 #include <unistd.h>
+#include <memory.h>
 #include <iostream>
+#include <cstdio>
 
-#include <winsock2.h>
-
-#include "core/Logger.h"
+#ifndef __APPLE__
+    #include <winsock2.h>
+#else
+    #include <arpa/inet.h>
+    #include <sys/time.h>
+    #include <sys/socket.h>
+    #include <fcntl.h>
+#endif
 
 #define TIMEOUT_WAIT 2500
-#define CONBUF_SIZE  1024
-#define MSG_END      '@'
+#define SOCK_BUFFER_SIZE 1024
+#define MSG_END '@'
 
-// A Connection is a socket connection using UDP between two open
-// sockets, wether is be Java or C++
-class Connection {
+namespace sss {
 
-    public:
-        // Constructor and deconstructor
-        Connection();
-        Connection(std::string ip, int port);
-        ~Connection();
-        
-        // Methods
-        bool makeConnect(std::string ip, int port);
-        void disconnect();
+    class Connection {
+        private:
+            bool _connected;
+            char _buffer[SOCK_BUFFER_SIZE];
 
-        void printBuffer();
-        void write(std::string message);
-
-        std::string getValue(std::string value);
-        void        setValue(char* msg);
-
-        static Connection _connection;
-    private:
-        bool _connected;
-        char _buffer[CONBUF_SIZE];
-
-        // Winsock data members
-        WSADATA         _wsaData;
-        SOCKET          _socket;
-        struct hostent* _host;
-        SOCKADDR_IN     _sockAddr;
-
-        int  _port;      // Port connection
-        std::string _ip; // IP of the other socket
-
-        void init();  // Initalizes winsock2
-        void close(); // Close ws2 and all resources
-        void clearBuffer();
-};
-
+#ifndef __APPLE__ 
+            WSADATA _wsaData;
+            SOCKET _socket;
+            SOCKADDR_IN _sockAddr;
+#else
+            struct sockaddr_in _server;
+            int _socketDesc;
+          
 #endif
+            struct hostent* _host;
+            int _port;
+            std::string _ip;
+        protected:
+            Connection();
+            ~Connection();
+        public:
+            static Connection& getInstance();
+
+            bool makeConnection(const std::string& ip, int port);
+            void disconnect();
+
+            void printBuffer();
+            void write(const std::string& msg);
+
+            std::string getValue(const std::string& value);
+            void setValue(const char* msg);
+
+
+        private:
+            void init();
+            void clearBuffer();
+
+        protected:
+    };
+
+}
