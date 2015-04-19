@@ -1,6 +1,7 @@
 #include <core/Game.h>
 #include <actors/Pawn.h>
 #include <components/RenderComponent.h>
+#include <core/Connection.h>
 
 namespace sss {
 
@@ -16,6 +17,8 @@ namespace sss {
         return glm::mat3_cast(rot) * glm::vec3(0, 1, 0);
     }
 
+
+    
     Game::Game(const Camera& camera) 
         : _camera(camera)
     {
@@ -25,6 +28,12 @@ namespace sss {
         _canFire = true;
         init();
     }
+
+    Game& Game::getGame() {
+        static Game game(Camera(glm::vec3(0, 0, 0), glm::quat(0, 0, 0, 1), glm::perspective(70.0f, 960.0f / 540.0f, 0.1f, 1000.0f)));
+        return game;
+    }
+
 
     Game::~Game() {
         _shader->unbind();
@@ -38,7 +47,6 @@ namespace sss {
     }
 
     void Game::update(float delta) {
-        Connection::getInstance().printBuffer();
         player_stuff();
         detect_collisions();
         _camera.setPosition(_player->getPosition());
@@ -98,32 +106,32 @@ namespace sss {
             _player->rotate(Y_AXIS, -2);
 
         if(Input::isKeyPressed(GLFW_KEY_I))
-            _player->rotate(X_AXIS, 0.1);
+            _player->rotate(X_AXIS, 2);
         else if(Input::isKeyPressed(GLFW_KEY_K))
-            _player->rotate(X_AXIS, -0.1);
+            _player->rotate(X_AXIS, -2);
 
         if(Input::isKeyPressed(GLFW_KEY_U))
-            _player->rotate(Z_AXIS, 0.1);
+            _player->rotate(Z_AXIS, 2);
         else if(Input::isKeyPressed(GLFW_KEY_O))
-            _player->rotate(Z_AXIS, -0.1);
+            _player->rotate(Z_AXIS, -2);
 
         glm::vec3 forward = getForward(_player->getRotation());
         glm::vec3 right   = getRight(_player->getRotation());
         /* movement */
         if(Input::isKeyPressed(GLFW_KEY_W))
-            _player->move(-0.01f * forward);
+            _player->move(-0.1f * forward);
         else if(Input::isKeyPressed(GLFW_KEY_S))
-            _player->move(0.01f * forward);
+            _player->move(0.1f * forward);
 
         if(Input::isKeyPressed(GLFW_KEY_D))
-            _player->move(0.01f * right);
+            _player->move(0.1f * right);
         else if(Input::isKeyPressed(GLFW_KEY_A))
-            _player->move(-0.01f * right);
+            _player->move(-0.1f * right);
 
         /* firing */
         if(_canFire and Input::isKeyPressed(GLFW_KEY_F)) {
             glm::vec3 position = _player->getPosition() + glm::vec3(0, 0, -5) * forward;
-            Missile* m = new Missile(position, -0.4f * forward);
+            Missile* m = new Missile(position, -0.7f * forward);
             m->setRotation(_player->getRotation());
             m->rotate(glm::vec3(1, 0, 0), -90);
             _missiles.push_back(m);
@@ -134,11 +142,16 @@ namespace sss {
 
     }
 
+    void Game::addEnemy() {
+        _children.push_back(new Enemy(glm::vec3(rand() % 100, rand() % 100, rand() % 100),
+                                      glm::vec3(rand() % 100, rand() % 100, rand() % 100)));
+    }
+
     void Game::init() {
         int texts[16] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
         _shader->setUniform1iv("textures", texts, 16);
-        for(size_t i = 0; i < 400; i++) {
-            Asteroid* a = new Asteroid(glm::vec3(rand() % 300 - 150, rand() % 300 - 150, rand() % 300 - 150), 1);
+        for(size_t i = 0; i < 200; i++) {
+            Asteroid* a = new Asteroid(glm::vec3(rand() % 200 - 100, rand() % 200 - 100, rand() % 200 - 100), 1);
             a->onSpawn();
             _children.push_back(a);
         }
@@ -147,7 +160,6 @@ namespace sss {
         _children.push_back(new Enemy(glm::vec3(80, 80, 80), glm::vec3(54, 54, 54)));
 
 
-        _missiles.push_back(new Missile(glm::vec3(-1, -1, -1), glm::vec3(0, 0, 0)));
         // _children[0]->destroy();
     }
 
@@ -168,7 +180,7 @@ namespace sss {
                     p->destroy();
                 }
 
-                if(glm::length(m->getPosition() - _player->getPosition()) > 700.0f)
+                if(glm::length(m->getPosition() - _player->getPosition()) > 300.0f)
                     m->destroy();
 
                 // send missle hit

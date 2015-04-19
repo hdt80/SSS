@@ -4,7 +4,6 @@
 #include <physics/SphereCollider.h>
 #include <components/RenderComponent.h>
 #include <components/PhysicsComponent.h>
-#include <cmath>
 
 namespace sss {
 

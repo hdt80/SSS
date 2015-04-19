@@ -3,8 +3,6 @@
 #include <actors/Pawn.h>
 #include <physics/SphereCollider.h>
 #include <components/RenderComponent.h>
-#include <cstdlib>
-#include <cstdio>
 
 namespace sss {
     

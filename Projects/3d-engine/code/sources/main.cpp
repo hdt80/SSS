@@ -15,7 +15,7 @@
 #include "testing/Player.h"
 #include <cstdio>
 
-#define LOTS_OF_SPRITES 1
+#define LOTS_OF_SPRITES 0
 
 using namespace engine;
 using namespace graphics;
@@ -29,6 +29,7 @@ int main(int argc, char** argv) {
     Window window("engine", 960, 540);
     std::cout << glGetString(GL_VERSION) << std::endl;
     glClearColor(0, 0.3, 0.3, 1.0);
+
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glEnable(GL_DEPTH_TEST);

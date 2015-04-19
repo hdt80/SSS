@@ -25,14 +25,17 @@ namespace engine {
                 /* parse a vertex */
                 if(not tokens[0].compare("v")) { 
                     glm::vec3 vert;
-                    vert.x = strtof(tokens[1].c_str(), nullptr);
-                    vert.y = strtof(tokens[2].c_str(), nullptr);
-                    vert.z = strtof(tokens[3].c_str(), nullptr);
+                    std::sscanf(tokens[1].c_str(), "%f", &vert.x);
+                    std::sscanf(tokens[2].c_str(), "%f", &vert.y);
+                    std::sscanf(tokens[3].c_str(), "%f", &vert.z);
                     temp_verts.push_back(vert);
                 } else if(not tokens[0].compare("vt")) { /* parse a UV coordinate */
                     glm::vec2 UV;
-                    UV.x = strtof(tokens[1].c_str(), nullptr);
-                    UV.y = 1.0f - strtof(tokens[2].c_str(), nullptr);
+                    std::sscanf(tokens[1].c_str(), "%f", &UV.x);
+                    // UV.x = std::stof(tokens[1]);i
+                    std::sscanf(tokens[2].c_str(), "%f", &UV.y);
+                    UV.y = 1.0f - UV.y;
+                    // UV.y = 1.0f - std::stof(tokens[2]);
                     temp_uvs.push_back(UV);
                 } else if(not tokens[0].compare("f")) { /* parse a face */
                     for(size_t i = 0; i < tokens.size() - 3; i++) {
@@ -132,7 +135,9 @@ namespace engine {
             std::string num;
             for(size_t i = 0; i < token.length(); i++) {
                 if(token[i] == '/') {
-                    nums.push_back(strtol(num.c_str(), nullptr, 10));
+                    int n = 0;
+                    std::sscanf(num.c_str(), "%d", &n);
+                    nums.push_back(n - 1);
                     num = "";
                 } else {
                     num += token[i];

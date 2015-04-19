@@ -65,7 +65,7 @@ namespace sss {
          * we'll catch that as it's not important and is expected
          */
         if(connect(_socket, (SOCKADDR*)(&_sockAddr), sizeof(_sockAddr)) != 0 and WSAGetLastError() != 10035) {
-            disconnect();
+            close();
             return false;
         } else {
             return true;
@@ -82,7 +82,7 @@ namespace sss {
 
         std::string setTest(_buffer, 3);
         if(not setTest.compare("SET")) {
-            setValue(_buffer + 4);
+            setValue(_buffer + 4, strlen(_buffer));
         }
 
         clearBuffer();
@@ -123,11 +123,9 @@ namespace sss {
 
     }
 
-    void Connection::write(const std::string& message) {
-        if (send(_socket, (message + MSG_END).c_str(), strlen((message + MSG_END).c_str()), 0) == SOCKET_ERROR) {
-			printf("Error while writing to socket: %i\n", WSAGetLastError());
-		}
-		printf("SEND: \'%s\' (%i)\n", (message + MSG_END).c_str(), strlen((message + MSG_END).c_str()));
+    void Connection::write(const std::string& msg) {
+        if(send(_socket, (msg + MSG_END).c_str(), msg.length() + 1))
+            std::cerr << " write failure " << std::endl;
     }
 
     void Connection::clearBuffer() {
@@ -146,10 +144,6 @@ namespace sss {
             return false;
         }
 
-        // if((fcntl(_socketDesc, F_SETFL, O_NONBLOCK)) < 0) {
-        //     std::cerr << "Could not set socket to non-blocking" << std::endl;
-        //     return false;
-        // }
         memset(&_server, 0, sizeof(_server));
 
         _server.sin_addr.s_addr = inet_addr(_ip.c_str());
@@ -173,31 +167,20 @@ namespace sss {
 
     void Connection::printBuffer() {
 
-        struct timeval tv;
-        fd_set read_fds;
-
-        tv.tv_sec = 2;
-        tv.tv_usec = 5000000;
-
-        FD_ZERO(&read_fds);
-        // FD_SET(0, &read_fds);
-
-        // if(select(1, &read_fds, NULL, NULL, &tv) == -1) {
-        //     std::cerr << "select error" << std::endl;  
-        //     return;
-        // }
 
         int result = recv(_socketDesc, &_buffer[0], SOCK_BUFFER_SIZE, 0);
         if(result == -1) 
             return;
 
-        printf("%s\n", _buffer);
+        // printf("%s\n", _buffer);
 
         std::string setTest(_buffer, 3);
         if(not setTest.compare("SET")) 
             setValue(_buffer);
 
-
+        if(not strcmp(_buffer, "SPAWN")) { 
+            Game::getGame().addEnemy();
+        }
 
         clearBuffer();
 

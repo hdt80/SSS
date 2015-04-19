@@ -40,7 +40,7 @@ namespace sss {
         static const glm::vec3 NULL_VEC(0, 0, 0);
         if(_vector != NULL_VEC) {
             move(_vector);
-            if(glm::length(getPosition() - _initPos) > 1000.0f) {
+            if(glm::length(getPosition() - _initPos) > 700.0f) {
                 _vector *= -1.0f;
             }
         }

@@ -1,0 +1,42 @@
+CXX = g++
+CC = gcc
+
+LIBS = -lGLEW -lglfw3
+
+SOURCEDIR = code/sources
+BUILDDIR = build
+
+SOURCES = $(wildcard $(SOURCEDIR)/*.cpp)
+SOURCES += $(wildcard $(SOURCEDIR)/*/*.cpp)
+SOURCES += $(wildcard $(SOURCEDIR)/*/*/*.cpp)
+
+OBJECTS = $(patsubst $(SOURCEDIR)/%.cpp, $(BUILDDIR)/%.o, $(SOURCES))
+
+CSOURCES = $(wildcard $(SOURCEDIR)/*/*.c)
+COBJECTS = $(patsubst $(SOURCEDIR)/%.c, $(BUILDDIR)/%.o, $(CSOURCES))
+
+CXXFLAGS = -Wall -g -Wno-comment -Wsign-compare -Winline -pedantic -c -std=c++11 -I include -I code/headers
+CFLAGS = -c -I code/headers -I include
+LDFLAGS = $(LIBS) -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo lib/libengine.a 
+
+EXE = app
+
+build: $(EXE)
+	
+$(EXE): $(OBJECTS) $(COBJECTS)
+		$(CXX) $(addprefix $(BUILDDIR)/, $(notdir $^)) $(LDFLAGS) -o ./bin/$@
+
+$(OBJECTS): $(BUILDDIR)/%.o : $(SOURCEDIR)/%.cpp
+		$(CXX) $(CXXFLAGS) $< -o $(BUILDDIR)/$(notdir $@) 
+
+$(COBJECTS): $(BUILDDIR)/%.o : $(SOURCEDIR)/%.c
+		$(CC) $(CFLAGS) $< -o $(BUILDDIR)/$(notdir $@)
+
+clean:
+	rm -r $(BUILDDIR)/*.o ./bin/$(EXE) ./dist
+
+run:
+	./bin/$(EXE)
+
+debug:
+	gdb ./bin/$(EXE)

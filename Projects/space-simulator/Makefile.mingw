@@ -1,0 +1,45 @@
+CXX = g++
+CC = gcc
+
+LIBS = -Llib -Llib/win -lglfw3 -lglew32 -lopengl32 -lengine
+
+SOURCEDIR = code/sources
+BUILDDIR = build
+
+SOURCES = $(wildcard $(SOURCEDIR)/*.cpp)
+SOURCES += $(wildcard $(SOURCEDIR)/*/*.cpp)
+SOURCES += $(wildcard $(SOURCEDIR)/*/*/*.cpp)
+
+OBJECTS = $(patsubst $(SOURCEDIR)/%.cpp, $(BUILDDIR)/%.o, $(SOURCES))
+
+CSOURCES = $(wildcard $(SOURCEDIR)/*/*.c)
+COBJECTS = $(patsubst $(SOURCEDIR)/%.c, $(BUILDDIR)/%.o, $(CSOURCES))
+
+CXXFLAGS = -Wall -g -Wno-comment -Wsign-compare -Winline -pedantic -c -std=c++11 -I include -I code/headers
+CFLAGS = -c -I code/headers -I include
+LDFLAGS = $(LIBS) l
+
+EXE = app
+
+
+
+build: $(EXE)
+
+	
+$(EXE): $(OBJECTS) $(COBJECTS)
+		$(CXX) $(addprefix $(BUILDDIR)/, $(notdir $^)) $(LDFLAGS) -o ./bin/$@
+
+$(OBJECTS): $(BUILDDIR)/%.o : $(SOURCEDIR)/%.cpp
+		$(CXX) $(CXXFLAGS) $< -o $(BUILDDIR)/$(notdir $@) 
+
+$(COBJECTS): $(BUILDDIR)/%.o : $(SOURCEDIR)/%.c
+		$(CC) $(CFLAGS) $< -o $(BUILDDIR)/$(notdir $@)
+
+clean:
+	rm $(BUILDDIR)/*.o && rm ./bin/$(EXE)
+
+run:
+	./bin/$(EXE)
+
+debug:
+	gdb ./bin/$(EXE)
