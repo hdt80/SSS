@@ -35,13 +35,28 @@ namespace engine {
             glEnableVertexAttribArray(TRANS_W);
 
             glVertexAttribPointer(VERTEX_INDEX, 3, GL_FLOAT, GL_FALSE, VERTEX_POINTER_SIZE, 0);
-            glVertexAttribPointer(COLOR_INDEX, 4, GL_UNSIGNED_BYTE, GL_TRUE, VERTEX_POINTER_SIZE, (const GLvoid*)OFFSETOF(VertexPointer, VertexPointer::color));
-            glVertexAttribPointer(UV_INDEX, 2, GL_FLOAT, GL_FALSE, VERTEX_POINTER_SIZE, (const GLvoid*)OFFSETOF(VertexPointer, VertexPointer::uv));
-            glVertexAttribPointer(TEX_INDEX, 1, GL_FLOAT, GL_FALSE, VERTEX_POINTER_SIZE, (const GLvoid*)OFFSETOF(VertexPointer, VertexPointer::texture_id));
-            glVertexAttribPointer(TRANS_X, 4, GL_FLOAT, GL_FALSE, VERTEX_POINTER_SIZE, (const GLvoid*)(OFFSETOF(VertexPointer, VertexPointer::transformX)));
-            glVertexAttribPointer(TRANS_Y, 4, GL_FLOAT, GL_FALSE, VERTEX_POINTER_SIZE, (const GLvoid*)(OFFSETOF(VertexPointer, VertexPointer::transformY)));
-            glVertexAttribPointer(TRANS_Z, 4, GL_FLOAT, GL_FALSE, VERTEX_POINTER_SIZE, (const GLvoid*)(OFFSETOF(VertexPointer, VertexPointer::transformZ)));
-            glVertexAttribPointer(TRANS_W, 4, GL_FLOAT, GL_FALSE, VERTEX_POINTER_SIZE, (const GLvoid*)(OFFSETOF(VertexPointer, VertexPointer::transformW)));
+            
+            glVertexAttribPointer(COLOR_INDEX, 4, GL_UNSIGNED_BYTE, GL_TRUE, 
+                                  VERTEX_POINTER_SIZE, (const GLvoid*)OFFSETOF(VertexPointer, VertexPointer::color));
+            
+            glVertexAttribPointer(UV_INDEX, 2, GL_FLOAT, 
+                                 GL_FALSE, VERTEX_POINTER_SIZE, (const GLvoid*)OFFSETOF(VertexPointer, VertexPointer::uv));          
+                
+           
+            glVertexAttribPointer(TEX_INDEX, 1, GL_FLOAT, GL_FALSE, 
+                                 VERTEX_POINTER_SIZE, (const GLvoid*)OFFSETOF(VertexPointer, VertexPointer::texture_id));
+            
+            glVertexAttribPointer(TRANS_X, 4, GL_FLOAT, GL_FALSE, 
+                                VERTEX_POINTER_SIZE, (const GLvoid*)(OFFSETOF(VertexPointer, VertexPointer::transformX)));
+            
+            glVertexAttribPointer(TRANS_Y, 4, GL_FLOAT, GL_FALSE, 
+                                 VERTEX_POINTER_SIZE, (const GLvoid*)(OFFSETOF(VertexPointer, VertexPointer::transformY)));
+            
+            glVertexAttribPointer(TRANS_Z, 4, GL_FLOAT, GL_FALSE, 
+                                  VERTEX_POINTER_SIZE, (const GLvoid*)(OFFSETOF(VertexPointer, VertexPointer::transformZ)));
+           
+            glVertexAttribPointer(TRANS_W, 4, GL_FLOAT, GL_FALSE, 
+                                  VERTEX_POINTER_SIZE, (const GLvoid*)(OFFSETOF(VertexPointer, VertexPointer::transformW)));
 
             glBindBuffer(GL_ARRAY_BUFFER, 0);
             glBindVertexArray(0);
@@ -68,7 +83,7 @@ namespace engine {
             if(render->getTexture() != nullptr) {
                 GLuint tid = render->getTexture()->getTextureID();
                 bool found = false;
-                for(int i = 0; i < _textureSlots.size(); i++) {
+                for(size_t i = 0; i < _textureSlots.size(); i++) {
                     if(_textureSlots[i] == tid) {
                         ts = (float)(i + 1);
                         found = true;
@@ -115,7 +130,7 @@ namespace engine {
         }
 
         void BatchRenderer::flush() {
-            for(int i = 0; i < _textureSlots.size(); i++) {
+            for(size_t i = 0; i < _textureSlots.size(); i++) {
                 glActiveTexture(GL_TEXTURE0);
                 glBindTexture(GL_TEXTURE_2D, _textureSlots[i]);
             }

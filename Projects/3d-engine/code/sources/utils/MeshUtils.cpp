@@ -35,7 +35,7 @@ namespace engine {
                     UV.y = 1.0f - strtof(tokens[2].c_str(), nullptr);
                     temp_uvs.push_back(UV);
                 } else if(not tokens[0].compare("f")) { /* parse a face */
-                    for(int i = 0; i < tokens.size() - 3; i++) {
+                    for(size_t i = 0; i < tokens.size() - 3; i++) {
                         indices.push_back(parse_obj_index(tokens[1]));
                         indices.push_back(parse_obj_index(tokens[2 + i]));
                         indices.push_back(parse_obj_index(tokens[3 + i]));
@@ -114,9 +114,9 @@ namespace engine {
             /* read in the indices */
             file.read(reinterpret_cast<char*>(&indices[0]), indexCount * sizeof(GLuint));
             file.close();
-            for(int i = 0; i < vertexCount; i++) 
+            for(size_t i = 0; i < vertexCount; i++) 
                 vertices_out.push_back(vertices[i]);
-            for(int i = 0; i < indexCount; i++)
+            for(size_t i = 0; i < indexCount; i++)
                 indices_out.push_back(indices[i]);
 
             delete[] indices;
