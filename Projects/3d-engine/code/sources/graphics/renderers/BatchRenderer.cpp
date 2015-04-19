@@ -131,7 +131,7 @@ namespace engine {
 
         void BatchRenderer::flush() {
             for(size_t i = 0; i < _textureSlots.size(); i++) {
-                glActiveTexture(GL_TEXTURE0);
+                glActiveTexture(GL_TEXTURE0 + i);
                 glBindTexture(GL_TEXTURE_2D, _textureSlots[i]);
             }
             _vertexCount = 0;

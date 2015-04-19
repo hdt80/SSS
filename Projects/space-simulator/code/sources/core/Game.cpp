@@ -30,7 +30,7 @@ namespace sss {
     }
 
     Game& Game::getGame() {
-        static Game game(Camera(glm::vec3(0, 0, 0), glm::quat(0, 0, 0, 1), glm::perspective(70.0f, 960.0f / 540.0f, 0.1f, 1000.0f)));
+        static Game game(Camera(glm::vec3(0, 0, 0), glm::quat(0, 0, 0, 1), glm::perspective(glm::radians(70.0f), 960.0f / 540.0f, 0.1f, 1000.0f)));
         return game;
     }
 
@@ -101,19 +101,19 @@ namespace sss {
 
         /*  looking around */
         if(Input::isKeyPressed(GLFW_KEY_J)) 
-            _player->rotate(Y_AXIS, 2);
+            _player->rotate(Y_AXIS, glm::radians(2.0f));
         else if(Input::isKeyPressed(GLFW_KEY_L)) 
-            _player->rotate(Y_AXIS, -2);
+            _player->rotate(Y_AXIS, glm::radians(-2.0f));
 
         if(Input::isKeyPressed(GLFW_KEY_I))
-            _player->rotate(X_AXIS, 2);
+            _player->rotate(X_AXIS, glm::radians(2.0f));
         else if(Input::isKeyPressed(GLFW_KEY_K))
-            _player->rotate(X_AXIS, -2);
+            _player->rotate(X_AXIS, glm::radians(-2.0f));
 
         if(Input::isKeyPressed(GLFW_KEY_U))
-            _player->rotate(Z_AXIS, 2);
+            _player->rotate(Z_AXIS, glm::radians(2.0f));
         else if(Input::isKeyPressed(GLFW_KEY_O))
-            _player->rotate(Z_AXIS, -2);
+            _player->rotate(Z_AXIS, glm::radians(-2.0f));
 
         glm::vec3 forward = getForward(_player->getRotation());
         glm::vec3 right   = getRight(_player->getRotation());
@@ -133,7 +133,7 @@ namespace sss {
             glm::vec3 position = _player->getPosition() + glm::vec3(0, 0, -5) * forward;
             Missile* m = new Missile(position, -0.7f * forward);
             m->setRotation(_player->getRotation());
-            m->rotate(glm::vec3(1, 0, 0), -90);
+            m->rotate(glm::vec3(1, 0, 0), glm::radians(-90.0f));
             _missiles.push_back(m);
             _canFire = false;
         } else if(not _canFire and not Input::isKeyPressed(GLFW_KEY_F)) {
