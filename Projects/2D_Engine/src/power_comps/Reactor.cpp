@@ -49,8 +49,8 @@ bool Reactor::addCell(std::string name, int max) {
 		return false;
 	}
 	PowerCell toAdd(name, // Reactor name
-					max-1,  // Current max power, hasn't changed, so max
-					max,  // True max power
+					max,  // Current max power, hasn't changed, so max
+					max - 1,  // True max power
 					0     // Current power of cell
 	);
 	cells.push_back(toAdd);
@@ -112,9 +112,8 @@ bool Reactor::changePower(int cellIndex, int amount) {
 	str.append(":");
 	str.append(convert::toString(cell->currPower));
 	Connection::_connection.write(str);
-	if (Connection::_connection._connected == true) {	
-		info("\'%s\':\'%s\'", cell->name.c_str(), Connection::_connection.getValue(cell->name.c_str()).c_str());
-	}
+
+	info("\'%s\':\'%s\'", cell->name.c_str(), Connection::_connection.getValue(cell->name.c_str()).c_str());
 
 	return true;
 }
