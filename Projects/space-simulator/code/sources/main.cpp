@@ -1,3 +1,4 @@
+#define GLM_FORCE_RADIANS
 #include <graphics/Window.h>
 #include <graphics/Shader.h>
 #include <glm/gtx/transform.hpp>
@@ -8,15 +9,18 @@
 #include <actors/Prop.h>
 #include <input/Input.h>
 #include <core/Game.h>
+#include <thread>
 #include <time.h>
 #include <core/Connection.h>
-#include <thread>
-#include <chrono>
+
+void print_buffer() {
+    while(true)
+        sss::Connection::getInstance().printBuffer();
+}
 
 int main(int argc, char** agrv) {
 
     srand(time(NULL));
-
     using engine::graphics::Window;
     using engine::graphics::Shader;
     using engine::graphics::BatchRenderer;
@@ -28,6 +32,7 @@ int main(int argc, char** agrv) {
     using sss::Connection;
 
     Window window("sunset-space-simulator", 960, 540);
+    std::cout << glGetString(GL_VERSION) << std::endl;
     glClearColor(0.0, 0.0, 0.0, 1.0);
 
     glEnable(GL_CULL_FACE);
@@ -36,24 +41,29 @@ int main(int argc, char** agrv) {
     glEnable(GL_DEPTH_CLAMP);
     glDepthMask(GL_TRUE);std::string file_path = "assets/shaders/textured";
     
-    Connection::getInstance().makeConnection("192.168.0.105", 5003);
-    Connection::getInstance().write("NAV");
+    // Connection::getInstance().makeConnection("192.168.0.105", 5003);
+    // Connection::getInstance().write("NAV");
 
-    sss::Game game(Camera(glm::vec3(0, 0, 0), glm::quat(0, 0, 0, 1), glm::perspective(70.0f, 960.0f / 540.0f, 0.1f, 1000.0f)));
+    sss::Game::getGame();
+    // std::thread method(print_buffer);
+    // method.detach();
     while(not window.shouldClose()) {
         window.clear();
 
 
 
-        game.update();
-        game.render();
+        sss::Game::getGame().update();
+        sss::Game::getGame().render();
 
-        if(Input::isKeyPressed(GLFW_KEY_ESCAPE))
+        if(Input::isKeyPressed(GLFW_KEY_ESCAPE)) {
             break;
-
+        }
+        
         window.update();
-		
     }
+    Connection::getInstance().disconnect();
+    // exit(0);
+    // method.join();
 
     
     return 0;

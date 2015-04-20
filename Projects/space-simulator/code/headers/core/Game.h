@@ -11,6 +11,7 @@
 #include <environment/Enemy.h>
 #include <environment/Missile.h>
 #include <core/Connection.h>
+#include <glm/glm.hpp>
 #include <core/Game.h>
 #include <algorithm>
 
@@ -23,7 +24,7 @@ namespace sss {
     using engine::graphics::BatchRenderer;
     using engine::physics::SphereCollider;
     using engine::Input;
-    using sss::Connection;
+    class Connection;
     using sss::Enemy;
     using sss::Missile;
 
@@ -36,15 +37,19 @@ namespace sss {
             Actor* _player; 
             BatchRenderer _renderer;
             bool _canFire;
-        public:
+        protected:
             Game(const Camera& camera);
             ~Game();
-            
+        public:
+           
+            static Game& getGame();
+
             void update(float delta=1.0f);
             void render();
             void sendMsg(const std::string& msg) {}
             inline void addChild(Actor* child) { _children.push_back(child); }  
 
+            void addEnemy();
         private:
             void init();
             void player_stuff();

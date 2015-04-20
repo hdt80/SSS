@@ -10,7 +10,7 @@ namespace engine {
         }
 
         VertexArray::~VertexArray() {
-            for(int i = 0; i < _buffers.size(); i++)
+            for(size_t i = 0; i < _buffers.size(); i++)
                 delete _buffers[i];
 
             glDeleteVertexArrays(1, &_arrayID);

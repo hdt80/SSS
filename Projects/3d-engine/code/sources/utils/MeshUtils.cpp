@@ -25,17 +25,20 @@ namespace engine {
                 /* parse a vertex */
                 if(not tokens[0].compare("v")) { 
                     glm::vec3 vert;
-                    vert.x = strtof(tokens[1].c_str(), nullptr);
-                    vert.y = strtof(tokens[2].c_str(), nullptr);
-                    vert.z = strtof(tokens[3].c_str(), nullptr);
+                    std::sscanf(tokens[1].c_str(), "%f", &vert.x);
+                    std::sscanf(tokens[2].c_str(), "%f", &vert.y);
+                    std::sscanf(tokens[3].c_str(), "%f", &vert.z);
                     temp_verts.push_back(vert);
                 } else if(not tokens[0].compare("vt")) { /* parse a UV coordinate */
                     glm::vec2 UV;
-                    UV.x = strtof(tokens[1].c_str(), nullptr);
-                    UV.y = 1.0f - strtof(tokens[2].c_str(), nullptr);
+                    std::sscanf(tokens[1].c_str(), "%f", &UV.x);
+                    // UV.x = std::stof(tokens[1]);i
+                    std::sscanf(tokens[2].c_str(), "%f", &UV.y);
+                    UV.y = 1.0f - UV.y;
+                    // UV.y = 1.0f - std::stof(tokens[2]);
                     temp_uvs.push_back(UV);
                 } else if(not tokens[0].compare("f")) { /* parse a face */
-                    for(int i = 0; i < tokens.size() - 3; i++) {
+                    for(size_t i = 0; i < tokens.size() - 3; i++) {
                         indices.push_back(parse_obj_index(tokens[1]));
                         indices.push_back(parse_obj_index(tokens[2 + i]));
                         indices.push_back(parse_obj_index(tokens[3 + i]));
@@ -114,9 +117,9 @@ namespace engine {
             /* read in the indices */
             file.read(reinterpret_cast<char*>(&indices[0]), indexCount * sizeof(GLuint));
             file.close();
-            for(int i = 0; i < vertexCount; i++) 
+            for(size_t i = 0; i < vertexCount; i++) 
                 vertices_out.push_back(vertices[i]);
-            for(int i = 0; i < indexCount; i++)
+            for(size_t i = 0; i < indexCount; i++)
                 indices_out.push_back(indices[i]);
 
             delete[] indices;
@@ -132,7 +135,9 @@ namespace engine {
             std::string num;
             for(size_t i = 0; i < token.length(); i++) {
                 if(token[i] == '/') {
-                    nums.push_back(strtol(num.c_str(), nullptr, 10));
+                    int n = 0;
+                    std::sscanf(num.c_str(), "%d", &n);
+                    nums.push_back(n - 1);
                     num = "";
                 } else {
                     num += token[i];

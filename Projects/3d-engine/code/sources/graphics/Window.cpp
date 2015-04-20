@@ -4,11 +4,11 @@
 namespace engine {
     namespace graphics {
 
-        Window::Window(const std::string& title, int width, int height) {
+        Window::Window(const std::string& title, int width, int height, bool fullscreen) {
             _title = title;
             _width = width;
             _height = height;
-            if(init() == false) 
+            if(init(fullscreen) == false) 
                 glfwTerminate();
         }
 
@@ -16,25 +16,28 @@ namespace engine {
             glfwTerminate(); 
         }
 
-        bool Window::init() {
+        bool Window::init(bool fullscreen) {
 
             if(not glfwInit()) {
                 std::cout << "Failed to initialize GLFW" << std::endl;
                 return false;
             }
-
-            // glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);  
-            // glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-            // glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-            // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-			GLFWmonitor* prim = glfwGetPrimaryMonitor();
-			const GLFWvidmode* vidMode = glfwGetVideoMode(prim);
-			
-			_width = vidMode->width;
-			_height = vidMode->height;
-			
-            _window = glfwCreateWindow(_width, _height, _title.c_str(), glfwGetPrimaryMonitor(), NULL);
+#if defined __APPLE__ 
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);  
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+            glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+            glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#endif 
+            
+            if(fullscreen) {
+                GLFWmonitor* primary = glfwGetPrimaryMonitor();
+                const GLFWvidmode* vidMode = glfwGetVideoMode(primary);
+                _width = vidMode->width;
+                _height = vidMode->height;
+                _window = glfwCreateWindow(_width, _height, _title.c_str(), primary, NULL);
+            } else {
+                _window = glfwCreateWindow(_width, _height, _title.c_str(), NULL, NULL); 
+            }
 
             if(not _window) {
                 glfwTerminate();

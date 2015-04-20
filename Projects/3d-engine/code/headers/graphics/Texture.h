@@ -3,7 +3,7 @@
 #include <GL/glew.h>
 #include <string>
 #include <iostream>
-#include <stb_image.h>
+#include <utils/stb_image.h>
 
 namespace engine {
     namespace graphics {

@@ -4,8 +4,8 @@
 #include <cstring>
 #include <unistd.h>
 #include <memory.h>
+#include <core/Game.h>
 #include <iostream>
-#include <cstdio>
 
 #ifndef __APPLE__
     #include <winsock2.h>

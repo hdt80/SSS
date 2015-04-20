@@ -12,10 +12,11 @@
 #include <utils/MeshUtils.h>
 #include <time.h>
 #include <input/Input.h>
+#include <utils/MathUtils.h>
 #include "testing/Player.h"
 #include <cstdio>
 
-#define LOTS_OF_SPRITES 1
+#define LOTS_OF_SPRITES 0
 
 using namespace engine;
 using namespace graphics;
@@ -29,6 +30,7 @@ int main(int argc, char** argv) {
     Window window("engine", 960, 540);
     std::cout << glGetString(GL_VERSION) << std::endl;
     glClearColor(0, 0.3, 0.3, 1.0);
+
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glEnable(GL_DEPTH_TEST);
@@ -45,7 +47,7 @@ int main(int argc, char** argv) {
 #if LOTS_OF_SPRITES
     shader.setUniformMat4("perspective", glm::ortho(0.0f, 16.0f, 0.0f, 9.0f, -1.0f, 1.0f));
 #else
-    shader.setUniformMat4("perspective", glm::perspective(70.0f, 960.0f / 540.0f, 0.1f, 1000.0f));
+    shader.setUniformMat4("perspective", glm::perspective(utils::toRadians(70.0f), 960.0f / 540.0f, 0.1f, 1000.0f));
 #endif
     shader.setUniform4f("light_color", glm::vec4(0.2, 0.4, 0.8, 1.0f));
 
