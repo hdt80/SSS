@@ -1,12 +1,13 @@
 # compile for the correct OS
 
-OS = $(shell uname)
-MAKEFILE = osx
+OS := $(shell uname)
+MAKEFILE := mingw
+
 
 .PHONY: static clean build run debug
 
-ifeq ($(OS), wsindows32)
-	MAKEFILE = mingw
+ifeq ($(OS), Darwin)
+MAKEFILE=osx
 endif
 
 static:
