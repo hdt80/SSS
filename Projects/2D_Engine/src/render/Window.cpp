@@ -172,16 +172,12 @@ void Window::renderReactor() {
 
 // Renders all the power cells and how much power each cell has
 void Window::renderPowerCells() {
-	_render->setColor(0xB0, 0xC4, 0xDE, 0x00); // A silvery grey, "light blue steel"
-
 	// Drawing the amount of power in each cell
 	for (int y = POWER_CELL_Y; y < Reactor::_reactor.size(); ++y) {
 		PowerCell* cell = &Reactor::_reactor.cells[y];
-
-		if (cell->currPower == 0) { // If they have no power why
-			continue;               // try to draw their power?
-		}
+		
 		// Drawing the amount of power inside the cell
+		_render->setColor(0xB0, 0xC4, 0xDE, 0x00); // A silvery grey, "light blue steel"
 		_render->drawBox(POWER_CELL_X, // Power cell's power starts at 0.75
 						 // The y origin of the rect to draw is a ratio of screen hgt to #cells
 						 (double) y * (POWER_CELL_HEIGHT / (double) Reactor::_reactor.size()),
@@ -191,8 +187,10 @@ void Window::renderPowerCells() {
 						 POWER_CELL_HEIGHT / (double) Reactor::_reactor.size());
 
 		// Draw the currMax amount of power
+		_render->setColor(0xFF, 0x00, 0x00, 0x00);
 		_render->drawBox((POWER_CELL_X + POWER_CELL_WIDTH) -
-							(POWER_CELL_WIDTH / (double) cell->currPower) * (double) cell->currMax,
+							((double) cell->trueMax - (double) cell->currMax) * 
+							(POWER_CELL_WIDTH / (double) cell->trueMax),
 						 (double) y * (POWER_CELL_HEIGHT / (double) Reactor::_reactor.size()),
 						 POWER_CELL_X + POWER_CELL_WIDTH,
 						 POWER_CELL_HEIGHT / (double) Reactor::_reactor.size());
