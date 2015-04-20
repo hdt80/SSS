@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class InternalValues {
@@ -44,22 +45,20 @@ public class InternalValues {
         values.put(msg.substring(8, keyStop), msg.substring(keyStop + 1, msg.length()));
     }
     
-    public void setEvent(String msg) {
-    	int[] vals = new int[10];
-    	int curval = 0;
-    	String curvalstr = "";
+	public void setEvent(String msg) {
+    	String curval = "";
+    	ArrayList<Integer> args = new ArrayList<Integer>();
     	
     	for (int i = 0; i < msg.length(); i++) {
-    		if (msg.charAt(i) != ';') {
-    			curvalstr += msg.charAt(i);
-    		} else {
-    			vals[curval] = Integer.parseInt(curvalstr);
-    			curvalstr = "";
-    			curval++;
-    		}
-    	}
-    	//parse my AMAZING code
-    	eh.callEvent(vals);
+			if (msg.charAt(i) != ';') {
+				curval += msg.charAt(i);
+			} else {
+				args.add(Integer.parseInt(curval));
+				curval = "";
+			}
+		}
+    	
+    	eh.callEvent(args);
     }
 
     /**
