@@ -15,9 +15,10 @@ namespace sss {
         disconnect();
     }
 
+// =================================
+// Windows method definitions
+// =================================
 #ifndef __APPLE__
-
-
     void Connection::init() {
         int errorCode = WSAStartup(MAKEWORD(2, 2), &_wsaData);
         if(errorCode != 0) {
@@ -61,11 +62,11 @@ namespace sss {
         /*
          * Attempt to connect to server
          * error number 10035 is WSAWOULDBLOCK, which means an opperation was
-         * called that would bloeck the main thread. becuase connect will cause blocking
+         * called that would block the main thread, but becuase connect will cause blocking
          * we'll catch that as it's not important and is expected
          */
         if(connect(_socket, (SOCKADDR*)(&_sockAddr), sizeof(_sockAddr)) != 0 and WSAGetLastError() != 10035) {
-            close();
+            disconnect();
             return false;
         } else {
             return true;
@@ -74,7 +75,6 @@ namespace sss {
 
     /* print the buffer from the socket */
     void Connection::printBuffer() {
-
         memset(_buffer, 0, sizeof(_buffer));
         int result = recv(_socket, _buffer, SOCK_BUFFER_SIZE, 0);
         if(result == -1) 
@@ -82,7 +82,7 @@ namespace sss {
 
         std::string setTest(_buffer, 3);
         if(not setTest.compare("SET")) {
-            setValue(_buffer + 4, strlen(_buffer));
+            setValue(_buffer + 4);
         }
 
         clearBuffer();
@@ -124,7 +124,7 @@ namespace sss {
     }
 
     void Connection::write(const std::string& msg) {
-        if(send(_socket, (msg + MSG_END).c_str(), msg.length() + 1))
+        if(send(_socket, (msg + MSG_END).c_str(), msg.length() + 1, 0))
             std::cerr << " write failure " << std::endl;
     }
 
@@ -132,6 +132,9 @@ namespace sss {
         memset(_buffer, 0, sizeof(_buffer));
     }
 
+// =================================
+// OSX Method definitions
+// =================================
 #else
 
     bool Connection::makeConnection(const std::string& ip, int port) {

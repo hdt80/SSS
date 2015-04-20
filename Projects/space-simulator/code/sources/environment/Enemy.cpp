@@ -23,8 +23,8 @@ namespace sss {
     }
 
     void Enemy::tick(float delta) {
-        static float s = std::sinf(0.01);
-        static float c = std::cosf(0.01);
+        static float s = sinf(0.01);
+        static float c = cosf(0.01);
 
         float px = getPosition().x - _rotPoint.x;
         float py = getPosition().z - _rotPoint.y;

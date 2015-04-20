@@ -13,6 +13,7 @@
 #include <core/Connection.h>
 #include <glm/glm.hpp>
 #include <core/Game.h>
+#include <algorithm>
 
 namespace sss {
 
