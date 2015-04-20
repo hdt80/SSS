@@ -24,7 +24,7 @@ EXE = app
 
 static: $(OBJECTS) $(COBJECTS)
 	mkdir -p ./dist/mac
-	$(AR) rvs dist/win/libengin.a $(addprefix $(BUILDDIR)/, $(notdir $^))
+	$(AR) rvs dist/win/libengine.a $(addprefix $(BUILDDIR)/, $(notdir $^))
 	cp -r ./code/headers/* ./dist/win
 
 build: $(EXE)
