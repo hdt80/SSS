@@ -24,5 +24,5 @@ run:
 	$(MAKE) -f Makefile.$(MAKEFILE) run
 
 debug:
-	$(MAKE) -f Makefile.$(MAKEfile) debug
+	$(MAKE) -f Makefile.$(MAKEFILE) debug
 
