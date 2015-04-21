@@ -1,17 +1,20 @@
+package SSS;
+
+import SSS.Util.Logger;
+
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 
 public class Server {
-
 	public static boolean debug;
 
 	private int port = 5003;
 	ServerSocket serverSocket;
 
 	public static ArrayList<Client> clients = new ArrayList<>();
-	public static InternalValues    values = new InternalValues();
+	public static InternalValues values = new InternalValues();
 
 	public static void main(String[] args) {
 		for (int i = 0; i < args.length; ++i) {
@@ -55,5 +58,9 @@ public class Server {
 			}
 		}
 		return null;
+	}
+
+	public static boolean isDebug() {
+		return debug;
 	}
 }

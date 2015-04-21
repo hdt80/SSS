@@ -1,3 +1,7 @@
+package SSS;
+
+import SSS.Util.Logger;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -183,8 +187,8 @@ public class Client extends Thread {
 	}
 
 	/**
-	 * Return the Client's name
-	 * @return Client's name
+	 * Return the SSS.Client's name
+	 * @return SSS.Client's name
 	 */
 	public String getClientID() {
 		return clientID;

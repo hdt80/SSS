@@ -1,3 +1,7 @@
+package SSS.Util;
+
+import SSS.Server;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
@@ -30,7 +34,6 @@ public class Logger {
 		sb.append(Color.YELLOW).append("WARN").append(Color.RESET).append("]: ");
 		sb.append(message);
 		System.out.println(sb.toString());
-		//log(Level.WARNING, message);
 	}
 
 	public static void severe(String message) {
@@ -47,7 +50,7 @@ public class Logger {
 	}
 
 	public static void debug(String message) {
-		if (Server.debug) {
+		if (Server.isDebug() == true) {
 			StringBuilder sb = new StringBuilder();
 			Date date = new Date();
 			sb.append(format.format(date)).append(" [");

@@ -1,14 +1,19 @@
+package SSS;
+
+import SSS.Event.EventHandler;
+import SSS.Util.Logger;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class InternalValues {
     private HashMap<String, String> values;
-	private EventHandler eh;
+	private EventHandler eventHandler;
 
     public InternalValues() {
         values = new HashMap<>();
-        eh = new EventHandler();
+        eventHandler = new EventHandler();
     }
 
     /**
@@ -16,7 +21,7 @@ public class InternalValues {
      * @param msg String to be processed
      */
     public void processString(String msg) {
-        // Messages are in [1-3] Client name, [4-7] SET/GET, [8-n] Key, :, [n-n] Value
+        // Messages are in [1-3] SSS.Client name, [4-7] SET/GET, [8-n] Key, :, [n-n] Value
         if (msg.substring(4, 7).equals("SET")) {
             setValue(msg);
         } else if (msg.substring(4, 7).equals("EVN")) {
@@ -48,7 +53,7 @@ public class InternalValues {
 	public void setEvent(String msg) {
     	String curval = "";
     	ArrayList<Integer> args = new ArrayList<Integer>();
-    	
+
     	for (int i = 0; i < msg.length(); i++) {
 			if (msg.charAt(i) != ';') {
 				curval += msg.charAt(i);
@@ -58,7 +63,7 @@ public class InternalValues {
 			}
 		}
     	
-    	eh.callEvent(args);
+    	eventHandler.callEvent(args);
     }
 
     /**
