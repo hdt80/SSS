@@ -107,9 +107,8 @@ void Connection::printBuffer() {
 		//return;
 	}
 	int result = recv(_socket, _buffer, BUFFER_SIZE, 0);
-	if (result == -1) {
-		//_connected = false;
-		//return;
+	if (result == -1) { // If nothing is returned we don't want to print
+		return;         // the buffer out yet
 	}
 	debug("RECV: \'%s\' (%i)", _buffer, result);
 
