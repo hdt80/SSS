@@ -11,10 +11,12 @@ public class Server {
 	public static boolean debug;
 
 	private int port = 5003;
-	ServerSocket serverSocket;
+	private ServerSocket serverSocket;
 
-	public static ArrayList<Client> clients = new ArrayList<>();
-	public static InternalValues values = new InternalValues();
+	public ArrayList<Client> clients = new ArrayList<>();
+	public InternalValues values = new InternalValues();
+
+	private static Server instance;
 
 	public static void main(String[] args) {
 		for (int i = 0; i < args.length; ++i) {
@@ -28,6 +30,7 @@ public class Server {
 
 	public Server() {
 		try {
+			instance = this;
 			serverSocket = new ServerSocket(port);
 			Logger.info("Awaiting connections");
 
@@ -51,13 +54,25 @@ public class Server {
 		}
 	}
 
-	public static Client getClientByName(String name) {
+	public static Server get() {
+		return instance;
+	}
+
+	public Client getClientByName(String name) {
 		for (int i = 0; i < clients.size(); ++i) {
 			if (clients.get(i).getClientID().equals(name)) {
 				return clients.get(i);
 			}
 		}
 		return null;
+	}
+
+	public void addClient(Client client) {
+		clients.add(client);
+	}
+
+	public void removeClient(Client client) {
+		clients.remove(client);
 	}
 
 	public static boolean isDebug() {

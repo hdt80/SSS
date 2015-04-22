@@ -7,30 +7,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * InternalValues is a class that holds all the server values
+ * All parsing of String will be done here, and not in message handlers
+ */
 public class InternalValues {
     private HashMap<String, String> values;
-	private EventHandler eventHandler;
 
     public InternalValues() {
         values = new HashMap<>();
-        eventHandler = new EventHandler();
-    }
-
-    /**
-     * Process the String supplied and update the value on the server
-     * @param msg String to be processed
-     */
-    public void processString(String msg) {
-        // Messages are in [1-3] SSS.Client name, [4-7] SET/GET, [8-n] Key, :, [n-n] Value
-        if (msg.substring(4, 7).equals("SET")) {
-            setValue(msg);
-        } else if (msg.substring(4, 7).equals("EVN")) {
-        	setEvent(msg.substring(8, msg.length()));
-        } else if (msg.substring(4, 7).equals("GET")) {
-            requestValue(msg);
-        } else {
-            Logger.warn("Unknown request: \'" + msg + "\'");
-        }
     }
 
     /**
@@ -49,45 +34,29 @@ public class InternalValues {
         Logger.debug("Setting:\'" + msg.substring(8, keyStop) + "\' to \'" + msg.substring(keyStop + 1, msg.length()) + '\'');
         values.put(msg.substring(8, keyStop), msg.substring(keyStop + 1, msg.length()));
     }
-    
-	public void setEvent(String msg) {
-    	String curval = "";
-    	ArrayList<Integer> args = new ArrayList<Integer>();
-
-    	for (int i = 0; i < msg.length(); i++) {
-			if (msg.charAt(i) != ';') {
-				curval += msg.charAt(i);
-			} else {
-				args.add(Integer.parseInt(curval));
-				curval = "";
-			}
-		}
-    	
-    	eventHandler.callEvent(args);
-    }
 
     /**
-     * Returns a value on the server that matches the String
-     * @param msg Value to be gotten
-     * @return The value on the server, or null if that value hasn't been set
+     * Get the value of the key stored in the HashMap
+     * @param key Key in the HashMap
+     * @return The value of the key, or null if they key hasn't been set
      */
-    public String requestValue(String msg) {
-        Logger.debug('\'' + msg.substring(8, msg.length()) + "\'=\'" + values.get(msg.substring(8, msg.length())) + "\'");
+    public String getValue(String key) {
+        Logger.debug('\'' + key.substring(8, key.length()) + "\'=\'" + values.get(key.substring(8, key.length())) + "\'");
         try {
-            Client toSend = Server.getClientByName(msg.substring(0, 3));
+            Client toSend = Server.get().getClientByName(key.substring(0, 3));
             if (toSend != null) {
-                if (values.containsKey(msg.substring(8, msg.length()))) {
-                    toSend.send(values.get(msg.substring(8, msg.length())));
+                if (values.containsKey(key.substring(8, key.length()))) {
+                    toSend.send(values.get(key.substring(8, key.length())));
                 } else {
-                    Logger.warn("Key \'" + msg.substring(8, msg.length()) + "\' does not have a value");
+                    Logger.warn("Key \'" + key.substring(8, key.length()) + "\' does not have a value");
                 }
             } else {
-                Logger.error("Unknown client ID \'" + msg.substring(0, 3) + "\'");
+                Logger.error("Unknown client ID \'" + key.substring(0, 3) + "\'");
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return values.get(msg.substring(4, msg.length()));
+        return values.get(key.substring(4, key.length()));
     }
 
     public void print() {

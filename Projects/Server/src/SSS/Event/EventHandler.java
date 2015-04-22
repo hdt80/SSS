@@ -1,6 +1,7 @@
 package SSS.Event;
 
 import SSS.Event.Events.CollisionEvent;
+import SSS.Event.Events.PowerChangeEvent;
 import SSS.Event.Events.SpawnEnemyEvent;
 import SSS.Util.Logger;
 
@@ -59,7 +60,7 @@ public class EventHandler {
 	 * @param args
 	 */
 	public void callEvent(ArrayList<Integer> args) {
-		EventType eventType = EventType.valueOf(args.get(0).toString());
+		EventType eventType = EventType.values()[args.get(0)];
 		switch (eventType) {
 			case COLLISION:
 				eventQueue.enqueue(new CollisionEvent());
@@ -67,8 +68,12 @@ public class EventHandler {
 			case SPAWNENEMY:
 				eventQueue.enqueue(new SpawnEnemyEvent());
 				break;
+			case POWERCHANGE:
+				eventQueue.enqueue(new PowerChangeEvent(args.get(1).toString(), args.get(2)));
+				break;
 			default:
 				Logger.error("Unknown event type " + args.get(0));
+				break;
 		}
 	}
 }

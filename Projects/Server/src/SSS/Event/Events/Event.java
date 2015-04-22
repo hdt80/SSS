@@ -11,8 +11,8 @@ public abstract class Event {
     }
 
     /**
-     *
-     * @param id
+     * Constructor for a new event with a new ID
+     * @param id Internal ID for the event
      */
     public Event(int id) {
         this.id = id;

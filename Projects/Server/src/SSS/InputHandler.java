@@ -1,24 +1,33 @@
-package SSS.Event;
+package SSS;
 
-import SSS.Event.Events.Event;
+
+import SSS.Event.EventHandler;
+import SSS.Util.Logger;
 
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 
-public class EventQueue {
-    private ArrayList<Event> queue;
-    private boolean          closed;
+/**
+ * InputHandler is a class to handle and parse all the input from Clients
+ */
+public class InputHandler {
+    private ArrayList<String> queue;
+    private boolean closed;
 
-    public EventQueue() {
+    private EventHandler eventHandler;
+
+    public InputHandler() {
         queue = new ArrayList<>();
+        eventHandler = new EventHandler();
+        closed = false;
     }
 
     /**
-     * Add a new Event to the queue
-     * @param event Event to be queued
+     * Add an input String to be processed to the queue
+     * @param input String to be proccessed
      */
-    public void enqueue(Event event) {
-        queue.add(event);
+    public void processInput(String input) {
+        queue.add(input);
     }
 
     /**
@@ -46,7 +55,7 @@ public class EventQueue {
     }
 
     /**
-     * Begin running through all the queued events until we close
+     * Begin proccessing all the queued events
      */
     public void run() {
         Executors.newSingleThreadExecutor().execute(new Runnable() {
@@ -54,11 +63,19 @@ public class EventQueue {
             public void run() {
                 while (!closed) {
                     if (!isEmpty()) {
-                        queue.get(0).run();
+                        processString(queue.get(0));
                         queue.remove(0);
                     }
                 }
             }
         });
+    }
+
+    /**
+     * Process the String
+     * @param input Input to be processed
+     */
+    private void processString(String input) {
+        Logger.debug("I'm proccessing: \'" + input + '\'');
     }
 }

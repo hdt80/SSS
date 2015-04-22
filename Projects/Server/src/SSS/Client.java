@@ -39,7 +39,7 @@ public class Client extends Thread {
 			getClientName();
 			Logger.info("Connection made to " + clientID + " (" + clientSocket.getLocalAddress().getHostName() + ":" + clientSocket.getPort() + ")");
 
-			Server.clients.add(this);
+			Server.get().addClient(this);
 
 			Executors.newSingleThreadExecutor().execute(new Runnable() {
 				@Override
@@ -67,9 +67,9 @@ public class Client extends Thread {
 	public void disconnect() {
 		try {
 			Logger.debug("Disconnecting to " + clientID);
-			closed = true;
 			getSocket().close();
-			Server.clients.remove(this);
+			Server.get().removeClient(this);
+			closed = true;
 			Logger.info("Disconnected from " + clientID);
 		} catch (IOException e) {
 			Logger.error("Failed to disconnect from " + clientID);
@@ -142,11 +142,15 @@ public class Client extends Thread {
 					char input;
 					while (!closed) {
 						input = (char) in.read();
+						if ((int) input == 65535) {
+							Logger.error("No data received from " + clientID);
+							disconnect();
+						}
 						if (input != '@') {
 							buffer.add(input);
 						} else {
 							Logger.debug("RECV: \'" + makeString(buffer) + '\'');
-							Server.values.processString(makeString(buffer));
+							Server.get().values.processString(makeString(buffer));
 							buffer.clear();
 						}
 					}
