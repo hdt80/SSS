@@ -9,7 +9,7 @@ public class EventQueue {
     private ArrayList<Event> queue;
     private boolean          closed;
 
-    public void EventQueue() {
+    public EventQueue() {
         queue = new ArrayList<>();
     }
 
@@ -53,9 +53,8 @@ public class EventQueue {
             @Override
             public void run() {
                 while (!closed) {
-                    Event e = queue.get(0);
-                    if (e != null) {
-                        e.run();
+                    if (!isEmpty()) {
+                        queue.get(0).run();
                         queue.remove(0);
                     }
                 }
