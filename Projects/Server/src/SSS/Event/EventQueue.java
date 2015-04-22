@@ -26,6 +26,7 @@ public class EventQueue {
      * @return If there are queued events
      */
     public boolean isEmpty() {
+        Thread.yield();
         return queue.isEmpty();
     }
 

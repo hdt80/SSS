@@ -107,13 +107,12 @@ bool Reactor::changePower(int cellIndex, int amount) {
 
 	// Creating the string to be sent to the master server
 	std::string str = "";
-	str.append("SET#");
+	str.append("EVN#");
+	str.append("4;"); // Event ID 4 is power change event
 	str.append(cell->name);
-	str.append(":");
+	str.append(";");
 	str.append(convert::toString(cell->currPower));
 	Connection::_connection.write(str);
-
-	info("\'%s\':\'%s\'", cell->name.c_str(), Connection::_connection.getValue(cell->name.c_str()).c_str());
 
 	return true;
 }

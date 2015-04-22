@@ -59,8 +59,8 @@ public class EventHandler {
 	 * When an event message is read from a client
 	 * @param args
 	 */
-	public void callEvent(ArrayList<Integer> args) {
-		EventType eventType = EventType.values()[args.get(0)];
+	public void callEvent(ArrayList<String> args) {
+		EventType eventType = EventType.values()[Integer.parseInt(args.get(0))];
 		switch (eventType) {
 			case COLLISION:
 				eventQueue.enqueue(new CollisionEvent());
@@ -69,7 +69,7 @@ public class EventHandler {
 				eventQueue.enqueue(new SpawnEnemyEvent());
 				break;
 			case POWERCHANGE:
-				eventQueue.enqueue(new PowerChangeEvent(args.get(1).toString(), args.get(2)));
+				eventQueue.enqueue(new PowerChangeEvent(args.get(1), Integer.parseInt(args.get(2))));
 				break;
 			default:
 				Logger.error("Unknown event type " + args.get(0));

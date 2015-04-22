@@ -33,26 +33,17 @@ public class Client extends Thread {
 		Logger.debug("Created a new connection");
 	}
 
+	/**
+	 * Get the client name and begin reading in bytes to create a message
+	 */
 	public void start() {
 		try {
 			send("Connection to main server successful");
 			getClientName();
-			Logger.info("Connection made to " + clientID + " (" + clientSocket.getLocalAddress().getHostName() + ":" + clientSocket.getPort() + ")");
+			Logger.info("Connection made to " + clientID + " (" + clientSocket.getInetAddress().getHostAddress() + ":" + clientSocket.getPort() + ")");
 
-			Server.get().addClient(this);
+			Server.get().clientHandler.addClient(this);
 
-			Executors.newSingleThreadExecutor().execute(new Runnable() {
-				@Override
-				public void run() {
-					while (!closed) {
-						try {
-							Thread.sleep(1000);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-				}
-			});
 			read();
 
 		} catch (IOException e) {
@@ -64,15 +55,15 @@ public class Client extends Thread {
 	/**
 	 * Disconnect from the socket
 	 */
-	public void disconnect() {
+	public void close() {
 		try {
 			Logger.debug("Disconnecting to " + clientID);
 			getSocket().close();
-			Server.get().removeClient(this);
+			Server.get().clientHandler.removeClient(this);
 			closed = true;
 			Logger.info("Disconnected from " + clientID);
 		} catch (IOException e) {
-			Logger.error("Failed to disconnect from " + clientID);
+			Logger.error("Failed to close from " + clientID);
 			e.printStackTrace();
 			closed = true;
 		}
@@ -108,14 +99,14 @@ public class Client extends Thread {
 					out.write(msg.getBytes());
 				} catch (Exception e) {
 					e.printStackTrace();
-					disconnect();
+					close();
 				}
 			}
 		});
 	}
 
 	/**
-	 * Send a request to the client to set the key to the value
+	 * Send a set request to the client
 	 * @param key   Variable to be set
 	 * @param value Value var should be set to
 	 */
@@ -144,22 +135,22 @@ public class Client extends Thread {
 						input = (char) in.read();
 						if ((int) input == 65535) {
 							Logger.error("No data received from " + clientID);
-							disconnect();
+							close();
 						}
 						if (input != '@') {
 							buffer.add(input);
 						} else {
-							Logger.debug("RECV: \'" + makeString(buffer) + '\'');
-							Server.get().values.processString(makeString(buffer));
+							Logger.debug(clientID + ">RECV: \'" + makeString(buffer) + '\'');
+							Server.get().inputHandler.processInput(makeString(buffer));
 							buffer.clear();
 						}
 					}
 				} catch (Exception e) {
 					if (e.getMessage().equals("Connection reset")) {
-						disconnect();
+						close();
 					} else {
 						e.printStackTrace();
-						disconnect();
+						close();
 					}
 				}
 			}

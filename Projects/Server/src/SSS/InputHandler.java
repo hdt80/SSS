@@ -1,10 +1,9 @@
 package SSS;
 
-
-import SSS.Event.EventHandler;
 import SSS.Util.Logger;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.Executors;
 
 /**
@@ -14,11 +13,8 @@ public class InputHandler {
     private ArrayList<String> queue;
     private boolean closed;
 
-    private EventHandler eventHandler;
-
     public InputHandler() {
         queue = new ArrayList<>();
-        eventHandler = new EventHandler();
         closed = false;
     }
 
@@ -32,9 +28,13 @@ public class InputHandler {
 
     /**
      * Returns if there are any queued events
-     * @return If there are queued events
+     * @return True  - The queue is not empty and is processing requests
+     *         False - The queue is empty
      */
     public boolean isEmpty() {
+        // If we don't yield the Thread here, the anonymous runnable inside run() never properly
+        // calls queue.isEmpty(), so by yielding the Thread, we guarantee the isEmpty to be called
+        Thread.yield();
         return queue.isEmpty();
     }
 
@@ -55,7 +55,7 @@ public class InputHandler {
     }
 
     /**
-     * Begin proccessing all the queued events
+     * Begin processing all the queued events
      */
     public void run() {
         Executors.newSingleThreadExecutor().execute(new Runnable() {
@@ -76,6 +76,11 @@ public class InputHandler {
      * @param input Input to be processed
      */
     private void processString(String input) {
-        Logger.debug("I'm proccessing: \'" + input + '\'');
+        //Logger.debug("I'm proccessing: \'" + input + '\'');
+        if (input.substring(4, 7).equals("EVN")) {
+            Logger.debug("Event");
+            ArrayList<String> event = new ArrayList<String>(Arrays.asList(input.substring(8).split(";")));
+            Server.get().eventHandler.callEvent(event);
+        }
     }
 }
