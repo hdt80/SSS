@@ -49,7 +49,7 @@ bool Reactor::addCell(std::string name, int max) {
 		return false;
 	}
 	PowerCell toAdd(name, // Reactor name
-					max-1,  // Current max power, hasn't changed, so max
+					max,  // Current max power, hasn't changed, so max
 					max,  // True max power
 					0     // Current power of cell
 	);
