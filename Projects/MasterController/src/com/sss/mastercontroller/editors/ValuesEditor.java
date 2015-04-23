@@ -36,10 +36,11 @@ public class ValuesEditor implements ChangeListener, ActionListener {
     
     private int type;
     private int enemyType;
-	public final static int Collision = 0;
-	public final static int SpawnEnemy = 1;
-	public final static int InternalProblem = 2;
-	public final static int ExteriorEvent = 3;
+
+	private final int SPAWNENEMY = 0;
+	private final int WEFIRE = 2;
+	private final int POWERCHANGE = 4;
+	private final int ENEMYFIRE = 6;
     
     private Connection connection;
     
@@ -103,13 +104,13 @@ public class ValuesEditor implements ChangeListener, ActionListener {
 		//editor
 		editorPanel = new JPanel();
 		switch (type) {
-		case 1:
+		case 0:
 			setEnemy();
 			break;
-		case 2:
+		case 1:
 			setIP();
 			break;
-		case 3:
+		case 2:
 			setEvent();
 			break;
 		}
@@ -256,20 +257,24 @@ public class ValuesEditor implements ChangeListener, ActionListener {
 		} else if (event.getSource().equals(apply)) {
 			// this is where all the code will go to send information to the server
 			int isfriend = (_isfriendly) ? 1 : 0;
-			
+
 			switch (type) {
-				case SpawnEnemy:
+				case SPAWNENEMY:
 					Print.debug("Sending spawn event to the server.");
-					connection.sendEventToServer(SpawnEnemy + ";" + enemyType + ";" + _spawncount + ";" + _initialhealth
+					connection.sendEventToServer(SPAWNENEMY + ";" + enemyType + ";" + _spawncount + ";" + _initialhealth
 							+ ";" + isfriend + ";");
 					break;
-				case InternalProblem:
-					Print.debug("Sending internal problem to the server.");
-					connection.sendEventToServer(InternalProblem + ";");
+				case WEFIRE:
+					Print.debug("Sending fire event to the server.");
+					connection.sendEventToServer(WEFIRE + ";");
 					break;
-				case ExteriorEvent:
-					Print.debug("Sending exterior event to the server.");
-					connection.sendEventToServer(ExteriorEvent + ";");
+				case POWERCHANGE:
+					Print.debug("Sending power change event to the server.");
+					connection.sendEventToServer(POWERCHANGE + ";");
+					break;
+				case ENEMYFIRE:
+					Print.debug("Sending enemy fire event to the server.");
+					connection.sendEventToServer(ENEMYFIRE + ";");
 					break;
 			}
 			

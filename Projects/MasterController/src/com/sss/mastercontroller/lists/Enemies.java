@@ -12,7 +12,9 @@ public class Enemies {
 		
 		_enemies = new ArrayList<Enemy>();
 		
-		_enemies.add(new Enemy("Fighter Ship 1", "Standard Enemy ship. Basic health, basic attack power. Limited AI."));
+		_enemies.add(new Enemy("Fighter Ship 1", "Standard Enemy ship. Basic health, basic attack power, limited AI."));
+		_enemies.add(new Enemy("Fighter Ship 2", "Standard Enemy ship. Basic health, basic attack power, limited AI."));
+		_enemies.add(new Enemy("Fighter Ship 3", "Standard Enemy ship. Basic health, basic attack power, limited AI."));
 	}
 	
 	public String getEnemy(int i) {

@@ -285,11 +285,7 @@ public class MasterController implements ActionListener {
 	private void showValues(int i) {
 		frame.setEnabled(false);
 		if (selectedNum == 1) { // enemies tab
-			new ValuesEditor(enemies.getEnemy(i), enemies.getDefinition(i), ValuesEditor.SpawnEnemy, i);
-		} else if (selectedNum == 2) { // internal problems tab
-			new ValuesEditor(internalproblems.getInternalProblem(i), internalproblems.getDefinition(i), ValuesEditor.InternalProblem, -1);
-		} else if (selectedNum == 3) { // events tab
-			new ValuesEditor(events.getEventName(i), events.getEventDefinition(i), ValuesEditor.ExteriorEvent, -1);
+			new ValuesEditor(enemies.getEnemy(i), enemies.getDefinition(i), 0, i);
 		} else {
 			System.err.println("For some reason you are still running when you pressed exit button...");
 		}
@@ -366,7 +362,7 @@ public class MasterController implements ActionListener {
 				isSelected[i] = false;
 				// give the items section to the user
 				selectedNum = 0;
-				connection.sendEventToServer(ValuesEditor.Collision + ";" + collisions.getDamage(i));
+				connection.sendEventToServer(1 + ";" + collisions.getDamage(i));
 			}
 		}
 	}
