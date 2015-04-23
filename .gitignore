@@ -47,9 +47,7 @@ $RECYCLE.BIN/
 /Projects/Server/.idea
 /Projects/Server/out
 /Projects/MasterController/bin
-/Projects/MasterController/.settings
-/Projects/Mastercontroller/.classpath
-/Projects/MasterController/.project
+/Projects/MasterController/.idea
 
 *.html
 *.iml
