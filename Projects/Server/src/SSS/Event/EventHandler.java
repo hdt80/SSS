@@ -63,10 +63,10 @@ public class EventHandler {
 		EventType eventType = EventType.values()[Integer.parseInt(args.get(0))];
 		switch (eventType) {
 			case COLLISION:
-				eventQueue.enqueue(new CollisionEvent());
+				eventQueue.enqueue(new CollisionEvent(Integer.parseInt(args.get(1))));
 				break;
 			case SPAWNENEMY:
-				eventQueue.enqueue(new SpawnEnemyEvent());
+				eventQueue.enqueue(new SpawnEnemyEvent(Integer.parseInt(args.get(1)), Integer.parseInt(args.get(2)), Integer.parseInt(args.get(3))));
 				break;
 			case POWERCHANGE:
 				eventQueue.enqueue(new PowerChangeEvent(args.get(1), Integer.parseInt(args.get(2))));

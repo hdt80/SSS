@@ -79,8 +79,7 @@ public class InputHandler {
         //Logger.debug("I'm proccessing: \'" + input + '\'');
         if (input.substring(4, 7).equals("EVN")) {
             Logger.debug("Event");
-            ArrayList<String> event = new ArrayList<String>(Arrays.asList(input.substring(8).split(";")));
-            Server.get().eventHandler.callEvent(event);
+            Server.get().eventHandler.callEvent(new ArrayList<>(Arrays.asList(input.substring(8).split(";"))));
         }
     }
 }
