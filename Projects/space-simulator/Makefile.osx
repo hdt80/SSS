@@ -1,7 +1,7 @@
 CXX = clang++
 CC = clang
 
-LIBS = -Llib/mac -lglfw3 -lGLEW 
+LIBS = -Llib/mac -lglfw3 -lGLEW -lengine 
 
 SOURCEDIR = code/sources
 BUILDDIR = build
