@@ -30,7 +30,8 @@ namespace sss {
     }
 
     Game& Game::getGame() {
-        static Game game(Camera(glm::vec3(0, 0, 0), glm::quat(0, 0, 0, 1), glm::perspective(glm::radians(70.0f), 960.0f / 540.0f, 0.1f, 1000.0f)));
+        static Game game(Camera(glm::vec3(0, 0, 0), glm::quat(0, 0, 0, 1), 
+                    glm::perspective(glm::radians(70.0f), 960.0f / 540.0f, 0.1f, 1000.0f)));
         return game;
     }
 
@@ -143,8 +144,7 @@ namespace sss {
     }
 
     void Game::addEnemy() {
-        _children.push_back(new Enemy(glm::vec3(rand() % 100, rand() % 100, rand() % 100),
-                                      glm::vec3(rand() % 100, rand() % 100, rand() % 100)));
+        _children.push_back(new Enemy(glm::vec3(rand() % 100, rand() % 100, rand() % 100), nullptr));
     }
 
     void Game::init() {
@@ -156,8 +156,8 @@ namespace sss {
             _children.push_back(a);
         }
 
-        _children.push_back(new Enemy(glm::vec3(20, 20, 20), glm::vec3(0, 0, 0)));
-        _children.push_back(new Enemy(glm::vec3(80, 80, 80), glm::vec3(54, 54, 54)));
+        _children.push_back(new Enemy(glm::vec3(20, 20, 20), nullptr));
+        _children.push_back(new Enemy(glm::vec3(80, 80, 80), nullptr));
 
 
         // _children[0]->destroy();

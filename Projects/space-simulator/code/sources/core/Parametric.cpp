@@ -17,7 +17,7 @@ namespace sss {
     glm::vec3 Parametric::next() {
         glm::vec3 result;
         std::pair<float, float> p = _vals[_currIter];
-        _currIter = (_currIter == _vals.size()) ? 0 : _currIter + 1;
+        _currIter = (_currIter == _vals.size() + 1) ? 0 : _currIter + 1;
         result.x = _Fx(p.first, p.second);
         result.y = _Fy(p.first, p.second);
         result.z = _Fz(p.first, p.second);

@@ -16,7 +16,7 @@ CSOURCES = $(wildcard $(SOURCEDIR)/*/*.c)
 COBJECTS = $(patsubst $(SOURCEDIR)/%.c, $(BUILDDIR)/%.o, $(CSOURCES))
 
 CXXFLAGS = -pedantic -Wall -Wno-comment -Wsign-compare -Winline -g -c -std=c++11 -I include -I code/headers
-CFLAGS = -g -c -I code/headers -I include
+CFLAGS = -pedantic -Wall -g -c -I code/headers -I include
 LDFLAGS = $(LIBS) -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo 
 
 EXE = exe

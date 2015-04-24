@@ -1,3 +1,40 @@
+#define TESTING 1
+
+#include <core/event_queue.h>
+
+#if TESTING 
+
+
+int main(int argc, char** argv) {
+
+    sss_init_queue();
+
+    sss_event events[4];
+    for(int i = 0; i < 4; i++) 
+        events[i].test_datum = i;
+   
+    sss_enque_event(events[0]);
+    sss_enque_event(events[3]);
+    sss_enque_event(events[2]);
+    sss_enque_event(events[1]);
+
+    sss_debug_queue();    
+
+    sss_event t;
+    while(sss_poll_event(&t)) 
+        printf("%d\n", t.test_datum);
+    
+
+    return 0;
+}
+
+
+
+
+
+
+#else
+
 #define GLM_FORCE_RADIANS
 #include <graphics/Window.h>
 #include <graphics/Shader.h>
@@ -69,4 +106,5 @@ int main(int argc, char** agrv) {
     return 0;
 }
 
+#endif
 

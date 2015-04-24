@@ -5,6 +5,7 @@
 #include <components/RenderComponent.h>
 #include <components/PhysicsComponent.h>
 #include <cmath>
+#include <core/Parametric.h>
 
 namespace sss {
 
@@ -13,10 +14,10 @@ namespace sss {
             typedef Pawn Super;
             typedef Enemy This;
 
-            glm::vec3 _rotPoint;
-            float _radius;
+            Parametric* _course;
+
         public:
-            Enemy(const glm::vec3& position, const glm::vec3& rotPoint);
+            Enemy(const glm::vec3& position, Parametric* course);
             ~Enemy(); 
             void tick(float delta=1.0f) override;
             void onSpawn() override {}

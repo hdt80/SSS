@@ -3,8 +3,24 @@
 namespace sss {
     
 
-    Enemy::Enemy(const glm::vec3& position, const glm::vec3& rotPoint) :Super() {
-        _radius = glm::length(rotPoint - position);
+    Enemy::Enemy(const glm::vec3& position, Parametric* course) :Super() {
+       
+        if(course == nullptr) {
+            
+            // _course = new Parametric(6.28, 
+            //         [](float theta, float phi) -> float{ return 10.0f  * (std::cosf(phi))*(std::sinf(theta)); },
+            //         [](float theta, float phi) -> float{ return 10.0f  * (std::cosf(theta))*(std::sinf(phi)); },
+            //         [](float theta, float phi) -> float{ return 10.0f * std::cosf(phi); });
+            
+            _course = new Parametric(6.28,
+                    [](float theta, float phi) -> float{ return 10 * std::cosf(5.0f*phi) / 5.0f; },
+                    [](float theta, float phi) -> float{ return 10 * std::sinf(4.0f*phi) / 5.0f; },
+                    [](float theta, float phi) -> float{ return 10 * std::cosf(3.0f*phi) / 5.0f; });
+        
+        } else {
+            _course = course;
+        }
+
         delete _input;
         delete _physics;
 
@@ -23,17 +39,7 @@ namespace sss {
     }
 
     void Enemy::tick(float delta) {
-        static float s = sinf(0.01);
-        static float c = cosf(0.01);
-
-        float px = getPosition().x - _rotPoint.x;
-        float py = getPosition().z - _rotPoint.y;
-
-        float newx = px * c - py * s;
-        float newy = px * s + py * c;
-
-        setPosition(glm::vec3(newx + _rotPoint.x, getPosition().y, newy + _rotPoint.z));
-
+        move(_course->next()); 
     }
 
 } 
