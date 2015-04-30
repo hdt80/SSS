@@ -151,7 +151,7 @@ namespace sss {
         int texts[16] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
         _shader->setUniform1iv("textures", texts, 16);
         for(size_t i = 0; i < 200; i++) {
-            Asteroid* a = new Asteroid(glm::vec3(rand() % 200 - 100, rand() % 200 - 100, rand() % 200 - 100), 1);
+            Asteroid* a = new Asteroid(glm::vec3(rand() % 600 - 300, rand() % 600 - 300, rand() % 600 - 300), 1);
             a->onSpawn();
             _children.push_back(a);
         }

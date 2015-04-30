@@ -10,6 +10,7 @@ namespace sss {
     Asteroid::Asteroid(const glm::vec3& position, float size, const glm::vec3& vector, const glm::vec3& rotAxis)
         : Super(), _initPos(position), _vector(vector), _rotAxis(rotAxis)
     {
+        // setScale(glm::vec3(size, size, size));
         init(position, size);
     }
 
@@ -31,7 +32,7 @@ namespace sss {
         delete _input;
         delete _physics;
         _input = nullptr;
-        _physics = new engine::object::PhysicsComponent(new engine::physics::SphereCollider(position, size));
+        _physics = new engine::object::PhysicsComponent(new engine::physics::SphereCollider(position, 0.0001));
         _render = new engine::object::RenderComponent(array[rand() % 2], "assets/textures/asteroid1.png");
         setPosition(position);
     }
@@ -40,9 +41,9 @@ namespace sss {
         static const glm::vec3 NULL_VEC(0, 0, 0);
         if(_vector != NULL_VEC) {
             move(_vector);
-            // if(glm::length(getPosition() - _initPos) > 700.0f) {
-            //     _vector *= -1.0f;
-            // }
+            if(glm::length(getPosition() - _initPos) > 700.0f) {
+                _vector *= -1.0f;
+            }
         }
         if(_rotAxis != NULL_VEC)
             rotate(_rotAxis, glm::radians(1.0f));

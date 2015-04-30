@@ -1,4 +1,4 @@
-#define TESTING 1
+#define TESTING 0
 
 #include <core/event_queue.h>
 
@@ -98,7 +98,7 @@ int main(int argc, char** agrv) {
         
         window.update();
     }
-    Connection::getInstance().disconnect();
+    // Connection::getInstance().disconnect();
     // exit(0);
     // method.join();
 

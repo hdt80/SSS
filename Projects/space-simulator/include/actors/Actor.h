@@ -33,10 +33,12 @@ namespace engine {
                
                 /* implements transforms functions */
                 inline const glm::mat4 getTransformation() const { return _transform.getTransformation(); }
-                inline const glm::vec3 getPosition() const { return _transform.getPosition(); }
-                inline const glm::quat getRotation() const { return _transform.getRotation(); }
+                inline const glm::vec3& getPosition() const { return _transform.getPosition(); }
+                inline const glm::quat& getRotation() const { return _transform.getRotation(); }
+                inline const glm::vec3& getScale() const { return _transform.getScale(); }
                 inline void  setPosition(const glm::vec3& position) { _transform.setPosition(position); }
-                inline void setRotation(const glm::quat& rotation) {_transform.setRotation(rotation); }
+                inline void  setRotation(const glm::quat& rotation) { _transform.setRotation(rotation); }
+                inline void  setScale(const glm::vec3& scale) { _transform.setScale(scale); }
                 inline void  move(const glm::vec3& delta) { _transform.translate(delta); }
                 inline void  rotate(const glm::vec3& axis, float theta) { _transform.rotate(axis, theta); }
 
