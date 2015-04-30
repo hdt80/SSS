@@ -14,8 +14,8 @@ public class EventHandler {
 	// enum declaration of the different event types
 	// ==================================================
 	public enum EventType {
-		COLLISION    (0), // Occurs when when the ship collides with another object, such as an enemy, meteror, or a giant fat oaf Bryce
-		SPAWNENEMY   (1), // Occurs when the Master Controller spawns enemies
+		SPAWNENEMY   (0), // Occurs when the Master Controller spawns enemies
+		COLLISION    (1), // Occurs when when the ship collides with another object, such as an enemy, meteror, or a giant fat oaf Bryce
 		SHIPFIRES    (2), // Occurs when we fire any weapon
 		MINIGAMEDONE (3), // Occurs when a minigame is completed
 		POWERCHANGE  (4), // Occurs when the engineer changes the power level in a cell
