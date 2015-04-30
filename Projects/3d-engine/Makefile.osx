@@ -12,7 +12,9 @@ SOURCES += $(wildcard $(SOURCEDIR)/*/*/*.cpp)
 
 OBJECTS = $(patsubst $(SOURCEDIR)/%.cpp, $(BUILDDIR)/%.o, $(SOURCES))
 
-CSOURCES = $(wildcard $(SOURCEDIR)/*/*.c)
+CSOURCES = $(wildcard $(SOURCEDIR)/*.c)
+CSOURCES += $(wildcard $(SOURCEDIR)/*/*.c)
+
 COBJECTS = $(patsubst $(SOURCEDIR)/%.c, $(BUILDDIR)/%.o, $(CSOURCES))
 
 CXXFLAGS = -pedantic -Wall -Wno-comment -Wsign-compare -Winline -g -c -std=c++11 -I include -I code/headers

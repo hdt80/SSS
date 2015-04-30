@@ -50,8 +50,10 @@ int main(int argc, char** argv) {
 #include <time.h>
 #include <core/Connection.h>
 
+static bool running = true;
+
 void print_buffer() {
-    while(true)
+    while(running)
         sss::Connection::getInstance().printBuffer();
 }
 
@@ -100,7 +102,7 @@ int main(int argc, char** agrv) {
     }
     // Connection::getInstance().disconnect();
     // exit(0);
-    // method.join();
+    // running = false;
 
     
     return 0;

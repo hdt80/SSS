@@ -10,7 +10,6 @@ namespace sss {
     Asteroid::Asteroid(const glm::vec3& position, float size, const glm::vec3& vector, const glm::vec3& rotAxis)
         : Super(), _initPos(position), _vector(vector), _rotAxis(rotAxis)
     {
-        // setScale(glm::vec3(size, size, size));
         init(position, size);
     }
 
@@ -32,7 +31,8 @@ namespace sss {
         delete _input;
         delete _physics;
         _input = nullptr;
-        _physics = new engine::object::PhysicsComponent(new engine::physics::SphereCollider(position, 0.0001));
+        setScale(glm::vec3(size, size, size));
+        _physics = new engine::object::PhysicsComponent(new engine::physics::SphereCollider(position, size));
         _render = new engine::object::RenderComponent(array[rand() % 2], "assets/textures/asteroid1.png");
         setPosition(position);
     }

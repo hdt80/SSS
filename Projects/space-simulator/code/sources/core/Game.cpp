@@ -16,8 +16,6 @@ namespace sss {
     glm::vec3 getUp(const glm::quat& rot) {
         return glm::mat3_cast(rot) * glm::vec3(0, 1, 0);
     }
-
-
     
     Game::Game(const Camera& camera) 
         : _camera(camera)
@@ -151,7 +149,8 @@ namespace sss {
         int texts[16] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
         _shader->setUniform1iv("textures", texts, 16);
         for(size_t i = 0; i < 200; i++) {
-            Asteroid* a = new Asteroid(glm::vec3(rand() % 600 - 300, rand() % 600 - 300, rand() % 600 - 300), 1);
+            Asteroid* a = new Asteroid(glm::vec3(rand() % 600 - 300, rand() % 600 - 300, rand() % 600 - 300), 3);
+            a->setScale(glm::vec3(3, 3, 3));
             a->onSpawn();
             _children.push_back(a);
         }

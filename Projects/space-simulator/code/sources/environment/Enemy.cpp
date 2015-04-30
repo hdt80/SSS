@@ -13,9 +13,9 @@ namespace sss {
             //         [](float theta, float phi) -> float{ return 10.0f * std::cosf(phi); });
             
             _course = new Parametric(6.28,
-                    [](float theta, float phi) -> float{ return 10 * std::cosf(5.0f*phi) / 5.0f; },
-                    [](float theta, float phi) -> float{ return 10 * std::sinf(4.0f*phi) / 5.0f; },
-                    [](float theta, float phi) -> float{ return 10 * std::cosf(3.0f*phi) / 5.0f; });
+                    [](float theta, float phi) -> float{ return 600.0f * std::cosf(5.0f*phi) / 30.0f; },
+                    [](float theta, float phi) -> float{ return 600.0f * std::sinf(4.0f*phi) / 30.0f; },
+                    [](float theta, float phi) -> float{ return 600.0f * std::cosf(3.0f*phi) / 30.0f; });
         
         } else {
             _course = course;
@@ -39,7 +39,7 @@ namespace sss {
     }
 
     void Enemy::tick(float delta) {
-        move(_course->next()); 
+        move(glm::normalize(_course->next())); 
     }
 
 } 
