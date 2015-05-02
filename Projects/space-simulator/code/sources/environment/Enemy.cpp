@@ -12,7 +12,7 @@ namespace sss {
             //         [](float theta, float phi) -> float{ return 10.0f  * (std::cosf(theta))*(std::sinf(phi)); },
             //         [](float theta, float phi) -> float{ return 10.0f * std::cosf(phi); });
             
-            _course = new Parametric(6.28,
+            _course = new Parametric(6.283,
                     [](float theta, float phi) -> float{ return 600.0f * cosf(5.0f*phi) / 30.0f; },
                     [](float theta, float phi) -> float{ return 600.0f * sinf(4.0f*phi) / 30.0f; },
                     [](float theta, float phi) -> float{ return 600.0f * cosf(3.0f*phi) / 30.0f; },
@@ -40,7 +40,11 @@ namespace sss {
     }
 
     void Enemy::tick(float delta) {
-        move(glm::normalize(_course->next())); 
+        glm::vec3 next = glm::normalize(_course->next());
+        glm::vec3 curr_forward = glm::normalize(glm::mat3_cast(getRotation()) * glm::vec3(0, 0, 1));
+        glm::vec3 cross = glm::cross(next, curr_forward);
+        rotate(cross, asinf(glm::length(cross)));
+        move(next);
     }
 
 } 

@@ -6,6 +6,7 @@
 #include <components/PhysicsComponent.h>
 #include <cmath>
 #include <core/Parametric.h>
+#include <glm/trigonometric.hpp>
 
 namespace sss {
 
