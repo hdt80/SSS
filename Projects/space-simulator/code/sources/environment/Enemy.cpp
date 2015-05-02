@@ -15,7 +15,8 @@ namespace sss {
             _course = new Parametric(6.28,
                     [](float theta, float phi) -> float{ return 600.0f * cosf(5.0f*phi) / 30.0f; },
                     [](float theta, float phi) -> float{ return 600.0f * sinf(4.0f*phi) / 30.0f; },
-                    [](float theta, float phi) -> float{ return 600.0f * cosf(3.0f*phi) / 30.0f; });
+                    [](float theta, float phi) -> float{ return 600.0f * cosf(3.0f*phi) / 30.0f; },
+                    0.01f);
         
         } else {
             _course = course;

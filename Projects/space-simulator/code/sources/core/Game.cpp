@@ -22,7 +22,7 @@ namespace sss {
     {
         _shader = new Shader("assets/shaders/textured.vs", "assets/shaders/textured.fs");
         _shader->bind();
-        _player = new Actor;
+        _player = new Player;
         _canFire = true;
         init();
     }
@@ -46,7 +46,7 @@ namespace sss {
     }
 
     void Game::update(float delta) {
-        player_stuff();
+        _player->tick(delta);
         detect_collisions();
         _camera.setPosition(_player->getPosition());
         _camera.setRotation(_player->getRotation());
@@ -70,6 +70,7 @@ namespace sss {
                 _missiles[i]->tick();
             }
         }
+
         auto iter(std::remove_if(_children.begin(), _children.end(), [](Actor* a) -> bool { return a == nullptr; }));
         _children.erase(iter, _children.end());
         _children.shrink_to_fit();
@@ -92,55 +93,6 @@ namespace sss {
         _renderer.flush();
     }
 
-    /* handle player input */
-    void Game::player_stuff() {
-        static glm::vec3 Z_AXIS(0, 0, 1);
-        static glm::vec3 Y_AXIS(0, 1, 0);
-        static glm::vec3 X_AXIS(1, 0, 0);
-
-        /*  looking around */
-        if(Input::isKeyPressed(GLFW_KEY_J)) 
-            _player->rotate(Y_AXIS, glm::radians(2.0f));
-        else if(Input::isKeyPressed(GLFW_KEY_L)) 
-            _player->rotate(Y_AXIS, glm::radians(-2.0f));
-
-        if(Input::isKeyPressed(GLFW_KEY_I))
-            _player->rotate(X_AXIS, glm::radians(2.0f));
-        else if(Input::isKeyPressed(GLFW_KEY_K))
-            _player->rotate(X_AXIS, glm::radians(-2.0f));
-
-        if(Input::isKeyPressed(GLFW_KEY_U))
-            _player->rotate(Z_AXIS, glm::radians(2.0f));
-        else if(Input::isKeyPressed(GLFW_KEY_O))
-            _player->rotate(Z_AXIS, glm::radians(-2.0f));
-
-        glm::vec3 forward = getForward(_player->getRotation());
-        glm::vec3 right   = getRight(_player->getRotation());
-        /* movement */
-        if(Input::isKeyPressed(GLFW_KEY_W))
-            _player->move(-0.1f * forward);
-        else if(Input::isKeyPressed(GLFW_KEY_S))
-            _player->move(0.1f * forward);
-
-        if(Input::isKeyPressed(GLFW_KEY_D))
-            _player->move(0.1f * right);
-        else if(Input::isKeyPressed(GLFW_KEY_A))
-            _player->move(-0.1f * right);
-
-        /* firing */
-        if(_canFire and Input::isKeyPressed(GLFW_KEY_F)) {
-            glm::vec3 position = _player->getPosition() + glm::vec3(0, 0, -5) * forward;
-            Missile* m = new Missile(position, -0.7f * forward);
-            m->setRotation(_player->getRotation());
-            m->rotate(glm::vec3(1, 0, 0), glm::radians(-90.0f));
-            _missiles.push_back(m);
-            _canFire = false;
-        } else if(not _canFire and not Input::isKeyPressed(GLFW_KEY_F)) {
-            _canFire = true; 
-        }
-
-    }
-
     void Game::addEnemy() {
         _children.push_back(new Enemy(glm::vec3(rand() % 100, rand() % 100, rand() % 100), nullptr));
     }
@@ -157,9 +109,6 @@ namespace sss {
 
         _children.push_back(new Enemy(glm::vec3(20, 20, 20), nullptr));
         _children.push_back(new Enemy(glm::vec3(80, 80, 80), nullptr));
-
-
-        // _children[0]->destroy();
     }
 
     void Game::detect_collisions() {

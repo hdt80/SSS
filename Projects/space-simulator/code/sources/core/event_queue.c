@@ -1,5 +1,5 @@
-#ifndef EVENT_QUEUE_H_
-#define EVENT_QUEUE_H_
+// #ifndef EVENT_QUEUE_C_
+// #define EVENT_QUEUE_C_
 
 #include <core/event_queue.h>
 
@@ -63,4 +63,4 @@ void sss_debug_queue() {
     printf("\n"); 
 }
 
-#endif
+// #endif /* EVENT_QUEUE_C_ */

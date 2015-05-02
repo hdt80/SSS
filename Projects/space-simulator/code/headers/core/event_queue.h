@@ -1,6 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#ifndef EVENT_QUEUE_H_
+#define EVENT_QUEUE_H_
+
 enum EVENT_TYPE {
     SPWANENEMY 
 };
@@ -22,6 +25,7 @@ struct NODE {
 };
 typedef struct NODE sss_node;
 
+#endif /* EVENT_QUEUE_H_ */
 
 #ifdef __cplusplus
 extern "C" {

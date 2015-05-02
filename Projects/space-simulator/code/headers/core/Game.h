@@ -12,8 +12,8 @@
 #include <environment/Missile.h>
 #include <core/Connection.h>
 #include <glm/glm.hpp>
-#include <core/Game.h>
 #include <algorithm>
+#include <core/Player.h>
 
 namespace sss {
 
@@ -34,7 +34,7 @@ namespace sss {
             std::vector<Missile*> _missiles;
             Camera _camera;
             Shader* _shader;
-            Actor* _player; 
+            Player* _player; 
             BatchRenderer _renderer;
             bool _canFire;
         protected:
