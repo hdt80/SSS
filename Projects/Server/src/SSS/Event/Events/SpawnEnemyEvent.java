@@ -1,6 +1,9 @@
 package SSS.Event.Events;
 
+import SSS.Server;
 import SSS.Util.Logger;
+
+import java.io.IOException;
 
 public class SpawnEnemyEvent extends Event {
     private int enemyType;
@@ -16,5 +19,10 @@ public class SpawnEnemyEvent extends Event {
     @Override
     public void run() {
         Logger.info("Spawning " + spawnCount + " of type " + enemyType + " with " + enemyHealth + " health");
+        try {
+            Server.get().clientHandler.send("NAV", "EVN#0;" + spawnCount + ';' + enemyType + ';' + enemyHealth + ';');
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -45,21 +45,21 @@ static char* all_test() {
     return 0;
 }
 
-int main(int argc, char** argv) {
+// int main(int argc, char** argv) {
 
-    char* result = all_test();
-    if(result != 0)
-        printf("%s\n", result);
-    else {
-        printf("all tests passed\n");
-    }
+//     char* result = all_test();
+//     if(result != 0)
+//         printf("%s\n", result);
+//     else {
+//         printf("all tests passed\n");
+//     }
 
-    printf("Tests run: %d\n", sss_tests_run);
+//     printf("Tests run: %d\n", sss_tests_run);
 
 
 
-    return 0;
-}
+//     return 0;
+// }
 
 
 
