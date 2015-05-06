@@ -46,8 +46,8 @@ namespace sss {
 
             void update(float delta=1.0f);
             void render();
-            void sendMsg(const std::string& msg) {}
             inline void addChild(Actor* child) { _children.push_back(child); }  
+            inline const Player& getPlayer() const { return *_player; }
 
             void addEnemy();
         private:

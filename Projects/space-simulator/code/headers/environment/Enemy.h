@@ -10,6 +10,8 @@
 
 namespace sss {
 
+    class Game;
+
     class Enemy : public engine::object::Pawn {
         private:
             typedef Pawn Super;

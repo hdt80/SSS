@@ -37,6 +37,10 @@ namespace sss {
             inline float& operator[](int index) { return _power[index]; }
             inline float operator[](int index) const { return _power[index]; }
 
+            inline glm::vec3 getForward() const { return glm::mat3_cast(getRotation()) * glm::vec3(0, 0, 1); }
+            inline glm::vec3 getRight() const { return glm::mat3_cast(getRotation()) * glm::vec3(1, 0, 0); }
+            inline glm::vec3 getUp() const { return glm::mat3_cast(getRotation()) * glm::vec3(0, 1, 0); }
+
         protected:
             void onDestroy() override;
     };

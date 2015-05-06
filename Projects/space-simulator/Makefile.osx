@@ -19,7 +19,7 @@ CXXFLAGS = -pedantic -Wall -Wno-comment -Wsign-compare -Winline -g -c -std=c++11
 CFLAGS = -pedantic -Wall -g -c -I code/headers -I include
 LDFLAGS = $(LIBS) -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo 
 
-EXE = exe
+EXE = app
 
 
 static: $(OBJECTS) $(COBJECTS)
@@ -39,7 +39,7 @@ $(COBJECTS): $(BUILDDIR)/%.o : $(SOURCEDIR)/%.c
 		$(CC) $(CFLAGS) $< -o $(BUILDDIR)/$(notdir $@)
 
 clean:
-	rm -r $(BUILDDIR)/*.o ./bin/$(EXE) ./dist
+	rm -r $(BUILDDIR)/*.o ./bin/$(EXE)
 
 run:
 	./bin/$(EXE)

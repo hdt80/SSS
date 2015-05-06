@@ -1,23 +1,24 @@
 #include <environment/Enemy.h>
+#include <core/Game.h>
 
 namespace sss {
-    
+
 
     Enemy::Enemy(const glm::vec3& position, Parametric* course) :Super() {
-       
+
         if(course == nullptr) {
-            
+
             // _course = new Parametric(6.28, 
             //         [](float theta, float phi) -> float{ return 10.0f  * (std::cosf(phi))*(std::sinf(theta)); },
             //         [](float theta, float phi) -> float{ return 10.0f  * (std::cosf(theta))*(std::sinf(phi)); },
             //         [](float theta, float phi) -> float{ return 10.0f * std::cosf(phi); });
-            
+
             _course = new Parametric(6.283,
-                    [](float theta, float phi) -> float{ return 600.0f * cosf(5.0f*phi) / 30.0f; },
-                    [](float theta, float phi) -> float{ return 600.0f * sinf(4.0f*phi) / 30.0f; },
-                    [](float theta, float phi) -> float{ return 600.0f * cosf(3.0f*phi) / 30.0f; },
+                    [](float theta, float phi) -> float{ return 600.0f * cosf(5.0f*phi) / 30.0f; }, // x function
+                    [](float theta, float phi) -> float{ return 600.0f * sinf(4.0f*phi) / 30.0f; }, // y function
+                    [](float theta, float phi) -> float{ return 600.0f * cosf(3.0f*phi) / 30.0f; }, // z function
                     0.01f);
-        
+
         } else {
             _course = course;
         }
@@ -37,14 +38,30 @@ namespace sss {
     Enemy::~Enemy() {
         delete _render;
         _render = nullptr;
+        delete _course;
+        _course = nullptr;
     }
 
     void Enemy::tick(float delta) {
+        
         glm::vec3 next = glm::normalize(_course->next());
-        glm::vec3 curr_forward = glm::normalize(glm::mat3_cast(getRotation()) * glm::vec3(0, 0, 1));
-        glm::vec3 cross = glm::cross(next, curr_forward);
-        rotate(cross, asinf(glm::length(cross)));
+        glm::quat q = getRotation();
+        glm::vec3 curr_forward = glm::normalize(glm::mat3_cast(q) * glm::vec3(0, 0, 1));
+        glm::vec3 dp = glm::normalize(Game::getGame().getPlayer().getPosition() - getPosition());
+        glm::vec3 cross = glm::cross(dp, curr_forward);
+        float s = glm::length(cross);
+        // printf("< %f, %f, %f > : ", dp.x, dp.y, dp.z);
+        // printf("< %f, %f, %f > : ", next.x, next.y, next.z);
+        // printf("< %f, %f, %f > : ", cross.x, cross.y, cross.z);
+        // printf("< %f, %f, %f > : ", curr_forward.x, curr_forward.y, curr_forward.z);
+        // printf("< %f, %f, %f, %f > : ", q.x, q.y, q.z, q.w);
+        // printf("|| %f ||\n", s);
+
+        if(s != 0.0f) // glm::rotate cuase nans to appear if the angle is 0.0f
+            rotate(cross, s);
+        
         move(next);
+        // linear algebra in kinda cool, but mostly a pain in the ass
     }
 
 } 

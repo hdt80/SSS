@@ -59,6 +59,7 @@ void print_buffer() {
 
 int main(int argc, char** agrv) {
 
+
     srand(time(NULL));
     using engine::graphics::Window;
     using engine::graphics::Shader;

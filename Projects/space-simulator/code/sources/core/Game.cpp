@@ -107,8 +107,9 @@ namespace sss {
             _children.push_back(a);
         }
 
-        _children.push_back(new Enemy(glm::vec3(20, 20, 20), nullptr));
-        _children.push_back(new Enemy(glm::vec3(80, 80, 80), nullptr));
+        _children.push_back(new Enemy(glm::vec3(0, 0, -30), nullptr));
+        // _children.push_back(new Enemy(glm::vec3(20, 20, 20), nullptr));
+        // _children.push_back(new Enemy(glm::vec3(80, 80, 80), nullptr));
     }
 
     void Game::detect_collisions() {
