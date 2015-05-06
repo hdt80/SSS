@@ -5,18 +5,6 @@
 
 namespace sss {
 
-    glm::vec3 getForward(const glm::quat& rot) {
-        return glm::mat3_cast(rot) * glm::vec3(0, 0, 1);
-    }
-
-    glm::vec3 getRight(const glm::quat& rot) {
-        return glm::mat3_cast(rot) * glm::vec3(1, 0, 0);
-    }
-
-    glm::vec3 getUp(const glm::quat& rot) {
-        return glm::mat3_cast(rot) * glm::vec3(0, 1, 0);
-    }
-    
     Game::Game(const Camera& camera) 
         : _camera(camera)
     {
@@ -71,6 +59,9 @@ namespace sss {
             }
         }
 
+        /* both these iterators go through and free the memory of 
+         * missiles, asteroids, and enemies no longer in use 
+         */
         auto iter(std::remove_if(_children.begin(), _children.end(), [](Actor* a) -> bool { return a == nullptr; }));
         _children.erase(iter, _children.end());
         _children.shrink_to_fit();
@@ -108,10 +99,9 @@ namespace sss {
         }
 
         _children.push_back(new Enemy(glm::vec3(0, 0, -30), nullptr));
-        // _children.push_back(new Enemy(glm::vec3(20, 20, 20), nullptr));
-        // _children.push_back(new Enemy(glm::vec3(80, 80, 80), nullptr));
     }
 
+    /* */
     void Game::detect_collisions() {
         for(auto& c : _children) {
 

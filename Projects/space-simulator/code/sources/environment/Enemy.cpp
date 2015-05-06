@@ -23,6 +23,8 @@ namespace sss {
             _course = course;
         }
 
+        _timer = new Timer(3000);
+        
         delete _input;
         delete _physics;
 
@@ -43,6 +45,30 @@ namespace sss {
     }
 
     void Enemy::tick(float delta) {
+        movement(delta);
+        if(canFire())
+            fire();
+    }
+
+    bool Enemy::canFire() {
+        if(_timer->finished()) {
+            _timer->restart();
+            return glm::length(Game::getGame().getPlayer().getPosition() - getPosition()) < 100.0f;
+        }
+        return false;
+    }
+
+    void Enemy::fire(float delta) {
+        Missile* m;
+        glm::vec3 forward = glm::normalize(glm::mat3_cast(getRotation()) * glm::vec3(0, 0, 1));
+        glm::vec3 position = getPosition() + 2.0f * forward;
+        m = new Missile(position, 2.0f * forward);
+        m->setRotation(getRotation());
+        m->rotate(glm::vec3(1, 0, 0), 3.1415920f / 2.0f);
+        Game::getGame().addMissile(m);
+    }
+
+    void Enemy::movement(float delta) {
         
         glm::vec3 next = glm::normalize(_course->next());
         glm::quat q = getRotation();

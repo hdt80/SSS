@@ -24,10 +24,10 @@ namespace sss {
     using engine::graphics::BatchRenderer;
     using engine::physics::SphereCollider;
     using engine::Input;
-    class Connection;
     using sss::Enemy;
     using sss::Missile;
 
+    class Connection;
     class Game {
         private:
             std::vector<Actor*> _children;
@@ -46,13 +46,19 @@ namespace sss {
 
             void update(float delta=1.0f);
             void render();
-            inline void addChild(Actor* child) { _children.push_back(child); }  
+
+            /* Adds an either an asteroid or an enemy to the world */
+            inline void addSpawn(Actor* child) { _children.push_back(child); }
+            /* Create an enemy and add it to the world */
+            void addEnemy();
+            /* Adds an emeny to the world */
+            inline void addMissile(Missile* missile) { _missiles.push_back(missile); }
+           
+            /* returns the games player */
             inline const Player& getPlayer() const { return *_player; }
 
-            void addEnemy();
         private:
             void init();
-            void player_stuff();
             void detect_collisions();
     };  
 }

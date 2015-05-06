@@ -1,1 +1,7 @@
-- Add Vector Linear Interpolation
+- Add Asteroid Fields
+- Add Solar Systems
+- check if player collides with an Asteroid in Asteroid Fields
+- check if player collides with Enemy, or Enemy missile, in Enemy class
+- check if player missile collides with anything in Player class
+- PARSE MESSAGES
+- SEND  MESSAGES

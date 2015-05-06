@@ -71,7 +71,7 @@ int main(int argc, char** agrv) {
     using sss::Asteroid;
     using sss::Connection;
 
-    Window window("sunset-space-simulator", 960, 540);
+    Window window("sunset-space-simulator", 960, 540, true);
     std::cout << glGetString(GL_VERSION) << std::endl;
     glClearColor(0.0, 0.0, 0.0, 1.0);
 
