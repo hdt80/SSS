@@ -8,9 +8,9 @@ extern "C" {
 //                             if (message) return message; } while(0)
 //
 
-char* sss_assert(char* msg, int test);
-char* sss_refute(char* msg, int test);
-char* sss_run_test(char* (*fptr)());
+const char* sss_assert(const char* msg, int test);
+const char* sss_refute(const char* msg, int test);
+const char* sss_run_test(const char* (*fptr)());
 
 extern int sss_tests_run;
 

@@ -2,6 +2,7 @@
 
 #include <actors/Actor.h>
 #include <components/RenderComponent.h>
+#include <algorithm>    // std::transform
 
 namespace engine {
     namespace graphics {

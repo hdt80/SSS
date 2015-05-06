@@ -72,6 +72,7 @@ int main(int argc, char** agrv) {
     using sss::Connection;
 
     Window window("sunset-space-simulator", 960, 540, true);
+    window.showMouse(false);
     std::cout << glGetString(GL_VERSION) << std::endl;
     glClearColor(0.0, 0.0, 0.0, 1.0);
 
@@ -101,6 +102,7 @@ int main(int argc, char** agrv) {
         
         window.update();
     }
+    window.showMouse(true);
     // Connection::getInstance().disconnect();
     // exit(0);
     // running = false;

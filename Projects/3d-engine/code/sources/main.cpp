@@ -23,7 +23,7 @@ using namespace object;
 using namespace physics;
 
 
-static char* test_collisions() {
+static const char* test_collisions() {
 
     /* Testing that shperes collide */
     SphereCollider s1(glm::vec3(0, 0, 0), 1);
@@ -31,35 +31,35 @@ static char* test_collisions() {
     return sss_assert("FAILURE -> <0, 0, 0>:1 failed to collide with <0.5, 0.5, 0.5>:1", s1.collides(s2));
 }
 
-static char* tests_non_collisions() {
+static const char* tests_non_collisions() {
     SphereCollider s1(glm::vec3(0, 0, 0), 1);
     SphereCollider s2(glm::vec3(5.0f, 5.0f, 5.0f), 1);
     return sss_refute("FAILURE -> <0, 0, 0>:1 collided with <5, 5, 5>:1", s1.collides(s2));
 }
 
-static char* all_test() {
-    char* t1 = sss_run_test(test_collisions);
+static const char* all_test() {
+    const char* t1 = sss_run_test(test_collisions);
     if(t1) return t1;
-    char* t2 = sss_run_test(tests_non_collisions);
+    const char* t2 = sss_run_test(tests_non_collisions);
     if(t2) return t2;
     return 0;
 }
 
-// int main(int argc, char** argv) {
+int main(int argc, char** argv) {
 
-//     char* result = all_test();
-//     if(result != 0)
-//         printf("%s\n", result);
-//     else {
-//         printf("all tests passed\n");
-//     }
+    const char* result = all_test();
+    if(result != 0)
+        printf("%s\n", result);
+    else {
+        printf("all tests passed\n");
+    }
 
-//     printf("Tests run: %d\n", sss_tests_run);
+    printf("Tests run: %d\n", sss_tests_run);
 
 
 
-//     return 0;
-// }
+    return 0;
+}
 
 
 

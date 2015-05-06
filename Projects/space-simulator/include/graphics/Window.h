@@ -28,6 +28,8 @@ namespace engine {
                 bool shouldClose() const;
                 void clear() const;
 
+                void showMouse(bool show);
+
                 inline int getWidth() const { return _width; }
                 inline int getHeight() const { return _height; }
 
@@ -48,5 +50,5 @@ namespace engine {
     
     
     
-    };
-};
+    }
+}

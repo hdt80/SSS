@@ -60,6 +60,14 @@ namespace engine {
             return true;
         }
 
+        void Window::showMouse(bool show) {
+            if(show) 
+                glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            else 
+                glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+            
+        }
+
         bool Window::shouldClose() const {
             return glfwWindowShouldClose(_window);
         }
