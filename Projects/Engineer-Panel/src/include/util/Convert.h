@@ -3,6 +3,8 @@
 
 #include <string>
 #include <sstream>
+#include <vector>
+#include <cstdlib>
 
 #include "util/Logger.h"
 
@@ -13,6 +15,11 @@ namespace convert {
 		stream << n;
 		return stream.str();
 	}
+
+	// Split a string into a vector delimited by the delim char
+	std::vector<std::string> split(std::string str, char delim);
+	// Convert a string to an int
+	int toInt(std::string str);
 }
 
 #endif

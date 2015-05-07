@@ -117,6 +117,20 @@ bool Reactor::changePower(int cellIndex, int amount) {
 	return true;
 }
 
+// Change a cell's max power level to the new amount
+// cell - Power cell to change the max power
+// amount - New max power relative to the current max power
+// Returns if the cell can have that much max power
+bool Reactor::setMaxPower(std::string str, int amount) {
+	PowerCell* cell = get(str);
+	if (cell == nullptr) {
+		warn("Cell %s doesn't exist", str.c_str());
+		return false;
+	}
+	cell->currMax += amount;
+	return true;
+}
+
 // Returns a pointer to the cell with that name
 // name - Power cell with that name to return
 // returns - A pointer to the cell with that name, or nullptr if that cell doesn't exist

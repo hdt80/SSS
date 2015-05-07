@@ -28,6 +28,7 @@ class Reactor {
 		bool contains(std::string name);         // Return if a power cell has that name
 
 		bool changePower(int cellIndex, int amount); // Changing a cell's power lvl
+		bool setMaxPower(std::string cell, int lvl); // Changing a cell's max power
 
 		PowerCell* get(std::string name); // Return a pointer to the cell with that name
 
