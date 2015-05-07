@@ -1,5 +1,7 @@
 package SSS.Event.Events;
 
+import java.io.IOException;
+
 public abstract class Event {
     private int id;
 
@@ -21,7 +23,7 @@ public abstract class Event {
     /**
      * Method overridden by events
      */
-    public void run() {
+    public void run() throws IOException {
         // To be overran by child Events
     }
 }
