@@ -48,6 +48,10 @@ $RECYCLE.BIN/
 /Projects/Server/out
 /Projects/MasterController/bin
 /Projects/MasterController/.idea
+.classpath
+.metadata
+.project
+.settings
 
 *.html
 *.iml

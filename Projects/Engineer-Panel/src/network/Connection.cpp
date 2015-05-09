@@ -113,9 +113,9 @@ void Connection::printBuffer() {
 	debug("RECV: \'%s\' (%i)", _buffer, result);
 
 	std::string setTest(_buffer, 3);
-	if (setTest == "SET") {
-		setValue(_buffer);
-		std::string toSet(_buffer + 4, strlen(_buffer));
+	if (setTest == "EVN") {
+		std::string event(_buffer + 4, strlen(_buffer));
+		EventHandler::processEvent(event);
 	}
 
 	clearBuffer();

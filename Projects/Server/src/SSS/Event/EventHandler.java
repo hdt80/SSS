@@ -14,13 +14,14 @@ public class EventHandler {
 	// enum declaration of the different event types
 	// ==================================================
 	public enum EventType {
-		SPAWNENEMY   (0), // Occurs when the Master Controller spawns enemies
-		COLLISION    (1), // Occurs when when the ship collides with another object, such as an enemy, meteror, or a giant fat oaf Bryce
-		SHIPFIRES    (2), // Occurs when we fire any weapon
-		MINIGAMEDONE (3), // Occurs when a minigame is completed
-		POWERCHANGE  (4), // Occurs when the engineer changes the power level in a cell
-		ENEMYDESPAWN (5), // Occurs when an enemy is despawned
-		ENEMYFIRES   (6); // Occurs when an enemy fires it's weapon
+		SPAWNENEMY    (0), // Occurs when the Master Controller spawns enemies
+		COLLISION     (1), // Occurs when when the ship collides with another object, such as an enemy, meteror, or a giant fat oaf Bryce
+		SHIPFIRES     (2), // Occurs when we fire any weapon
+		MINIGAMEDONE  (3), // Occurs when a minigame is completed
+		POWERCHANGE   (4), // Occurs when the engineer changes the power level in a cell
+		ENEMYDESPAWN  (5), // Occurs when an enemy is despawned
+		ENEMYFIRES    (6), // Occurs when an enemy fires it's weapon
+		MAXPOWERCHANGE(7); // Occurs when the eng panel should update a cell's max power
 
 		final int id; // Internal ID of the event
 
@@ -57,7 +58,7 @@ public class EventHandler {
 
 	/**
 	 * When an event message is read from a client
-	 * @param args
+	 * @param args Event arguments to be passed on event's creation
 	 */
 	public void callEvent(ArrayList<String> args) {
 		EventType eventType = EventType.values()[Integer.parseInt(args.get(0))];

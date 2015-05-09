@@ -2,6 +2,7 @@ package SSS.Event;
 
 import SSS.Event.Events.Event;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 
@@ -55,7 +56,11 @@ public class EventQueue {
             public void run() {
                 while (!closed) {
                     if (!isEmpty()) {
-                        queue.get(0).run();
+                        try {
+                            queue.get(0).run();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         queue.remove(0);
                     }
                 }

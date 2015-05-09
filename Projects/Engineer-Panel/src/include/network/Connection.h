@@ -10,6 +10,7 @@
 
 #include "util/Logger.h"
 #include "power_comps/Reactor.h"
+#include "network/EventHandler.h"
 
 #define TIMEOUT_WAIT 2500
 #define BUFFER_SIZE  1024

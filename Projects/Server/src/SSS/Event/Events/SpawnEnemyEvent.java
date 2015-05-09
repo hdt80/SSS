@@ -17,7 +17,7 @@ public class SpawnEnemyEvent extends Event {
     }
 
     @Override
-    public void run() {
+    public void run() throws IOException {
         Logger.info("Spawning " + spawnCount + " of type " + enemyType + " with " + enemyHealth + " health");
         try {
             Server.get().clientHandler.send("NAV", "EVN#0;" + spawnCount + ';' + enemyType + ';' + enemyHealth + ';');
