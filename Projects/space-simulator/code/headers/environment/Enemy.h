@@ -5,6 +5,7 @@
 #include <components/RenderComponent.h>
 #include <components/PhysicsComponent.h>
 #include <cmath>
+#include <sstream>
 #include <core/Parametric.h>
 #include <glm/trigonometric.hpp>
 #include <core/Timer.h>
@@ -21,14 +22,16 @@ namespace sss {
             Parametric* _course;
             Timer* _timer;
 
-            std::string _id;
+            size_t _id;
+
+            static size_t ID;
         public:
             Enemy(const glm::vec3& position, Parametric* course);
             ~Enemy(); 
             void tick(float delta=1.0f) override;
             void onSpawn() override {}
-
-            inline void setID(const std::string& id) { _id = id; }
+            
+            void onDestroy() override;
 
             void onHit();
         private:

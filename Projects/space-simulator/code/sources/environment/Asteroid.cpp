@@ -1,7 +1,8 @@
 #include <environment/Asteroid.h>
+#include <core/Game.h>
 
 namespace sss {
-    
+
     Asteroid::Asteroid(const glm::vec3& position, float size)
         : This(position, size, glm::vec3(0, 0, 0), glm::vec3(0, 0, 0))
     {
@@ -47,6 +48,13 @@ namespace sss {
         }
         if(_rotAxis != NULL_VEC)
             rotate(_rotAxis, glm::radians(1.0f));
+
+        if(getCollider()->collides(SphereCollider(Game::getGame().getPlayer().getPosition(), 1))) {
+            // TODO: what side we were hit on
+            Connection::getInstance().write("EVN#1;0;");
+            destroy();
+        }
+
     } 
 
     void Asteroid::onSpawn() {

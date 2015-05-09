@@ -1,4 +1,4 @@
-#define TESTING 1
+#define TESTING 0
 
 #include <core/event_queue.h>
 
@@ -11,18 +11,18 @@ int main(int argc, char** argv) {
 
     sss_event events[4];
     for(int i = 0; i < 4; i++) 
-        events[i].test_datum = i;
+        events[i].args[0] = i;
    
-    sss_enque_event(events[0]);
-    sss_enque_event(events[3]);
-    sss_enque_event(events[2]);
-    sss_enque_event(events[1]);
+    sss_enque_event(sss_parse_event("EVN#0;1;2;3;4;5;@\0"));
+    sss_enque_event(sss_parse_event("EVN#0;1;2;3;4;5;@\0"));
+    sss_enque_event(sss_parse_event("EVN#0;1;2;3;4;5;@\0"));
+    sss_enque_event(sss_parse_event("EVN#0;1;2;3;4;5;@\0"));
 
     sss_debug_queue();    
 
     sss_event t;
     while(sss_poll_event(&t)) 
-        printf("%d\n", t.test_datum);
+        printf("%d\n", t.evn);
    
     sss_parse_event("EVN#0;1;2;3;4;5;@\0");
 
@@ -85,7 +85,7 @@ int main(int argc, char** agrv) {
     glEnable(GL_DEPTH_CLAMP);
     glDepthMask(GL_TRUE);std::string file_path = "assets/shaders/textured";
     
-    Connection::getInstance().makeConnection("10.65.175.53", 5003);
+    Connection::getInstance().makeConnection("127.0.0.1", 5003);
     Connection::getInstance().write("NAV");
 
     Connection::getInstance().write("EVN#1;1;");
