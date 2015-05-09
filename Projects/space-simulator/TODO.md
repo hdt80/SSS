@@ -5,3 +5,5 @@
 - check if player missile collides with anything in Player class
 - PARSE MESSAGES
 - SEND  MESSAGES
+
+- {0:top, 1:right, 2:left, 3:bottom, 4:front, 5:back}

@@ -51,9 +51,52 @@ int sss_enque_event(sss_event event) {
 }
 
 sss_node sss_parse_event(const char* command) {
-   sss_node result;
+    sss_node result;
 
-   return result;
+    printf("%s\n", command);
+
+    int number_of_args = 0;
+    
+    // count the number of arguments
+    int i;
+    // params start at the fifth character
+    for(i = 4; ; i++) {
+        if(command[i] == '@') { 
+            number_of_args++;
+            break;
+        }
+        if(command[i] == ';')
+            number_of_args++;
+    }
+    int len = i;
+    
+    int* args_arr = (int*)malloc(sizeof(int) * number_of_args);
+    char* holder = (char*)malloc(sizeof(int) * len);
+    char* fmt = (char*)malloc(sizeof(int)    * number_of_args * 3);
+
+    for(i = 4; i < len; i++)
+        holder[i - 4] = command[i];
+   
+    for(i = 0; i < number_of_args * 3; i += 3) {
+        fmt[  i  ] = '%';
+        fmt[i + 1] = 'd';
+        fmt[i + 2] = ';';
+    } 
+
+    printf("%s\n", holder);
+
+    printf("%s\n", fmt);
+
+    sprintf(holder, fmt, args_arr);
+    
+    for(i = 0; i < number_of_args; i++)
+        printf("%d, ", args_arr[0]);
+    puts("");
+    
+    free(args_arr);
+    free(holder);
+    free(fmt);
+    return result;
 }
 
 void sss_debug_queue() {

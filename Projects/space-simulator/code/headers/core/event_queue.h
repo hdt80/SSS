@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #ifndef EVENT_QUEUE_H_
 #define EVENT_QUEUE_H_

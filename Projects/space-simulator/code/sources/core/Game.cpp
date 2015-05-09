@@ -101,7 +101,7 @@ namespace sss {
         _children.push_back(new Enemy(glm::vec3(0, 0, -30), nullptr));
     }
 
-    /* */
+    /* abstract into things*/
     void Game::detect_collisions() {
         for(auto& c : _children) {
 
@@ -110,7 +110,7 @@ namespace sss {
                 continue;
             if(p->getCollider()->collides(SphereCollider(_player->getPosition(), 1))) {
                 p->destroy();
-                Connection::getInstance().write("EVN#0;9;");
+                Connection::getInstance().write("EVN#1;1;");
             }
 
             for(auto& m : _missiles) {
