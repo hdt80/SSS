@@ -42,10 +42,7 @@ public class Client extends Thread {
 			getClientName();
 			Logger.info("Connection made to " + clientID + " (" + clientSocket.getInetAddress().getHostAddress() + ":" + clientSocket.getPort() + ")");
 
-			Server.get().clientHandler.addClient(this);
-
 			read();
-
 		} catch (IOException e) {
 			System.out.println("Exception caught when trying to listen on port or listening for a connection");
 			e.printStackTrace();
@@ -59,7 +56,9 @@ public class Client extends Thread {
 		try {
 			Logger.debug("Disconnecting to " + clientID);
 			getSocket().close();
-			Server.get().clientHandler.removeClient(this);
+            if (!Server.get().clientHandler.removeClient(clientID)) {
+                Logger.warn("Cannot remove " + clientID + " from client handler");
+            }
 			closed = true;
 			Logger.info("Disconnected from " + clientID);
 		} catch (IOException e) {
@@ -92,17 +91,7 @@ public class Client extends Thread {
 		if (closed) {
 			return;
 		}
-		Executors.newSingleThreadExecutor().execute(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					out.write(msg.getBytes());
-				} catch (Exception e) {
-					e.printStackTrace();
-					close();
-				}
-			}
-		});
+        out.write(msg.getBytes());
 	}
 
 	/**
@@ -167,9 +156,9 @@ public class Client extends Thread {
 		sb.append(clientID);
 		sb.append("#");
 
-		for (int i = 0; i < buffer.size(); ++i) {
-			sb.append(buffer.get(i));
-		}
+        for (Character c : buffer) {
+            sb.append(c);
+        }
 		return sb.toString();
 	}
 

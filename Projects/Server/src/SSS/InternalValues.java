@@ -1,10 +1,7 @@
 package SSS;
 
-import SSS.Event.EventHandler;
 import SSS.Util.Logger;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -24,7 +21,16 @@ public class InternalValues {
      */
     public void setValue(String msg) {
         int keyStop = msg.indexOf(":");
-        Logger.debug("keyStop at " + keyStop);
+        Logger.debug(msg.substring(0, keyStop) + ":" + msg.substring(keyStop + 1, msg.length()));
+        values.put(msg.substring(0, keyStop), msg.substring(keyStop + 1, msg.length()));
+    }
+
+    /**
+     * Parse an unparsed message from a Client and return the corresponding value
+     * @return The value corresponding to the key
+     */
+    public String getValue(String msg) {
+        return "";
     }
 
     public void print() {

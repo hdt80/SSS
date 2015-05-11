@@ -36,12 +36,17 @@ public class ClientHandler {
 
     /**
      * Remove a Client from the clients we handle
-     * @param client Client to remove
+     * @param name Name of the Client to remove
      * @return true  - The Client was removed
      *         false - The Client is not in the list, and cannot be removed
      */
-    public boolean removeClient(Client client) {
-        return clients.remove(client);
+    public boolean removeClient(String name) {
+        int index = getIndex(name);
+        if (index != -1) {
+            clients.remove(index);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -65,12 +70,26 @@ public class ClientHandler {
      * @return The first Client that matches clientName, or null if no Client matches that name
      */
     public Client getClient(String clientName) {
-        for (int i = 0; i < clients.size(); ++i) {
-            if (clients.get(i).getClientID().equals(clientName)) {
-                return clients.get(i);
+        for (Client client : clients) {
+            if (client.getClientID().equals(clientName)) {
+                return client;
             }
         }
         return null;
+    }
+
+    /**
+     * Return the index a Client's name is stored
+     * @param clientName Client's name to be found
+     * @return The index of the Client, -1 if a Client with that name doesn't exist
+     */
+    public int getIndex(String clientName) {
+        for (int i = 0; i < clients.size(); ++i) {
+            if (clients.get(i).getClientID().equals(clientName)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     /**
@@ -95,7 +114,6 @@ public class ClientHandler {
                         Client client = new Client(clientSocket);
 
                         addClient(client);
-
                         client.start();
                     }
                 } catch (Exception e) {
