@@ -28,7 +28,6 @@ static: $(OBJECTS) $(COBJECTS)
 	cp -r ./code/headers/* ./dist/win
 
 build: $(EXE)
-
 	
 $(EXE): $(OBJECTS) $(COBJECTS)
 		$(CXX) $(addprefix $(BUILDDIR)/, $(notdir $^)) $(LDFLAGS) -o ./bin/$@
