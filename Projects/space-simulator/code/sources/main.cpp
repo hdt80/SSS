@@ -11,19 +11,22 @@ int main(int argc, char** argv) {
 
     sss_event events[4];
     for(int i = 0; i < 4; i++) 
-        events[i].test_datum = i;
+        events[i].args[0] = i;
    
-    sss_enque_event(events[0]);
-    sss_enque_event(events[3]);
-    sss_enque_event(events[2]);
-    sss_enque_event(events[1]);
+    sss_enque_event(sss_parse_event("EVN#0;1;2;3;4;5;@\0"));
+    sss_enque_event(sss_parse_event("EVN#0;1;2;3;4;5;@\0"));
+    sss_enque_event(sss_parse_event("EVN#0;1;2;3;4;5;@\0"));
+    sss_enque_event(sss_parse_event("EVN#0;1;2;3;4;5;@\0"));
 
     sss_debug_queue();    
 
     sss_event t;
     while(sss_poll_event(&t)) 
-        printf("%d\n", t.test_datum);
-    
+        printf("%d\n", t.evn);
+   
+    sss_parse_event("EVN#0;1;2;3;4;5;@\0");
+
+
 
     return 0;
 }
@@ -71,7 +74,7 @@ int main(int argc, char** agrv) {
     using sss::Asteroid;
     using sss::Connection;
 
-    Window window("sunset-space-simulator", 960, 540, true);
+    Window window("sunset-space-simulator", 960, 540, false);
     window.showMouse(false);
     std::cout << glGetString(GL_VERSION) << std::endl;
     glClearColor(0.0, 0.0, 0.0, 1.0);
@@ -82,12 +85,13 @@ int main(int argc, char** agrv) {
     glEnable(GL_DEPTH_CLAMP);
     glDepthMask(GL_TRUE);std::string file_path = "assets/shaders/textured";
     
-    // Connection::getInstance().makeConnection("192.168.0.105", 5003);
-    // Connection::getInstance().write("NAV");
+    Connection::getInstance().makeConnection("127.0.0.1", 5003);
+    Connection::getInstance().write("NAV");
 
+    Connection::getInstance().write("EVN#1;1;");
     sss::Game::getGame();
-    // std::thread method(print_buffer);
-    // method.detach();
+    std::thread method(print_buffer);
+    method.detach();
     while(not window.shouldClose()) {
         window.clear();
 
@@ -103,9 +107,8 @@ int main(int argc, char** agrv) {
         window.update();
     }
     window.showMouse(true);
-    // Connection::getInstance().disconnect();
-    // exit(0);
-    // running = false;
+    Connection::getInstance().disconnect();
+    running = false;
 
     
     return 0;

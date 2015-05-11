@@ -1,17 +1,31 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #ifndef EVENT_QUEUE_H_
 #define EVENT_QUEUE_H_
 
+enum EVENT_CLASS {
+    SET, GET, EVN, ERROR, NUM_CLASSES
+};
+
 enum EVENT_TYPE {
-    SPWANENEMY 
+    SPWANENEMY,
+    COLLISION,
+    WE_FIRE,
+    MINI_GAME_DONE,
+    POWER_CHANGE,
+    ENEMY_DESPAWN,
+    CHANGE_MAX_POWER,
+
+    NUM_EVENTS
 };
 
 struct EVENT {
     // add data
-    enum EVENT_TYPE evt;
-    int test_datum;
+    enum EVENT_CLASS type;
+    enum EVENT_TYPE evn;
+    int args[10];
 };
 
 typedef struct EVENT sss_event;
@@ -21,7 +35,7 @@ struct NODE {
      * in an actual line, the guy/gal behind you
      */
     struct NODE* next;
-    sss_event evt;
+    sss_event evn;
 };
 typedef struct NODE sss_node;
 
@@ -38,7 +52,7 @@ int sss_poll_event(sss_event* event);
 int sss_enque_event(sss_event event);
 
 /* may need to pass in the string length as well */
-sss_node sss_parse_event(const char* command);
+sss_event sss_parse_event(const char* command);
 
 /* prints out the queue */
 void sss_debug_queue();

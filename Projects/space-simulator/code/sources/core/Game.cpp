@@ -101,32 +101,32 @@ namespace sss {
         _children.push_back(new Enemy(glm::vec3(0, 0, -30), nullptr));
     }
 
-    /* */
+    /* abstract into things*/
     void Game::detect_collisions() {
-        for(auto& c : _children) {
+        // for(auto& c : _children) {
 
-            Pawn* p = dynamic_cast<Pawn*>(c);
-            if(p == nullptr)
-                continue;
-            if(p->getCollider()->collides(SphereCollider(_player->getPosition(), 1))) {
-                p->destroy();
-                Connection::getInstance().write("EVN#0;9;");
-            }
+        //     Pawn* p = dynamic_cast<Pawn*>(c);
+        //     if(p == nullptr)
+        //         continue;
+        //     if(p->getCollider()->collides(SphereCollider(_player->getPosition(), 1))) {
+        //         p->destroy();
+        //         Connection::getInstance().write("EVN#1;1;");
+        //     }
 
-            for(auto& m : _missiles) {
-                if(p->getCollider()->collides(*m->getCollider())) {
-                    m->destroy();
-                    p->destroy();
-                }
+        //     for(auto& m : _missiles) {
+        //         if(p->getCollider()->collides(*m->getCollider())) {
+        //             m->destroy();
+        //             p->destroy();
+        //         }
 
-                if(glm::length(m->getPosition() - _player->getPosition()) > 300.0f)
-                    m->destroy();
+        //         if(glm::length(m->getPosition() - _player->getPosition()) > 300.0f)
+        //             m->destroy();
 
-                // send missle hit
+        //         // send missle hit
 
-            }
+        //     }
 
-        }
+        // }
 
     }
 }

@@ -3,9 +3,10 @@
 
 namespace sss {
 
+    size_t Enemy::ID = 0;
 
     Enemy::Enemy(const glm::vec3& position, Parametric* course) :Super() {
-
+        _id = ID++;
         if(course == nullptr) {
 
             // _course = new Parametric(6.28, 
@@ -42,12 +43,26 @@ namespace sss {
         _render = nullptr;
         delete _course;
         _course = nullptr;
+        ID--;
+    }
+
+    void Enemy::onDestroy() {
+        Super::onDestroy();
+        std::stringstream ss;
+        ss << "EVN#5;" << _id << ";";
+        Connection::getInstance().write(ss.str());
     }
 
     void Enemy::tick(float delta) {
         movement(delta);
         if(canFire())
             fire();
+
+        if(getCollider()->collides(SphereCollider(Game::getGame().getPlayer().getPosition(), 1))) {
+            // TODO: what side we were hit on
+            Connection::getInstance().write("EVN#1;0;");
+            destroy();
+        }
     }
 
     bool Enemy::canFire() {
