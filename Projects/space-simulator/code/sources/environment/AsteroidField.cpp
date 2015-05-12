@@ -1,13 +1,13 @@
 #include <environment/AsteroidField.h>
+#include <core/Connection.h>
 
 namespace sss {
 
-    AsteroidField::AsteroidField(const glm::vec3& little, const glm::vec3& large, int count, int size) {
-        glm::vec3 len = large - little; 
+    AsteroidField::AsteroidField(const glm::vec3& position, const glm::vec3& little, const glm::vec3& large, int count, int size) {
         for(int i = 0; i < count; i++) {
-            Asteroid* a = new Asteroid(glm::vec3(rand() % (int)(large.x - len.x), 
-                                                 rand() % (int)(large.y - len.y), 
-                                                 rand() % (int)(large.z - len.z)), size);
+            Asteroid* a = new Asteroid(glm::vec3(rand() % (int)large.x - little.x + position.x, 
+                                                 rand() % (int)large.y - little.y + position.y, 
+                                                 rand() % (int)large.z - little.z + position.z), size);
             a->setScale(glm::vec3(size, size, size));
             a->onSpawn();
             _asteroids.push_back(a);
@@ -28,7 +28,13 @@ namespace sss {
     }
 
     void AsteroidField::detect_collisions(engine::object::Pawn& object, bool isPlayer) {
-        // TODO: implement
+        for(auto& a : _asteroids) {
+            if(a->getCollider()->collides(*object.getCollider())) {
+                a->destroy();
+                if(isPlayer)
+                    Connection::getInstance().write("EVN#1;0;");
+            }
+        }
     }
 
     void AsteroidField::tick(float delta) {

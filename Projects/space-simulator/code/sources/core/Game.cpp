@@ -26,8 +26,10 @@ namespace sss {
         _shader->unbind();
         delete _shader;
         delete _player;
+        delete _asteroidField;
         _shader = nullptr;
         _player = nullptr;
+        _asteroidField = nullptr;
         for(size_t i = 0; i < _children.size(); i++)
             delete _children[i];
         _children.clear();
@@ -35,6 +37,7 @@ namespace sss {
 
     void Game::update(float delta) {
         _player->tick(delta);
+        _asteroidField->tick(delta);
         detect_collisions();
         _camera.setPosition(_player->getPosition());
         _camera.setRotation(_player->getRotation());
@@ -79,6 +82,8 @@ namespace sss {
 
         for(const auto& m : _missiles)
             _renderer.submit(m);
+        
+        _asteroidField->submit(_renderer);
 
         _renderer.end();
         _renderer.flush();
@@ -91,42 +96,23 @@ namespace sss {
     void Game::init() {
         int texts[16] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
         _shader->setUniform1iv("textures", texts, 16);
-        for(size_t i = 0; i < 200; i++) {
-            Asteroid* a = new Asteroid(glm::vec3(rand() % 600 - 300, rand() % 600 - 300, rand() % 600 - 300), 3);
-            a->setScale(glm::vec3(3, 3, 3));
-            a->onSpawn();
-            _children.push_back(a);
-        }
-
+        _asteroidField = new AsteroidField(glm::vec3(0, 0, 0), glm::vec3(450, 450, 450), glm::vec3(900, 900, 900), 200, 3);
         _children.push_back(new Enemy(glm::vec3(0, 0, -30), nullptr));
     }
 
     /* abstract into things*/
     void Game::detect_collisions() {
-        // for(auto& c : _children) {
-
-        //     Pawn* p = dynamic_cast<Pawn*>(c);
-        //     if(p == nullptr)
-        //         continue;
-        //     if(p->getCollider()->collides(SphereCollider(_player->getPosition(), 1))) {
-        //         p->destroy();
-        //         Connection::getInstance().write("EVN#1;1;");
-        //     }
-
-        //     for(auto& m : _missiles) {
-        //         if(p->getCollider()->collides(*m->getCollider())) {
-        //             m->destroy();
-        //             p->destroy();
-        //         }
-
-        //         if(glm::length(m->getPosition() - _player->getPosition()) > 300.0f)
-        //             m->destroy();
-
-        //         // send missle hit
-
-        //     }
-
-        // }
+        _asteroidField->detect_collisions(*_player, true);
+        
+        /* enemy missles attacking us */
+        for(auto& m : _missiles) {
+            if(m->getCollider()->collides(*_player->getCollider())) {
+                m->destroy();
+                Connection::getInstance().write("EVN#5;0;");
+            }
+        }
+        
+        /* add our missles hit something */
 
     }
 }

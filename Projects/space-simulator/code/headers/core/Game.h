@@ -14,6 +14,7 @@
 #include <glm/glm.hpp>
 #include <algorithm>
 #include <core/Player.h>
+#include <environment/AsteroidField.h>
 
 namespace sss {
 
@@ -31,6 +32,7 @@ namespace sss {
     class Game {
         private:
             std::vector<Actor*> _children;
+            AsteroidField* _asteroidField;
             std::vector<Missile*> _missiles;
             Camera _camera;
             Shader* _shader;

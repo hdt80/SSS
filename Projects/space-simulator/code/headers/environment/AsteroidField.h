@@ -11,7 +11,7 @@ namespace sss {
     
     class AsteroidField {
         public:
-            AsteroidField(const glm::vec3& little, const glm::vec3& large, int count, int size);
+            AsteroidField(const glm::vec3& position, const glm::vec3& little, const glm::vec3& large, int count, int size);
             ~AsteroidField();
 
             void submit(engine::graphics::BatchRenderer& renderer);
