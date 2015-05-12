@@ -127,7 +127,11 @@ bool Reactor::setMaxPower(std::string str, int amount) {
 		warn("Cell %s doesn't exist", str.c_str());
 		return false;
 	}
-	cell->currMax += amount;
+	if (cell->currMax > 0 && cell->currMax <= cell->trueMax) {
+		cell->currMax += amount;
+	} else {
+		warn("Cannot change %s's max power to %i (Currently %i)", str.c_str(), amount, cell->currMax);
+	}
 	return true;
 }
 

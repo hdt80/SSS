@@ -33,8 +33,8 @@ class Connection {
         void printBuffer();
         void write(std::string message);
 
-        std::string getValue(std::string value);
-        void        setValue(char* msg);
+        //std::string getValue(std::string value);
+        //void        setValue(char* msg);
 
         static Connection _connection;
         bool _connected;

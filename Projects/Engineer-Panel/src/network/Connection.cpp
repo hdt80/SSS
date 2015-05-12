@@ -90,7 +90,7 @@ bool Connection::makeConnect(std::string ip, int port) {
 		return false;
 	} else {
 		info("Connection made to %s:%i", _ip.c_str(), _port);
-		//_connected = true;
+		_connected = true;
 		return true;
 	}
 
@@ -104,7 +104,7 @@ void Connection::disconnect() {
 // Print the buffer from the socket
 void Connection::printBuffer() {
 	if (!_connected) {
-		//return;
+		return;
 	}
 	int result = recv(_socket, _buffer, BUFFER_SIZE, 0);
 	if (result == -1) { // If nothing is returned we don't want to print
@@ -121,64 +121,65 @@ void Connection::printBuffer() {
 	clearBuffer();
 }
 
-// Sends a request to the server to get the value stored on the server
-std::string Connection::getValue(std::string value) {
-	if (!_connected) {
-		//return "";
-	}
-	// Send a message to the server requesting a value
-	std::string msg = "";
-	msg.append("GET#");
-	msg.append(value);
-	Connection::_connection.write(msg);
+// // Sends a request to the server to get the value stored on the server
+// std::string Connection::getValue(std::string value) {
+// 	if (!_connected) {
+// 		//return "";
+// 	}
+// 	// Send a message to the server requesting a value
+// 	std::string msg = "";
+// 	msg.append("GET#");
+// 	msg.append(value);
+// 	Connection::_connection.write(msg);
 
-	// Wait for a return message from the server, hopefully the value
-	int result = recv(_socket, _buffer, BUFFER_SIZE, 0);
-	if (result == -1) {
-		warn("Recieved nothing when getting \'%s\'", value.c_str());
-		return "";
-	}
+// 	// Wait for a return message from the server, hopefully the value
+// 	int result = recv(_socket, _buffer, BUFFER_SIZE, 0);
+// 	if (result == -1) {
+// 		warn("Recieved nothing when getting \'%s\'", value.c_str());
+// 		return "";
+// 	}
 
-	std::string toReturn(_buffer);
-	//debug("\'%s\':\'%s\'", value.c_str(), toReturn.c_str());
+// 	std::string toReturn(_buffer);
+// 	//debug("\'%s\':\'%s\'", value.c_str(), toReturn.c_str());
 
-	clearBuffer();
-	return toReturn;
-}
+// 	clearBuffer();
+// 	return toReturn;
+// }
 
-// Set a value based on what message was recieved
-void Connection::setValue(char* msg) {
-	if (!_connected) {
-		error("Not connected!");
-		//return;
-	}
-	int keyStop = 0;
-	// Finding the index of the char that splits the key and value
-	for (unsigned int i = 0; i < strlen(msg); ++i) {
-		if (msg[i] == ':') {
-			keyStop = i;
-			break;
-		}
-	}
-	// -4 from keyStop cause second param is the amount of chars to create
-	// from, so because it's offset by 4, we'll subtract 4
-	std::string key(msg + 4, keyStop - 4);
-	// Add one more to keyStop so the ':' isn't included
-	std::string value(msg + keyStop + 1, strlen(msg));
-	debug("\'%s\':\'%s\'", key.c_str(), value.c_str());
+// // Set a value based on what message was recieved
+// void Connection::setValue(char* msg) {
+// 	if (!_connected) {
+// 		error("Not connected!");
+// 		//return;
+// 	}
+// 	int keyStop = 0;
+// 	// Finding the index of the char that splits the key and value
+// 	for (unsigned int i = 0; i < strlen(msg); ++i) {
+// 		if (msg[i] == ':') {
+// 			keyStop = i;
+// 			break;
+// 		}
+// 	}
+// 	// -4 from keyStop cause second param is the amount of chars to create
+// 	// from, so because it's offset by 4, we'll subtract 4
+// 	std::string key(msg + 4, keyStop - 4);
+// 	// Add one more to keyStop so the ':' isn't included
+// 	std::string value(msg + keyStop + 1, strlen(msg));
+// 	debug("\'%s\':\'%s\'", key.c_str(), value.c_str());
 
-	if (Reactor::_reactor.contains(key)) {
-		Reactor::_reactor.get(key)->currPower =
-			strtol(value.c_str(), nullptr, 10);
-	}
-}
+// 	if (Reactor::_reactor.contains(key)) {
+// 		Reactor::_reactor.get(key)->currPower =
+// 			strtol(value.c_str(), nullptr, 10);
+// 	}
+// }
 
 // Write a message to the socket
 // message - Message to send
 // Can't use send as Winsock uses that
 void Connection::write(std::string message) {
 	if (!_connected) {
-		//return;
+		warn("d/c'd");
+		return;
 	}
 	// SOCKET, char* buf, buff_size, flags
 	if (send(_socket, (message + MSG_END).c_str(), strlen((message + MSG_END).c_str()), 0) == SOCKET_ERROR) {
