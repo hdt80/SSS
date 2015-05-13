@@ -105,8 +105,8 @@ void Serial::loop() {
         if (readResult > -1) {
             if (buffer[0] == '1') {
                 printf("PORT> RECV: \'%s\' (%i)\n", buffer, readResult);
-                Connection::_connection.write("EVN#3;ENG;Weapon");
-                done = true;
+                Connection::_connection.write("EVN#3;ENG;Weapons");
+                //done = true;
             }
             flushBuffer();
         }

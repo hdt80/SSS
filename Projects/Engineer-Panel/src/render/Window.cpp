@@ -71,7 +71,7 @@ void Window::start() {
 	Connection::_connection.makeConnect("127.0.0.1", 5003);
 	Connection::_connection.write("ENG");
 
-	Serial::_port.connect("COM4");
+	Serial::_port.connect("COM3");
 
 	// Creating the power cells
 	if (!Reactor::_reactor.addCell("Shield", 4)) {
