@@ -53,6 +53,8 @@ int sss_enque_event(sss_event event) {
 sss_event sss_parse_event(const char* command) {
     sss_event result;
 
+    printf("command: %s\n", command);
+
 
     int number_of_args = 0;
     
@@ -61,12 +63,17 @@ sss_event sss_parse_event(const char* command) {
     // params start at the fifth character
     for(i = 4; ; i++) {
         if(command[i] == '@') { 
-            // number_of_args++;
             break;
         }
         if(command[i] == ';')
             number_of_args++;
     }
+    printf("%d\n", number_of_args);
+    if(number_of_args == 0) {
+        result.type = ERROR;
+        return result;
+    }
+
     int com_length = i;
 
     // read the type of the event
@@ -97,6 +104,9 @@ sss_event sss_parse_event(const char* command) {
         sscanf(arguments[i], "%d", &args_array[i]);
     }
 
+    for(i = 0; i < number_of_args; i++)
+        printf("%d, ", args_array[i]);
+    puts("here");
 
     /* construct the event */
     if(!strcmp(type, "EVN"))
@@ -112,6 +122,8 @@ sss_event sss_parse_event(const char* command) {
         result.args[i - 1] = args_array[i];
 
     result.evn = (enum EVENT_TYPE)args_array[0];
+
+    puts("asdffdsaasdf");
 
     free(args_array);
     return result;

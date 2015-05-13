@@ -56,6 +56,7 @@ int main(int argc, char** argv) {
 static bool running = true;
 
 void print_buffer() {
+    puts("talking to the server");
     while(running)
         sss::Connection::getInstance().printBuffer();
 }
@@ -89,13 +90,13 @@ int main(int argc, char** argv) {
 
     /* only do server connect if args are present */
     if(connectToServer) {
-        Connection::getInstance().makeConnection("127.0.0.1", 5003);
+        Connection::getInstance().makeConnection("192.168.0.101", 5003);
         Connection::getInstance().write("NAV");
     }
 
     sss::Game::getGame();
 
-#ifndef __APPLE__
+#ifdef __APPLE__
     /* only start the thread if on apple, and args are specifed */
     if(connectToServer) {
         std::thread method(print_buffer);

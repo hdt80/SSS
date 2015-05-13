@@ -41,6 +41,9 @@ $(COBJECTS): $(BUILDDIR)/%.o : $(SOURCEDIR)/%.c
 clean:
 	rm $(BUILDDIR)/*.o && rm ./bin/$(EXE)
 
+network:
+	./bin/$(EXE) arugment
+
 run:
 	./bin/$(EXE)
 

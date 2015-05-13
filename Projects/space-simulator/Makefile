@@ -23,6 +23,9 @@ build:
 run:
 	$(MAKE) -f Makefile.$(MAKEFILE) run
 
+network:
+	$(MAKE) -f Makefile.$(MAKEFILE) network
+
 debug:
 	$(MAKE) -f Makefile.$(MAKEFILE) debug
 

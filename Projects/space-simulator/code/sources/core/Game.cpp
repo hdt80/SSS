@@ -39,6 +39,11 @@ namespace sss {
         _player->tick(delta);
         _asteroidField->tick(delta);
         detect_collisions();
+
+        sss_event e;
+        while(sss_poll_event(&e))
+            EventHandler::handle_event(e);
+
         _camera.setPosition(_player->getPosition());
         _camera.setRotation(_player->getRotation());
 
@@ -97,7 +102,7 @@ namespace sss {
         int texts[16] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
         _shader->setUniform1iv("textures", texts, 16);
         _asteroidField = new AsteroidField(glm::vec3(0, 0, 0), glm::vec3(450, 450, 450), glm::vec3(900, 900, 900), 200, 3);
-        _children.push_back(new Enemy(glm::vec3(0, 0, -30), nullptr));
+        // _children.push_back(new Enemy(glm::vec3(0, 0, -30), nullptr));
     }
 
     /* abstract into things*/
@@ -108,7 +113,7 @@ namespace sss {
         for(auto& m : _missiles) {
             if(m->getCollider()->collides(*_player->getCollider())) {
                 m->destroy();
-                Connection::getInstance().write("EVN#5;0;");
+                Connection::getInstance().write("EVN#1;0;");
             }
         }
         

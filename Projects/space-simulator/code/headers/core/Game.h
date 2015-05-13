@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <core/Player.h>
 #include <environment/AsteroidField.h>
+#include <core/EventHandler.h>
 
 namespace sss {
 

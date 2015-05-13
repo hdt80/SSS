@@ -172,12 +172,9 @@ namespace sss {
 
     void Connection::printBuffer() {
 
-
         int result = recv(_socketDesc, &_buffer[0], SOCK_BUFFER_SIZE, 0);
         if(result == -1) 
             return;
-
-        // printf("%s\n", _buffer);
 
         std::string setTest(_buffer, 3);
         // if(not setTest.compare("SET")) 
@@ -187,10 +184,10 @@ namespace sss {
         //     Game::getGame().addEnemy();
         // }
         
-       
         sss_enque_event(sss_parse_event(_buffer));
 
         clearBuffer();
+
 
     }
 
