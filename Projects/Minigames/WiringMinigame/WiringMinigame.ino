@@ -96,4 +96,11 @@ void loop(){
   } else {
      digitalWrite(lightIDS[2], LOW); 
   }
+  
+  if(Serial.available()){
+   while(Serial.available()){
+     Serial.write(0);
+      rewire(); 
+   }
+  }
 }

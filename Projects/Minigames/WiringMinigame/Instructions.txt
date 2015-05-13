@@ -5,3 +5,7 @@
 3. When you plug in the wire to the correct corresponding pin (2,3,4) wait around a second and the light will light up. if it doesn't, well, it's plugged in to the wrong one.
 
 4. Sometimes lights turn on on their own due to static etc. simply touching the wiring should fix that.
+
+5. When the thing is turned on, it writes "0" to serial. when all the wires are correct, it writes "1".
+
+6. Writing anything to it makes it reset.
