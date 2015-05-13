@@ -1,5 +1,6 @@
-package SSS;
+package SSS.Handler;
 
+import SSS.Client;
 import SSS.Util.Logger;
 
 import java.io.IOException;

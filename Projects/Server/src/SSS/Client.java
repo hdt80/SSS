@@ -124,6 +124,7 @@ public class Client extends Thread {
 						input = (char) in.read();
 						if ((int) input == 65535) {
 							Logger.error("No data received from " + clientID);
+							Logger.error("Disconnecting from " + clientID);
 							close();
 						}
 						if (input != '@') {

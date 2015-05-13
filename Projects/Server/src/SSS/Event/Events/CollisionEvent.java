@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class CollisionEvent extends Event {
     final static private String[] sides = {"top", "right", "left", "bottom", "front", "back"};
-    final static private String[] powerCell = {"Engines", "Weapons", "Shields", "Engines", "Radar", "Engines"};
+    final static private String[] powerCell = {"Engines", "Weapons", "Shield", "Engines", "Radar", "Engines"};
 
     /**
      * 0 - top
@@ -23,7 +23,7 @@ public class CollisionEvent extends Event {
     public CollisionEvent(int collisionSide) {
         this.collisionSide = collisionSide;
 
-        if (collisionSide > 0 && collisionSide < 6) {
+        if (collisionSide >= 0 && collisionSide < 6) {
             side = sides[collisionSide];
         } else {
             Logger.warn("Tried to set collision side to " + collisionSide);

@@ -1,13 +1,12 @@
 package SSS;
 
 import SSS.Event.EventHandler;
+import SSS.Handler.ClientHandler;
+import SSS.Handler.InputHandler;
 import SSS.Util.Logger;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.concurrent.Executors;
 
 public class Server {
 	private int port = 5003;

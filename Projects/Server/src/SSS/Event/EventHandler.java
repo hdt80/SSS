@@ -1,9 +1,6 @@
 package SSS.Event;
 
-import SSS.Event.Events.CollisionEvent;
-import SSS.Event.Events.MinigameDoneEvent;
-import SSS.Event.Events.PowerChangeEvent;
-import SSS.Event.Events.SpawnEnemyEvent;
+import SSS.Event.Events.*;
 import SSS.Util.Logger;
 
 import java.util.ArrayList;
@@ -76,6 +73,9 @@ public class EventHandler {
             case MINIGAMEDONE:
                 eventQueue.enqueue(new MinigameDoneEvent(args.get(1), args.get(2)));
                 break;
+			case SHIPFIRES:
+				eventQueue.enqueue(new ShipFiresEvent(args.get(1), Integer.parseInt(args.get(2))));
+				break;
 			default:
 				Logger.error("Unknown event type " + args.get(0));
 				break;

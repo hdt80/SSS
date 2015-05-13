@@ -12,4 +12,12 @@ public class EventTester {
             e.printStackTrace();
         }
     }
+
+    public static void testWepPanel() {
+        try {
+            Server.get().clientHandler.send("WEP", "ANYTHING");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

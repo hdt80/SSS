@@ -1,5 +1,6 @@
-package SSS;
+package SSS.Handler;
 
+import SSS.Server;
 import SSS.Util.Logger;
 
 import java.util.ArrayList;
