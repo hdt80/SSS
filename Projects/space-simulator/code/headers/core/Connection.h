@@ -6,6 +6,7 @@
 #include <memory.h>
 #include <core/Game.h>
 #include <iostream>
+#include <core/event_queue.h>
 
 #ifndef __APPLE__
     #include <winsock2.h>

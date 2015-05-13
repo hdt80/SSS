@@ -12,7 +12,7 @@ int main(int argc, char** argv) {
     sss_event events[4];
     for(int i = 0; i < 4; i++) 
         events[i].args[0] = i;
-   
+
     sss_enque_event(sss_parse_event("EVN#0;1;2;3;4;5;@\0"));
     sss_enque_event(sss_parse_event("EVN#0;1;2;3;4;5;@\0"));
     sss_enque_event(sss_parse_event("EVN#0;1;2;3;4;5;@\0"));
@@ -23,7 +23,7 @@ int main(int argc, char** argv) {
     sss_event t;
     while(sss_poll_event(&t)) 
         printf("%d\n", t.evn);
-   
+
     sss_parse_event("EVN#0;1;2;3;4;5;@\0");
 
 
@@ -60,8 +60,9 @@ void print_buffer() {
         sss::Connection::getInstance().printBuffer();
 }
 
-int main(int argc, char** agrv) {
+int main(int argc, char** argv) {
 
+    const char* firstArg = argc >= 2 ? argv[1] : "NULL\0";
 
     srand(time(NULL));
     using engine::graphics::Window;
@@ -70,7 +71,6 @@ int main(int argc, char** agrv) {
     using engine::object::Prop;
     using engine::graphics::Camera;
     using engine::Input;
-
     using sss::Asteroid;
     using sss::Connection;
 
@@ -83,19 +83,28 @@ int main(int argc, char** agrv) {
     glCullFace(GL_BACK);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_DEPTH_CLAMP);
-    glDepthMask(GL_TRUE);std::string file_path = "assets/shaders/textured";
-    
-    Connection::getInstance().makeConnection("127.0.0.1", 5003);
-    Connection::getInstance().write("NAV");
+    glDepthMask(GL_TRUE);
 
-    Connection::getInstance().write("EVN#1;1;");
+    bool connectToServer = strcmp(firstArg, "NULL");
+
+    /* only do server connect if args are present */
+    if(connectToServer) {
+        Connection::getInstance().makeConnection("127.0.0.1", 5003);
+        Connection::getInstance().write("NAV");
+    }
+
     sss::Game::getGame();
-    std::thread method(print_buffer);
-    method.detach();
+
+#ifndef __APPLE__
+    /* only start the thread if on apple, and args are specifed */
+    if(connectToServer) {
+        std::thread method(print_buffer);
+        method.detach();
+    }
+#endif
+
     while(not window.shouldClose()) {
         window.clear();
-
-
 
         sss::Game::getGame().update();
         sss::Game::getGame().render();
@@ -103,14 +112,16 @@ int main(int argc, char** agrv) {
         if(Input::isKeyPressed(GLFW_KEY_ESCAPE)) {
             break;
         }
-        
+
         window.update();
     }
+
     window.showMouse(true);
-    Connection::getInstance().disconnect();
+    if(connectToServer)
+        Connection::getInstance().disconnect();
     running = false;
 
-    
+
     return 0;
 }
 

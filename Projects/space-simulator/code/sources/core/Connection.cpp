@@ -81,9 +81,11 @@ namespace sss {
             return;
 
         std::string setTest(_buffer, 3);
-        if(not setTest.compare("SET")) {
-            setValue(_buffer + 4);
-        }
+        // if(not setTest.compare("SET")) {
+        //     setValue(_buffer + 4);
+        // }
+
+        sss_enque_event(sss_parse_event(_buffer));
 
         clearBuffer();
     }
@@ -178,12 +180,15 @@ namespace sss {
         // printf("%s\n", _buffer);
 
         std::string setTest(_buffer, 3);
-        if(not setTest.compare("SET")) 
-            setValue(_buffer);
+        // if(not setTest.compare("SET")) 
+        //     setValue(_buffer);
 
-        if(not strcmp(_buffer, "SPAWN")) { 
-            Game::getGame().addEnemy();
-        }
+        // if(not strcmp(_buffer, "SPAWN")) { 
+        //     Game::getGame().addEnemy();
+        // }
+        
+       
+        sss_enque_event(sss_parse_event(_buffer));
 
         clearBuffer();
 
