@@ -14,10 +14,11 @@ OUTPUT_NAME = 2D_Engine
 
 # Where the sources are located
 SRCS = $(wildcard $(SRCDIR)/*.cpp)
-SRCS += $(wildcard $(SRCDIR)/network/*.cpp)
-SRCS += $(wildcard $(SRCDIR)/power_comps/*.cpp)
-SRCS += $(wildcard $(SRCDIR)/render/*.cpp)
-SRCS += $(wildcard $(SRCDIR)/util/*.cpp)
+SRCS += $(wildcard $(SRCDIR)/*/*.cpp)
+#SRCS += $(wildcard $(SRCDIR)/network/*.cpp)
+#SRCS += $(wildcard $(SRCDIR)/power_comps/*.cpp)
+#SRCS += $(wildcard $(SRCDIR)/render/*.cpp)
+#SRCS += $(wildcard $(SRCDIR)/util/*.cpp)
 
 # Where the compiled objects are located
 OBJS = $(patsubst $(SRCDIR)/%.cpp, $(BUILDDIR)/%.o, $(SRCS))

@@ -14,6 +14,7 @@
 #include "util/Logger.h"
 #include "render/Renderer.h"
 #include "network/Connection.h"
+#include "arduino/Serial.h"
 
 // Define some magic values up here for "Ease of Use"
 // All these values are ratios, weeeeeees
@@ -57,7 +58,6 @@ class Window {
 
 		// An object that will render things for us
 		Renderer*  _render;     // Renders stuff
-		//Reactor    _reactor;    // Main power reactor
 		FixPanel   _fixPanel;   // Center fix panel
 
 		bool _close; // If the window should close or not

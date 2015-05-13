@@ -71,6 +71,8 @@ void Window::start() {
 	Connection::_connection.makeConnect("127.0.0.1", 5003);
 	Connection::_connection.write("ENG");
 
+	Serial::_port.connect("COM4");
+
 	// Creating the power cells
 	if (!Reactor::_reactor.addCell("Shield", 4)) {
 		warn("Failed to create sheild power cell\n");
@@ -105,9 +107,15 @@ void Window::start() {
 
 void Window::loop() {
 	while (!shouldClose()) {
+		auto start = std::chrono::high_resolution_clock::now();
+
 		Connection::_connection.printBuffer();
+		Serial::_port.loop();
 		pollEvents();
 		render();
+
+		auto finish = std::chrono::high_resolution_clock::now();
+		//debug("Loop time: %lld", std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count());
 	}
 }
 
