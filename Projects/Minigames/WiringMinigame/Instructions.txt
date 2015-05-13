@@ -1,0 +1,7 @@
+1. Please don't break my wiring
+
+2. The only wires that are supposed to be MOVED or UNPLUGGED are the blue, yellow and green wires, which are connected to rows 10, 9, 8 on the BREADBOARD and their other ends would have to be matched with their correct inputs on pins 2,3,4.
+
+3. When you plug in the wire to the correct corresponding pin (2,3,4) wait around a second and the light will light up. if it doesn't, well, it's plugged in to the wrong one.
+
+4. Sometimes lights turn on on their own due to static etc. simply touchign the wiring should fix that.
