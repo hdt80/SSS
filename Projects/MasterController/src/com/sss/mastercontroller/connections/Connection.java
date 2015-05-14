@@ -119,6 +119,7 @@ public class Connection {
 			dOut = socket.getOutputStream();
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			closed = false;
+			Print.debug("Successfully connected");
 			beginRead();
 		} catch (IOException e) {
 			//connection failed
@@ -134,9 +135,10 @@ public class Connection {
 	 */
 	public void disconnect() {
 		try {
+			closed = true;
 			Print.debug("Closing the socket.");
 			socket.close(); //close the connection
-			closed = true;
+			System.exit(0);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

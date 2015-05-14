@@ -11,18 +11,21 @@ public class Collisions {
 	public Collisions() {
 		
 		_collisions = new ArrayList<Collision>();
-		
-		_collisions.add(new Collision("Collide with meteor", 20));
-		_collisions.add(new Collision("Collide with enemy", 200));
-		_collisions.add(new Collision("Collide with bulles", 2000));
+
+		_collisions.add(new Collision("Collide on top", 0));
+		_collisions.add(new Collision("Collide on right", 1));
+		_collisions.add(new Collision("Collide on left", 2));
+		_collisions.add(new Collision("Collide on bottom", 3));
+		_collisions.add(new Collision("Collide on front", 4));
+		_collisions.add(new Collision("Collide on back", 5));
 	}
 	
 	public String getCollision(int i) {
 		return _collisions.get(i).getName();
 	}
 	
-	public int getDamage(int i) {
-		return _collisions.get(i).getDamage();
+	public int getSide(int i) {
+		return _collisions.get(i).getSide();
 	}
 	
 	public int getCollisions() {

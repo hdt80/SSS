@@ -3,11 +3,11 @@ package com.sss.mastercontroller.objects;
 public class Collision {
 	
 	private String name;
-	private int damage;
+	private int side;
 	
-	public Collision(String name, int damage) {
+	public Collision(String name, int side) {
 		this.name = name;
-		this.damage = damage;
+		this.side = side;
 	}
 	
 	public String getName() {
@@ -18,11 +18,7 @@ public class Collision {
 		this.name = name;
 	}
 
-	public int getDamage() {
-		return damage;
-	}
-
-	public void setDefinition(int damage) {
-		this.damage = damage;
+	public int getSide() {
+		return side;
 	}
 }
