@@ -105,17 +105,17 @@ void loop() {
     digitalWrite(rled, LOW);
     delay(500);
   }
-  
-  if (mode == 5){
-   Serial.println("SWITCH_MINIGAME_COMPLETE");
-   for (int i=8;i<12;i++){
-    digitalWrite(i,HIGH);
-   } 
-   delay(400);
-   for (int i=8;i<12;i++){
-    digitalWrite(i,LOW);
-   } 
-   delay(400);
+
+  if (mode == 5) {
+    Serial.println("SWITCH_MINIGAME_COMPLETE");
+    for (int i = 8; i < 12; i++) {
+      digitalWrite(i, HIGH);
+    }
+    delay(400);
+    for (int i = 8; i < 12; i++) {
+      digitalWrite(i, LOW);
+    }
+    delay(400);
   }
 
 }
