@@ -162,6 +162,7 @@ public class EnemySpawner implements ChangeListener, ActionListener {
 					+ ";");
 			//end it here
 			frame.dispose();
+			MasterController ms = MasterController.getMasterController();
 			ms.frame.setEnabled(true);
 			ms.clearItems();
 		}
