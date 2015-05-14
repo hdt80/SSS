@@ -1,4 +1,4 @@
-#define TESTING 0
+#define TESTING 1
 
 #include <core/event_queue.h>
 
@@ -13,10 +13,10 @@ int main(int argc, char** argv) {
     for(int i = 0; i < 4; i++) 
         events[i].args[0] = i;
 
-    sss_enque_event(sss_parse_event("EVN#0;1;2;3;4;5;@\0"));
-    sss_enque_event(sss_parse_event("EVN#0;1;2;3;4;5;@\0"));
-    sss_enque_event(sss_parse_event("EVN#0;1;2;3;4;5;@\0"));
-    sss_enque_event(sss_parse_event("EVN#0;1;2;3;4;5;@\0"));
+    sss_enque_event(sss_parse_event("EVN#0;1;2;3;4;5;@"));
+    // sss_enque_event(sss_parse_event("EVN#0;1;2;3;4;5;@\0"));
+    // sss_enque_event(sss_parse_event("EVN#0;1;2;3;4;5;@\0"));
+    // sss_enque_event(sss_parse_event("EVN#0;1;2;3;4;5;@\0"));
 
     sss_debug_queue();    
 
@@ -24,7 +24,6 @@ int main(int argc, char** argv) {
     while(sss_poll_event(&t)) 
         printf("%d\n", t.evn);
 
-    sss_parse_event("EVN#0;1;2;3;4;5;@\0");
 
 
 
@@ -90,7 +89,7 @@ int main(int argc, char** argv) {
 
     /* only do server connect if args are present */
     if(connectToServer) {
-        Connection::getInstance().makeConnection("192.168.0.101", 5003);
+        Connection::getInstance().makeConnection("127.0.0.1", 5003);
         Connection::getInstance().write("NAV");
     }
 

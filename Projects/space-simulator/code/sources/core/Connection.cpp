@@ -177,6 +177,7 @@ namespace sss {
             return;
 
         std::string setTest(_buffer, 3);
+        // std::cout << setTest << std::endl;
         // if(not setTest.compare("SET")) 
         //     setValue(_buffer);
 
