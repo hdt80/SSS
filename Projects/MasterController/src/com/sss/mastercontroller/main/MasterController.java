@@ -23,9 +23,8 @@ import javax.swing.table.TableColumn;
 
 import com.sss.mastercontroller.connections.Addresses;
 import com.sss.mastercontroller.connections.Connection;
-import com.sss.mastercontroller.editors.EnemyDespawner;
-import com.sss.mastercontroller.editors.EnemySpawner;
 import com.sss.mastercontroller.editors.PreferencesEditor;
+import com.sss.mastercontroller.editors.EnemySpawner;
 import com.sss.mastercontroller.io.Print;
 import com.sss.mastercontroller.io.TableModel;
 import com.sss.mastercontroller.lists.Collisions;
@@ -52,13 +51,13 @@ public class MasterController implements ActionListener {
 
 	private JPanel buttonPanel = new JPanel();
 
-	private int selectorsNum = 5;
+	private int selectorsNum = 4;
 	private int itemsNum = 10;
 	private int num = 0;
 	private int selectedNum = 0;
 	int selectedItemNum = 0;
 
-	private String build = "1.1.31b";
+	private String build = "1.1.31a";
 
 	private boolean[] isSelected;
 	private boolean[] isItemSelected;
@@ -215,10 +214,9 @@ public class MasterController implements ActionListener {
 		isItemSelected = new boolean[num]; // there will be `num` amount of booleans
 
 		selections[0] = new JButton("Collisions");
-		selections[1] = new JButton("Spawn Enemies");
-		selections[2] = new JButton("Despawn Enemy");
-		selections[3] = new JButton("Preferences");
-		selections[4] = new JButton("Exit");
+		selections[1] = new JButton("Enemies");
+		selections[2] = new JButton("Preferences");
+		selections[3] = new JButton("Exit");
 
 		for (int i = 0; i < selections.length; i++) {
 			selectionC.add(selections[i]);
@@ -240,18 +238,16 @@ public class MasterController implements ActionListener {
 	}
 
 	public void showItems(int i) {
-		if (i == Lists.SPAWN) { // show enemies buttons
+		if (i == 1) { // show enemies buttons
 			num = enemies.getEnemies();
 			initItems(num);
-		} else if (i == Lists.COLLISION) {
+		} else if (i == 0) {
 			num = collisions.getCollisions();
 			initItems(num);
-		} else if (i == Lists.DESPAWN) {
-			showValues(i);
-		} else if (i == Lists.PREFERENCES) { //show preferences
+		} else if (i == 2) { //show preferences
 			num = preferences.getPreferences();
 			initItems(num);
-		} else if (i == Lists.EXIT) { //exit button
+		} else if (i == 3) { //exit button
 			Print.debug("Closing the socket.");
 			System.exit(-1);
 		} else { // some how there was an error
@@ -276,10 +272,8 @@ public class MasterController implements ActionListener {
 
 	private void showValues(int i) {
 		frame.setEnabled(false);
-		if (selectedNum == Lists.SPAWN) { // enemies tab
+		if (selectedNum == 1) { // enemies tab
 			new EnemySpawner(enemies.getEnemy(i), enemies.getDefinition(i), i);
-		} else if (selectedNum == Lists.DESPAWN) {
-			new EnemyDespawner();
 		} else {
 			System.err.println("For some reason you are still running when you pressed exit button...");
 		}
