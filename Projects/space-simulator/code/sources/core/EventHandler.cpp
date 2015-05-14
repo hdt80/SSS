@@ -19,7 +19,7 @@ namespace sss {
                 handle_get_event(evnt);
                 break;
             case ERROR:
-                // print error
+                std::cout << "We dun git en error" << std::endl;
                 break;
             default:
                 // print error
@@ -38,12 +38,15 @@ namespace sss {
     void EventHandler::handle_evn_event(const sss_event& evnt) {
         switch(evnt.evn) {
             case SPWANENEMY:
-                for(int i = 0; i < evnt.args[1]; i++) {
+                std::cout << "adding an enemy" << std::endl;
+                // for(int i = 0; i < evnt.args[1] + 1; i++) {
+                for(int i = 0; i < 1; i++) {
                     Enemy* enemy = new Enemy(Game::getGame().getPlayer().getPosition() + glm::vec3(rand() % 300 - 150,
                                                                                                    rand() % 300 - 150,
                                                                                                    rand() % 300 - 150), nullptr);
                     Game::getGame().addSpawn(enemy); 
-                }  
+                } 
+                std::cout << "added the enemy" << std::endl;
                 break;
             case COLLISION:
                 break;

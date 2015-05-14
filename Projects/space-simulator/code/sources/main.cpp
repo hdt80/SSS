@@ -1,4 +1,4 @@
-#define TESTING 1
+#define TESTING 0
 
 #include <core/event_queue.h>
 
@@ -18,7 +18,9 @@ int main(int argc, char** argv) {
     // sss_enque_event(sss_parse_event("EVN#0;1;2;3;4;5;@\0"));
     // sss_enque_event(sss_parse_event("EVN#0;1;2;3;4;5;@\0"));
 
-    sss_debug_queue();    
+    // sss_debug_queue();    
+
+    puts("Polling Events");
 
     sss_event t;
     while(sss_poll_event(&t)) 
@@ -89,7 +91,7 @@ int main(int argc, char** argv) {
 
     /* only do server connect if args are present */
     if(connectToServer) {
-        Connection::getInstance().makeConnection("127.0.0.1", 5003);
+        Connection::getInstance().makeConnection("192.168.0.103", 5003);
         Connection::getInstance().write("NAV");
     }
 

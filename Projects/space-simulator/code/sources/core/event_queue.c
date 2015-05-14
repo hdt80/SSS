@@ -53,7 +53,7 @@ int sss_enque_event(sss_event event) {
 sss_event sss_parse_event(const char* command) {
     sss_event result;
 
-    printf("command: %s\n", command);
+    printf("command: %s\n\n", command);
 
 
     int number_of_args = 0;
@@ -70,6 +70,7 @@ sss_event sss_parse_event(const char* command) {
     }
     printf("%d\n", number_of_args);
     if(number_of_args == 0) {
+        puts("returning error");
         result.type = ERROR;
         return result;
     }
@@ -77,36 +78,42 @@ sss_event sss_parse_event(const char* command) {
     int com_length = i;
 
     // read the type of the event
-    char type[3];
+    char type[4];
     for(i = 0; i < 3; i++) 
         type[i] = command[i];
+    type[3] = '\0';
 
+    puts("on the ritz");
+    // ignore arguments
     // holds all the arguments in character form
-    char arguments[100][10]; 
-    memset(&arguments, sizeof(arguments), 0);
+    // char arguments[100][10]; 
+    // memset(&arguments, sizeof(arguments), 0);
     int curr_arg_x = 0; // arguments[x][_]
     int curr_arg_y = 0; // arguments[_][y]
-    // thats some spooky stuff;
-    for(i = 4; i < com_length; i++) {
-        if(command[i] != ';' && command[i] != '@') {
-            arguments[curr_arg_x][curr_arg_y++] = command[i];            
-            /* uncomment next line to see some spooky stuff */
-            // printf("curr arg: %s\n", arguments[curr_arg_x]);
-        } else {
-            curr_arg_x++;
-            curr_arg_y = 0;
-        }
-    }
+    // // thats some spooky stuff;
+    // for(i = 4; i < com_length; i++) {
+    //     if(command[i] != ';' && command[i] != '@') {
+    //         arguments[curr_arg_x][curr_arg_y++] = command[i];            
+    //         /* uncomment next line to see some spooky stuff */
+    //         // printf("curr arg: %s\n", arguments[curr_arg_x]);
+    //     } else {
+    //         curr_arg_x++;
+    //         curr_arg_y = 0;
+    //     }
+    // }
 
     int* args_array = (int*)malloc(sizeof(int) * number_of_args);
-    
+    memset(args_array, sizeof(int) * number_of_args, 0);
+    /* quietly ignore arguments */
     for(i = 0; i < curr_arg_x; i++) {
-        sscanf(arguments[i], "%d", &args_array[i]);
+        // sscanf(arguments[i], "%d", &args_array[i]);
     }
 
     for(i = 0; i < number_of_args; i++)
         printf("%d, ", args_array[i]);
     puts("here");
+
+    printf("%s\n", type);
 
     /* construct the event */
     if(!strcmp(type, "EVN"))
@@ -126,6 +133,7 @@ sss_event sss_parse_event(const char* command) {
     puts("asdffdsaasdf");
 
     free(args_array);
+    puts("after freeing the args_array");
     return result;
 }
 
