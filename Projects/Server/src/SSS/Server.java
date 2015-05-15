@@ -3,10 +3,12 @@ package SSS;
 import SSS.Event.EventHandler;
 import SSS.Handler.ClientHandler;
 import SSS.Handler.InputHandler;
+import SSS.Util.EventTester;
 import SSS.Util.Logger;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.concurrent.Executors;
 
 public class Server {
 	private int port = 5003;
@@ -44,6 +46,20 @@ public class Server {
 
 		inputHandler.run();
 		clientHandler.acceptConnections();
+		Executors.newSingleThreadExecutor().execute(new Runnable() {
+			@Override
+			public void run() {
+				while (true) {
+					EventTester.testNav();
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+
 	}
 
 	/**

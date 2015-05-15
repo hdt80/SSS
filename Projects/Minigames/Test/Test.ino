@@ -8,5 +8,5 @@ void setup() {
 
 void loop() {
   Serial.print(!digitalRead(buttonPin));
-  delay(25);
+  delay(125);
 }

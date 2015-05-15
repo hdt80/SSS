@@ -20,4 +20,12 @@ public class EventTester {
             e.printStackTrace();
         }
     }
+
+    public static void testNav() {
+        try {
+            Server.get().clientHandler.send("NAV", "EVN#0;0;2;0;");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
