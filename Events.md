@@ -7,3 +7,4 @@ Minigame done | 3 | 0 - What station (String), 1 - What was fixed/Reward (String
 Power change | 4 | 0 - Station ID (String), 1 - New power level (int) | Eng | Server, Nav, Wep
 Enemy despawn | 5 | 0 - Enemy ID (int) | Nav | Wep
 Change max power | 7 | 0 - Power cell (String), 1 - Relative power change (int) | Server | Eng
+Ship movements | 8 | 0 - Ship ID (int), 1 - x (int), 2 - y (int), 3 - z (int) | Server | Nav, Wep
