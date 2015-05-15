@@ -84,7 +84,7 @@ namespace sss {
         // if(not setTest.compare("SET")) {
         //     setValue(_buffer + 4);
         // }
-
+        std::cout << setTest << std::endl;
         sss_enque_event(sss_parse_event(_buffer));
 
         clearBuffer();

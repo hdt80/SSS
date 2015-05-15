@@ -12,8 +12,6 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import com.sss.mastercontroller.connections.Connection;
-import com.sss.mastercontroller.io.Print;
 import com.sss.mastercontroller.main.MasterController;
 
 public class EnemyDespawner implements ActionListener {
@@ -24,17 +22,14 @@ public class EnemyDespawner implements ActionListener {
 	private JButton exit = new JButton("Exit");
 	private JButton apply = new JButton("Apply");
 	private GridBagConstraints editorCon = new GridBagConstraints();
-	private int _enemyid;
+	private int selectedEnemy;
 	private String[] enemiesInGame;
 	private JComboBox enemiesInGameBox = new JComboBox();
 	
 	private MasterController ms;
-	private Connection connection;
 	
-	@SuppressWarnings("static-access")
 	public EnemyDespawner() {
 		ms = MasterController.getMasterController();
-		connection = ms.getConnection();
 		//set up the gbc
 		editorCon.anchor = GridBagConstraints.CENTER;
 		editorCon.fill = GridBagConstraints.HORIZONTAL;
@@ -81,19 +76,6 @@ public class EnemyDespawner implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent event) {
-		if (event.getSource().equals(exit)) {
-			frame.dispose();
-			ms.frame.setEnabled(true);
-			ms.clearItems();
-		} else if (event.getSource().equals(apply)) {
-			// this is where all the code will go to send information to the server
-			Print.debug("Sending despawn event to the server.");
-			Print.debug("We are going to despawn enemy id " + _enemyid);
-			connection.sendEventToServer("5;" + _enemyid + ";");
-			//end it here
-			frame.dispose();
-			ms.frame.setEnabled(true);
-			ms.clearItems();
-		}
+		
 	}
 }
