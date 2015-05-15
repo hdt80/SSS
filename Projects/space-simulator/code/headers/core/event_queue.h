@@ -6,7 +6,7 @@
 #define EVENT_QUEUE_H_
 
 enum EVENT_CLASS {
-    SET, GET, EVN, ERROR, NUM_CLASSES
+    SET, GET, EVN, ERR, NUM_CLASSES
 };
 
 enum EVENT_TYPE {

@@ -71,7 +71,7 @@ sss_event sss_parse_event(const char* command) {
     printf("%d\n", number_of_args);
     if(number_of_args == 0) {
         puts("returning error");
-        result.type = ERROR;
+        result.type = ERR;
         return result;
     }
 
@@ -123,7 +123,7 @@ sss_event sss_parse_event(const char* command) {
     else if(!strcmp(type, "GET"))
         result.type = GET;
     else
-        result.type = ERROR;
+        result.type = ERR;
 
     for(i = 1; i < number_of_args; i++)
         result.args[i - 1] = args_array[i];

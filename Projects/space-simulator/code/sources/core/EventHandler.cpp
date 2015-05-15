@@ -6,8 +6,6 @@
 #include <cstdlib>
 
 namespace sss {
-    
-
     void EventHandler::handle_event(const sss_event& evnt) {
         switch(evnt.type) {
             case EVN:
@@ -19,7 +17,7 @@ namespace sss {
             case GET:
                 handle_get_event(evnt);
                 break;
-            case ERROR:
+            case ERR:
                 std::cout << "We dun git en error" << std::endl;
                 break;
             default:
