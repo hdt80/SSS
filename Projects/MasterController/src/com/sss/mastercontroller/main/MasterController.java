@@ -10,6 +10,7 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Logger;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -23,8 +24,9 @@ import javax.swing.table.TableColumn;
 
 import com.sss.mastercontroller.connections.Addresses;
 import com.sss.mastercontroller.connections.Connection;
-import com.sss.mastercontroller.editors.PreferencesEditor;
+import com.sss.mastercontroller.editors.EnemyDespawner;
 import com.sss.mastercontroller.editors.EnemySpawner;
+import com.sss.mastercontroller.editors.PreferencesEditor;
 import com.sss.mastercontroller.io.Print;
 import com.sss.mastercontroller.io.TableModel;
 import com.sss.mastercontroller.lists.Collisions;
@@ -57,7 +59,7 @@ public class MasterController implements ActionListener {
 	private int selectedNum = 0;
 	int selectedItemNum = 0;
 
-	private String build = "1.1.31a";
+	private String build = "1.1.31b";
 
 	private boolean[] isSelected;
 	private boolean[] isItemSelected;
@@ -214,8 +216,9 @@ public class MasterController implements ActionListener {
 		isItemSelected = new boolean[num]; // there will be `num` amount of booleans
 
 		selections[0] = new JButton("Collisions");
-		selections[1] = new JButton("Enemies");
-		selections[2] = new JButton("Preferences");
+		selections[1] = new JButton("Spawner");
+		selections[2] = new JButton("Despawner");
+		//selections[3] = new JButton("Preferences");
 		selections[3] = new JButton("Exit");
 
 		for (int i = 0; i < selections.length; i++) {
@@ -238,16 +241,16 @@ public class MasterController implements ActionListener {
 	}
 
 	public void showItems(int i) {
-		if (i == 1) { // show enemies buttons
+		if (i == Lists.SPAWN) { // show enemies buttons
 			num = enemies.getEnemies();
 			initItems(num);
-		} else if (i == 0) {
+		} else if (i == Lists.COLLISION) {
 			num = collisions.getCollisions();
 			initItems(num);
-		} else if (i == 2) { //show preferences
+		} else if (i == Lists.PREFERENCES) { //show preferences
 			num = preferences.getPreferences();
 			initItems(num);
-		} else if (i == 3) { //exit button
+		} else if (i == Lists.EXIT) { //exit button
 			Print.debug("Closing the socket.");
 			System.exit(-1);
 		} else { // some how there was an error
@@ -272,13 +275,16 @@ public class MasterController implements ActionListener {
 
 	private void showValues(int i) {
 		frame.setEnabled(false);
-		if (selectedNum == 1) { // enemies tab
+		if (selectedNum == Lists.SPAWN) { // spawn frame
 			new EnemySpawner(enemies.getEnemy(i), enemies.getDefinition(i), i);
+		} else if (selectedNum == Lists.DESPAWN) { //despawn frame
+			new EnemyDespawner();
 		} else {
 			System.err.println("For some reason you are still running when you pressed exit button...");
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	private void showPreferences(int i) {
 		frame.setEnabled(false);
 		new PreferencesEditor(preferences.getPreferenceName(i), preferences.getPreferenceDefinition(i), selectedNum);
@@ -318,7 +324,7 @@ public class MasterController implements ActionListener {
 		}
 		// items buttons test
 		for (int i = 0; i < num; i++) {
-			if (event.getSource().equals(items[i]) && (selectedNum != 2 && selectedNum != 0)) { //not collision or preferences
+			if (event.getSource().equals(items[i]) && (selectedNum != Lists.PREFERENCES && selectedNum != Lists.DESPAWN && selectedNum != Lists.COLLISION)) { //not collision or preferences or despawn
 				if (items[i].getBackground().equals(new Color(60, 60, 200))) {
 					// it is already selected, de-select it.
 					items[i].setBackground(Color.LIGHT_GRAY);
@@ -331,7 +337,7 @@ public class MasterController implements ActionListener {
 					// give the new values section to the user
 					showValues(i);
 				}
-			} else if (event.getSource().equals(items[i]) && (selectedNum == 2 && selectedNum != 0)) { //not collisions but preferences
+			} else if (event.getSource().equals(items[i]) && (selectedNum == Lists.PREFERENCES && selectedNum != Lists.DESPAWN && selectedNum != Lists.COLLISION)) { //not collisions and not despawn but preferences
 				if (items[i].getBackground().equals(new Color(60, 60, 200))) {
 					// it is already selected, de-select it.
 					items[i].setBackground(Color.LIGHT_GRAY);
@@ -342,15 +348,22 @@ public class MasterController implements ActionListener {
 					items[i].setForeground(Color.WHITE);
 					selectedItemNum = i;
 					// give the new values section to the user
-					showPreferences(i);
+					//showPreferences(i);
 				}
-			} else if (event.getSource().equals(items[i]) && (selectedNum != 2 && selectedNum == 0)) { //not preferences but collisions
+			} else if (event.getSource().equals(items[i]) && (selectedNum != Lists.PREFERENCES && selectedNum != Lists.DESPAWN && selectedNum == Lists.COLLISION)) { //not preferences and not despawn but collisions
 				selections[i].setBackground(Color.LIGHT_GRAY);
 				selections[i].setForeground(Color.BLACK);
 				isSelected[i] = false;
 				// give the items section to the user
 				selectedNum = 0;
-				connection.sendEventToServer("1;" + collisions.getSide(i));
+				connection.sendEventToServer(Lists.COLLISION + ";" + collisions.getSide(i));
+			} else if (event.getSource().equals(items[i]) && (selectedNum != Lists.PREFERENCES && selectedNum == Lists.DESPAWN && selectedNum != Lists.COLLISION)) { //not preferences or collision but despawn
+				selections[i].setBackground(Color.LIGHT_GRAY);
+				selections[i].setForeground(Color.BLACK);
+				isSelected[i] = false;
+				// give the items section to the user
+				selectedNum = 0;
+				showValues(2);
 			}
 		}
 	}

@@ -21,7 +21,7 @@ public class Addresses {
 		_addresses.add(new IPAddress("192.168.0.105", "OGPC 2015 server connection.", _addresses.size()));
 		_addresses.add(new IPAddress("192.168.1.2", "Bryce Hahn's Personal Desktop.", _addresses.size()));
 		_addresses.add(new IPAddress("192.168.1.18", "Bryce Hahn's Personal laptop.", _addresses.size()));
-		_addresses.add(new IPAddress("192.168.0.103", "Shitty piece of shit laptop, masons", _addresses.size()));
+		_addresses.add(new IPAddress("192.168.0.108", "PAM server computer", _addresses.size()));
 	}
 	
 	public String getAddress(int i) {
