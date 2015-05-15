@@ -86,7 +86,7 @@ public class Vector3f {
 	}
 	
 	public String toString() {
-		return "(" + x + " " + y + " " + z + ")";
+		return "<" + x + " " + y + " " + z + ">";
 	} 
 	
 	public Vector2f getXY() { return new Vector2f(x, y); }

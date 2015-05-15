@@ -1,5 +1,3 @@
-package com.Networking;
-
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -8,7 +6,7 @@ import java.net.UnknownHostException;
 
 public class Network {
 	private Socket sock;
-	private String ip = "10.65.173.108";
+	private String ip = "192.168.0.108";
 	private int port = 5003;
 	private OutputStreamWriter output;
 	private InputStreamReader input;
@@ -24,19 +22,12 @@ public class Network {
 			output.flush();
 			output.write("WEP@");
 			output.flush();
-			Sendout("SET#enemycount:2");
-			Sendout("GET#enemycount");
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 		
-	}
-	public void test(){
-		//Sendout("WEP@");
-		Sendout("SET#enemycount:2");
-		Sendout("GET#enemycount");
 	}
 	public void Sendout(String s){
 		try {
