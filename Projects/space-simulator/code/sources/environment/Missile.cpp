@@ -1,4 +1,5 @@
 #include <environment/Missile.h>
+#include <core/Game.h>
 
 namespace sss {
     
@@ -31,5 +32,8 @@ namespace sss {
     
     void Missile::tick(float delta) {
         move(_vector);
+
+        if(glm::length(getPosition() - Game::getGame().getPlayer().getPosition()) > 200.0f)
+            destroy();
     } 
 }

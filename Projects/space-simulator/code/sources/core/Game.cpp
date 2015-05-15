@@ -77,6 +77,10 @@ namespace sss {
         auto iter2(std::remove_if(_missiles.begin(), _missiles.end(), [](Missile* m) -> bool {return m == nullptr; }));
         _missiles.erase(iter2, _missiles.end());
         _missiles.shrink_to_fit();
+    
+        /* Do Mark Stuff */
+        if(Input::isKeyPressed(GLFW_KEY_T))
+            Connection::getInstance().write("EVN#8;0;");
     }
 
     void Game::render() {
@@ -114,7 +118,9 @@ namespace sss {
             if(m->getCollider()->collides(*_player->getCollider())) {
                 m->destroy();
                 Connection::getInstance().write("EVN#1;0;");
-            }
+            } 
+
+            _asteroidField->detect_collisions(*m);
         }
         
         /* add our missles hit something */

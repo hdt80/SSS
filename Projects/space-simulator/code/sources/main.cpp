@@ -91,7 +91,7 @@ int main(int argc, char** argv) {
 
     /* only do server connect if args are present */
     if(connectToServer) {
-        Connection::getInstance().makeConnection("192.168.0.103", 5003);
+        Connection::getInstance().makeConnection("192.168.0.108", 5003);
         Connection::getInstance().write("NAV");
     }
 

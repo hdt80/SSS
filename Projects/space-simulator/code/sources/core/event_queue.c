@@ -128,7 +128,10 @@ sss_event sss_parse_event(const char* command) {
     for(i = 1; i < number_of_args; i++)
         result.args[i - 1] = args_array[i];
 
-    result.evn = (enum EVENT_TYPE)args_array[0];
+    int evnt_t = (int)(command[4]) - 48;
+    printf("evnt_t: %d command[4]: %c\n ", evnt_t, command[4]);
+    result.evn = (enum EVENT_TYPE)evnt_t;
+    // result.evn = (enum EVENT_TYPE)args_array[0];
 
     puts("asdffdsaasdf");
 
